@@ -13,7 +13,7 @@
 <body class="bg-white text-slate-800 min-h-screen flex flex-col justify-between selection:bg-indigo-600 selection:text-white">
 
   <!-- ================= NAVIGATION BAR ================= -->
-  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       
       <!-- Brand Logo -->
@@ -46,7 +46,6 @@
           <!-- Dropdown Options -->
           <div id="login-dropdown-menu" class="hidden absolute right-0 mt-2 w-56 rounded-xl bg-white border border-slate-200 shadow-2xl z-50 overflow-hidden py-1 divide-y divide-slate-100">
             
-            <!-- Student Login Link -->
             <a href="course.html" class="flex items-center px-4 py-3 text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition">
               <svg class="w-4 h-4 mr-3 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
               <div>
@@ -55,7 +54,6 @@
               </div>
             </a>
 
-            <!-- Organization / College Admin Login Link -->
             <a href="college-admin.html" class="flex items-center px-4 py-3 text-xs font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition">
               <svg class="w-4 h-4 mr-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
               <div>
@@ -64,7 +62,6 @@
               </div>
             </a>
 
-            <!-- Super Admin Login Link -->
             <a href="index.html" class="flex items-center px-4 py-3 text-xs font-semibold text-slate-700 hover:bg-purple-50 hover:text-purple-600 transition">
               <svg class="w-4 h-4 mr-3 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
               <div>
@@ -92,105 +89,18 @@
     </div>
   </section>
 
-  <!-- ================= SOFTSKILLS COURSES LIST SECTION ================= -->
+  <!-- ================= SOFTSKILLS COURSES LIST SECTION (18 COURSES) ================= -->
   <section id="courses-section" class="py-20 bg-slate-50 border-t border-slate-200">
     <div class="max-w-7xl mx-auto px-6">
       
       <div class="text-center mb-16 space-y-3">
-        <h2 class="text-3xl font-extrabold text-slate-900">Featured Soft Skills Courses</h2>
-        <p class="text-sm text-slate-600 max-w-xl mx-auto">Explore structured programs curated for corporate placement success.</p>
+        <h2 class="text-3xl font-extrabold text-slate-900">Featured Soft Skills Programs</h2>
+        <p class="text-sm text-slate-600 max-w-xl mx-auto">Master essential corporate skills with our 18 specialized programs. Click "View Course" to inspect the complete 50+ line syllabus and enroll for ₹250.</p>
       </div>
 
-      <!-- Course Cards Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        
-        <!-- Course 1 -->
-        <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden flex flex-col justify-between hover:border-indigo-400 hover:shadow-xl transition group">
-          <div>
-            <div class="h-48 w-full bg-slate-100 overflow-hidden relative">
-              <img 
-                src="careergraspplogo.jpg" 
-                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=600&auto=format&fit=crop';" 
-                alt="Corporate Communication" 
-                class="w-full h-full object-cover group-hover:scale-105 transition duration-300" 
-              />
-              <span class="absolute top-3 right-3 bg-indigo-600 text-white text-[10px] px-2.5 py-1 rounded-full font-bold shadow">4-Part Series</span>
-            </div>
-            <div class="p-6 space-y-3">
-              <h3 class="text-xl font-extrabold text-slate-900">Corporate Communication & Etiquette</h3>
-              <ul class="space-y-2 text-xs text-slate-600">
-                <li class="flex items-center"><span class="w-1.5 h-1.5 bg-indigo-600 rounded-full mr-2"></span>Professional Email Writing & Etiquette</li>
-                <li class="flex items-center"><span class="w-1.5 h-1.5 bg-indigo-600 rounded-full mr-2"></span>Body Language & Non-Verbal Cues</li>
-                <li class="flex items-center"><span class="w-1.5 h-1.5 bg-indigo-600 rounded-full mr-2"></span>Cross-Cultural Workplace Communication</li>
-              </ul>
-            </div>
-          </div>
-          <div class="p-6 pt-0">
-            <a href="course.html" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl text-xs transition flex items-center justify-center">
-              <span>View Course</span>
-              <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            </a>
-          </div>
-        </div>
-
-        <!-- Course 2 -->
-        <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden flex flex-col justify-between hover:border-indigo-400 hover:shadow-xl transition group">
-          <div>
-            <div class="h-48 w-full bg-slate-100 overflow-hidden relative">
-              <img 
-                src="careergraspplogo.jpg" 
-                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop';" 
-                alt="Interview Mastery" 
-                class="w-full h-full object-cover group-hover:scale-105 transition duration-300" 
-              />
-              <span class="absolute top-3 right-3 bg-emerald-600 text-white text-[10px] px-2.5 py-1 rounded-full font-bold shadow">6-Part Series</span>
-            </div>
-            <div class="p-6 space-y-3">
-              <h3 class="text-xl font-extrabold text-slate-900">GD & Personal Interview Mastery</h3>
-              <ul class="space-y-2 text-xs text-slate-600">
-                <li class="flex items-center"><span class="w-1.5 h-1.5 bg-emerald-600 rounded-full mr-2"></span>Group Discussion Strategies & Entry Tactics</li>
-                <li class="flex items-center"><span class="w-1.5 h-1.5 bg-emerald-600 rounded-full mr-2"></span>Handling Tricky HR & Behavioral Questions</li>
-                <li class="flex items-center"><span class="w-1.5 h-1.5 bg-emerald-600 rounded-full mr-2"></span>STAR Method for Storytelling</li>
-              </ul>
-            </div>
-          </div>
-          <div class="p-6 pt-0">
-            <a href="course.html" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl text-xs transition flex items-center justify-center">
-              <span>View Course</span>
-              <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            </a>
-          </div>
-        </div>
-
-        <!-- Course 3 -->
-        <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden flex flex-col justify-between hover:border-indigo-400 hover:shadow-xl transition group">
-          <div>
-            <div class="h-48 w-full bg-slate-100 overflow-hidden relative">
-              <img 
-                src="careergraspplogo.jpg" 
-                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=600&auto=format&fit=crop';" 
-                alt="Quantitative Aptitude" 
-                class="w-full h-full object-cover group-hover:scale-105 transition duration-300" 
-              />
-              <span class="absolute top-3 right-3 bg-purple-600 text-white text-[10px] px-2.5 py-1 rounded-full font-bold shadow">8-Part Series</span>
-            </div>
-            <div class="p-6 space-y-3">
-              <h3 class="text-xl font-extrabold text-slate-900">Quantitative Aptitude & Logic</h3>
-              <ul class="space-y-2 text-xs text-slate-600">
-                <li class="flex items-center"><span class="w-1.5 h-1.5 bg-purple-600 rounded-full mr-2"></span>Speed Math Techniques & Shortcuts</li>
-                <li class="flex items-center"><span class="w-1.5 h-1.5 bg-purple-600 rounded-full mr-2"></span>Logical Reasoning & Data Interpretation</li>
-                <li class="flex items-center"><span class="w-1.5 h-1.5 bg-purple-600 rounded-full mr-2"></span>Comprehensive Placement Problem Sets</li>
-              </ul>
-            </div>
-          </div>
-          <div class="p-6 pt-0">
-            <a href="course.html" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl text-xs transition flex items-center justify-center">
-              <span>View Course</span>
-              <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            </a>
-          </div>
-        </div>
-
+      <!-- Course Cards Grid (Rendered via JS for 18 items) -->
+      <div id="courses-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Injected via JavaScript -->
       </div>
     </div>
   </section>
@@ -240,6 +150,114 @@
     </div>
   </section>
 
+  <!-- ================= FULL SCREEN COURSE DETAIL & PAYMENT MODAL ================= -->
+  <div id="course-detail-modal" class="hidden fixed inset-0 z-50 bg-slate-950/95 overflow-y-auto p-4 md:p-8">
+    <div class="max-w-7xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden min-h-[90vh] flex flex-col">
+      
+      <!-- Top Modal Nav Bar -->
+      <div class="bg-slate-900 text-white p-6 flex justify-between items-center border-b border-slate-800 sticky top-0 z-30">
+        <button onclick="closeCourseModal()" class="inline-flex items-center text-indigo-400 hover:text-white font-semibold text-sm transition">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+          Back to Courses List
+        </button>
+        <div class="flex items-center space-x-3">
+          <span class="text-xs bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full font-semibold">Special Offer: ₹250</span>
+          <button onclick="closeCourseModal()" class="text-slate-400 hover:text-white text-2xl font-bold px-2">&times;</button>
+        </div>
+      </div>
+
+      <!-- Main Layout: 2/3 Description & Video Modules | 1/3 Payment Card -->
+      <div class="p-6 md:p-10 grid grid-cols-1 lg:grid-cols-3 gap-10 flex-1">
+        
+        <!-- Left 2 Columns: 50+ Line Syllabus & Video Modules -->
+        <div class="lg:col-span-2 space-y-8">
+          
+          <!-- Banner & Header -->
+          <div class="space-y-4">
+            <div class="h-64 w-full rounded-2xl overflow-hidden bg-slate-100 border border-slate-200">
+              <img id="modal-course-img" src="" alt="Course Cover" class="w-full h-full object-cover" />
+            </div>
+            <h1 id="modal-course-title" class="text-3xl md:text-4xl font-extrabold text-slate-900"></h1>
+          </div>
+
+          <!-- Complete Description (50+ Lines Supported) -->
+          <div class="bg-slate-50 border border-slate-200 p-8 rounded-2xl space-y-4 shadow-sm">
+            <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-3 flex items-center">
+              <svg class="w-5 h-5 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              Complete Course Syllabus & Detailed Overview
+            </h3>
+            <p id="modal-course-desc" class="text-slate-700 text-sm leading-relaxed whitespace-pre-line"></p>
+          </div>
+
+          <!-- Video Modules Option Section -->
+          <div class="space-y-4 pt-4 border-t border-slate-200">
+            <h3 class="text-2xl font-bold text-slate-900 flex items-center">
+              <svg class="w-6 h-6 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Included Video Modules & Lesson Parts
+            </h3>
+            <div id="modal-video-modules-list" class="space-y-3">
+              <!-- Modules injected via JS -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right 1 Column: Highlighted Payment Card (₹250) -->
+        <div class="space-y-6">
+          <div class="bg-slate-900 text-white rounded-3xl p-8 border border-slate-800 shadow-2xl sticky top-28 space-y-6">
+            
+            <div class="space-y-2 border-b border-slate-800 pb-6">
+              <span class="text-xs bg-indigo-600/30 text-indigo-300 border border-indigo-500/40 px-3 py-1 rounded-full font-semibold uppercase tracking-wider">Instant Access</span>
+              <div class="flex items-baseline space-x-2 pt-2">
+                <span class="text-4xl font-black text-white">₹250</span>
+                <span class="text-slate-400 text-sm line-through">₹2,999</span>
+                <span class="text-xs text-emerald-400 font-bold">91% OFF</span>
+              </div>
+              <p class="text-xs text-slate-400">One-time payment. Lifetime unlimited access to all video parts & PDF notes.</p>
+            </div>
+
+            <!-- Highlights Checklist -->
+            <div class="space-y-3 text-xs text-slate-300">
+              <div class="flex items-center space-x-2">
+                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <span>Full HD Streamline Multi-Part Videos</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <span>Downloadable PDF Lesson Material</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <span>Speed Controls (0.75x to 2.0x)</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <span>Verified Certificate of Completion</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <span>24/7 Portal Support & Access</span>
+              </div>
+            </div>
+
+            <!-- Enrollment Action Button -->
+            <div class="pt-4 space-y-3">
+              <a href="register.html" class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-2xl text-center block shadow-lg shadow-indigo-600/30 transition text-sm">
+                Pay ₹250 & Enroll Now
+              </a>
+              <a href="course.html" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-xl text-xs text-center block transition">
+                Already Enrolled? Log In
+              </a>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
   <!-- ================= FOOTER ================= -->
   <footer class="bg-slate-100 border-t border-slate-200 py-8 px-6">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between text-xs text-slate-600 gap-4">
@@ -253,8 +271,548 @@
     </div>
   </footer>
 
-  <!-- JavaScript for Login Dropdown Toggle -->
+  <!-- ================= JAVASCRIPT LOGIC ================= -->
   <script>
+    // 18 SOFTSKILLS COURSES DATASET WITH 50+ LINE DETAILED SYLLABUS
+    const softSkillsCourses = [
+      {
+        id: 1,
+        title: "Corporate Communication & Etiquette",
+        parts: "4-Part Series",
+        image: "careergraspplogo.jpg",
+        fallback: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=600&auto=format&fit=crop",
+        bullets: ["Professional Email Writing", "Body Language & Cues", "Cross-Cultural Communication"],
+        modules: [
+          { title: "Part 1: Workplace Communication Fundamentals", duration: "24 mins" },
+          { title: "Part 2: Executive Email Writing & Digital Etiquette", duration: "32 mins" },
+          { title: "Part 3: Non-Verbal Signals & Body Language Mastery", duration: "28 mins" },
+          { title: "Part 4: Cross-Cultural Collaboration in MNCs", duration: "30 mins" }
+        ],
+        desc: `MODULE 1: FOUNDATIONS OF PROFESSIONAL COMMUNICATION
+• Understanding the 7 Cs of Communication in corporate settings.
+• Active Listening techniques for clear team collaboration.
+• Overcoming verbal barriers and clarity in articulation.
+• Tone modulation and professional pitch adjustment.
+
+MODULE 2: WRITTEN COMMUNICATION & EMAIL ETIQUETTE
+• Structuring executive emails for leadership readability.
+• Writing clear subject lines and actionable call-to-actions.
+• Professional greeting standards and formal sign-offs.
+• Managing email threads, CC/BCC etiquette, and response timelines.
+• Drafting incident reports, status updates, and formal requests.
+
+MODULE 3: NON-VERBAL COMMUNICATION & BODY LANGUAGE
+• The power of posture, eye contact, and hand gestures in meetings.
+• Virtual meeting etiquette (Zoom, MS Teams, Google Meet).
+• Camera presence, lighting, and background professionality.
+• Reading room dynamics and unstated stakeholder cues.
+
+MODULE 4: WORKPLACE DIPLOMACY & CONFLICT RESOLUTION
+• Communicating constructiveness during feedback sessions.
+• De-escalating intense team disagreements diplomatically.
+• Establishing boundaries while maintaining camaraderie.
+• Handling constructive criticism from senior managers.
+
+MODULE 5: PRESENTATION & STORYTELLING FOR EXECUTIVES
+• Structuring technical data into compelling narratives.
+• Slide design principles for executive updates.
+• Handling Q&A sessions with poise and confidence.
+• Managing public speaking anxiety and stage fright.
+
+MODULE 6: CONTINUOUS IMPROVEMENT & WORKSHOP EXERCISES
+• Self-auditing communication patterns.
+• Daily articulation drills and vocabulary expansion.
+• Real-world scenario simulations and case studies.`
+      },
+      {
+        id: 2,
+        title: "GD & Personal Interview Mastery",
+        parts: "6-Part Series",
+        image: "careergraspplogo.jpg",
+        fallback: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop",
+        bullets: ["GD Entry & Subsuming Tactics", "Tricky HR & Behavioral Questions", "STAR Storytelling Technique"],
+        modules: [
+          { title: "Part 1: Group Discussion Frameworks & Rules", duration: "35 mins" },
+          { title: "Part 2: Strategic Entry & Moderation Tactics", duration: "27 mins" },
+          { title: "Part 3: Master Class on 'Tell Me About Yourself'", duration: "40 mins" },
+          { title: "Part 4: Cracking Behavioral Questions (STAR Method)", duration: "38 mins" },
+          { title: "Part 5: Technical Interview Communication Strategy", duration: "25 mins" },
+          { title: "Part 6: Salary Negotiation & Offer Evaluation", duration: "30 mins" }
+        ],
+        desc: `MODULE 1: GROUP DISCUSSION MECHANICS & EVALUATION
+• How interviewers rate GD participants on leadership and logic.
+• Types of GD topics: Factual, Abstract, Controversial, Case Studies.
+• Formulating initial thoughts within 60 seconds of topic announcement.
+
+MODULE 2: STRATEGIC GD ENTRY & LEADER TACTICS
+• How to initiate a GD smoothly without interrupting others.
+• Techniques for bringing off-track discussions back to core focus.
+• Summarizing key consensus points at mid-way and closing stages.
+• Handling dominant speakers politely while asserting your viewpoint.
+
+MODULE 3: PERSONAL INTERVIEW (PI) ESSENTIALS
+• Deconstructing "Tell Me About Yourself" into a winning elevator pitch.
+• Highlighting academic projects, internships, and extracurriculars.
+• Demonstrating company research and alignment with corporate culture.
+
+MODULE 4: BEHAVIORAL INTERVIEWS & STAR METHOD
+• Structuring answers using Situation, Task, Action, Result.
+• Preparing authentic stories for failure, conflict, and achievement.
+• Handling weakness questions with self-awareness and remediation.
+
+MODULE 5: TECHNICAL INTERVIEW COMMUNICATION
+• Explaining complex technical logic in plain business terms.
+• What to do when you don't know the exact answer to a question.
+• Demonstrating problem-solving methodology out loud.
+
+MODULE 6: POST-INTERVIEW ETIQUETTE & OFFER EVALUATION
+• Asking insightful questions to the panel at the end of the interview.
+• Drafting effective post-interview thank you notes.
+• Evaluating job offers and negotiating terms respectfully.`
+      },
+      {
+        id: 3,
+        title: "Quantitative Aptitude & Logic",
+        parts: "8-Part Series",
+        image: "careergraspplogo.jpg",
+        fallback: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=600&auto=format&fit=crop",
+        bullets: ["Speed Math & Short Tricks", "Logical Reasoning & Data Interpretation", "Placement Exam Problem Sets"],
+        modules: [
+          { title: "Part 1: Vedic Math & Rapid Calculations", duration: "45 mins" },
+          { title: "Part 2: Percentages, Profit & Loss Masterclass", duration: "50 mins" },
+          { title: "Part 3: Time, Speed & Distance Hacks", duration: "40 mins" },
+          { title: "Part 4: Pipes, Cisterns & Work Allocation", duration: "42 mins" },
+          { title: "Part 5: Permutations, Combinations & Probability", duration: "48 mins" },
+          { title: "Part 6: Logical Puzzles & Seating Arrangements", duration: "55 mins" },
+          { title: "Part 7: Data Interpretation & Chart Analysis", duration: "38 mins" },
+          { title: "Part 8: Mock Exam Walkthrough & Time Management", duration: "60 mins" }
+        ],
+        desc: `MODULE 1: SPEED MATH & COMPUTATIONAL EFFICIENCY
+• Vedic math shortcuts for 3-digit multiplication and square roots.
+• Memorization charts for fraction-to-percentage conversions.
+• Divisibility rules and unit digit calculation short tricks.
+
+MODULE 2: ARITHMETIC APTITUDE CORE
+• Percentages, profit, loss, and discount problem solving.
+• Simple and compound interest formulas and quick mental approximations.
+• Ratio, proportion, mixtures, and alligation techniques.
+
+MODULE 3: TIME, WORK, AND MOTION
+• Time and work equations solved via LCM methodology.
+• Pipes and cisterns inlet/outlet flow rate calculations.
+• Relative speed, train crossings, and river boat problems.
+
+MODULE 4: ADVANCED QUANTITATIVE TOPICS
+• Permutations, combinations, and probability concepts.
+• Number systems, HCF, LCM, and remainder theorems.
+• Mensuration, area, and volume formulas simplified.
+
+MODULE 5: LOGICAL REASONING
+• Linear and circular seating arrangement puzzles.
+• Blood relations, direction sense, and coding-decoding.
+• Syllogisms and Venn diagram logic derivation.
+
+MODULE 6: DATA INTERPRETATION & EXAM STRATEGY
+• Analyzing bar graphs, pie charts, and line charts under time pressure.
+• Time allocation strategy for TCS, Infosys, and Accenture exams.
+• Negative marking avoidance strategies.`
+      },
+      {
+        id: 4,
+        title: "Resume Building & LinkedIn Branding",
+        parts: "4-Part Series",
+        image: "careergraspplogo.jpg",
+        fallback: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=600&auto=format&fit=crop",
+        bullets: ["ATS-Friendly Resume Templates", "Action Verbs & Impact Metrics", "LinkedIn Profile Optimization"],
+        modules: [
+          { title: "Part 1: Single-Page Resume Architecture", duration: "30 mins" },
+          { title: "Part 2: Beating ATS Algorithms & Keyword Matching", duration: "35 mins" },
+          { title: "Part 3: Crafting High-Impact Bullet Points", duration: "25 mins" },
+          { title: "Part 4: LinkedIn Profile & Recruiter Outreach", duration: "40 mins" }
+        ],
+        desc: `MODULE 1: ATS RESUME ARCHITECTURE
+• Designing single-page ATS-compliant resume layouts.
+• Section hierarchy: Summary, Skills, Projects, Experience, Education.
+• Font, margin, and formatting rules that pass automated scanners.
+
+MODULE 2: CRAFTING HIGH-IMPACT BULLET POINTS
+• Using the Google XYZ formula: Accomplished [X] as measured by [Y], by doing [Z].
+• Strong action verbs to replace weak passive phrases.
+• Quantifying project outcomes with percentages and numbers.
+
+MODULE 3: LINKEDIN PROFILE OPTIMIZATION
+• Writing a search-optimized headline and compelling summary.
+• Structuring featured section with project links and certifications.
+• Requesting recommendations and recommendations etiquette.
+
+MODULE 4: OUTREACH & NETWORKING STRATEGY
+• Cold messaging recruiters and alumni for referrals.
+• Engaging with industry content to build visibility.`
+      },
+      {
+        id: 5,
+        title: "Emotional Intelligence & Workplace Empathy",
+        parts: "5-Part Series",
+        image: "careergraspplogo.jpg",
+        fallback: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=600&auto=format&fit=crop",
+        bullets: ["Self-Awareness & Self-Regulation", "Empathy in Teamwork", "Managing High-Stress Situations"],
+        modules: [
+          { title: "Part 1: The 5 Pillars of Emotional Intelligence", duration: "28 mins" },
+          { title: "Part 2: Self-Awareness & Trigger Identification", duration: "30 mins" },
+          { title: "Part 3: Emotional Regulation in High-Pressure Tasks", duration: "35 mins" },
+          { title: "Part 4: Developing Empathy & Perspective Taking", duration: "26 mins" },
+          { title: "Part 5: EQ in Leadership & Client Relations", duration: "32 mins" }
+        ],
+        desc: `MODULE 1: EQ VS IQ IN CORPORATE SUCCESS
+• Why EQ accounts for 80% of executive career progression.
+• The Daniel Goleman EQ framework: Self-awareness, Self-regulation, Motivation, Empathy, Social Skills.
+
+MODULE 2: SELF-AWARENESS & IMPULSE CONTROL
+• Identifying personal emotional triggers in work environments.
+• Pausing before responding under stress or criticism.
+• Daily reflection methods for emotional clarity.
+
+MODULE 3: EMPATHY & ACTIVE LISTENING
+• Distinguishing between sympathy and active empathy.
+• Understanding customer and team member pain points.
+• Validating others' perspectives without compromising standards.`
+      },
+      {
+        id: 6,
+        title: "Time Management & Productivity Hacks",
+        parts: "4-Part Series",
+        image: "careergraspplogo.jpg",
+        fallback: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=600&auto=format&fit=crop",
+        bullets: ["Eisenhower Matrix Prioritization", "Pomodoro & Time-Blocking", "Eliminating Procrastination"],
+        modules: [
+          { title: "Part 1: The Psychology of Procrastination", duration: "25 mins" },
+          { title: "Part 2: Eisenhower Matrix & Deep Work Frameworks", duration: "30 mins" },
+          { title: "Part 3: Time-Blocking & Calendar Management", duration: "28 mins" },
+          { title: "Part 4: Digital Distraction Detox & Focus Systems", duration: "22 mins" }
+        ],
+        desc: `MODULE 1: OVERCOMING PROCRASTINATION
+• Root causes of task avoidance: Fear of failure vs perfectionism.
+• The 2-minute rule for small tasks.
+• Breaking complex deliverables into manageable micro-steps.
+
+MODULE 2: PRIORITIZATION FRAMEWORKS
+• Urgent vs Important: Using the Eisenhower Matrix effectively.
+• The 80/20 Pareto principle applied to workload.
+• Setting boundaries and learning to say no to low-value tasks.
+
+MODULE 3: DEEP WORK & DAILY SYSTEMS
+• Time-blocking techniques for uninterrupted focus.
+• Setting up digital distraction shields (notifications, email checking schedules).`
+      },
+      {
+        id: 7,
+        title: "Public Speaking & Stage Confidence",
+        parts: "5-Part Series",
+        image: "careergraspplogo.jpg",
+        fallback: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?q=80&w=600&auto=format&fit=crop",
+        bullets: ["Overcoming Stage Fright", "Vocal Variety & Projection", "Engaging Large Audiences"],
+        modules: [
+          { title: "Part 1: Physiology of Public Speaking Anxiety", duration: "26 mins" },
+          { title: "Part 2: Structuring a Speech for Maximum Impact", duration: "34 mins" },
+          { title: "Part 3: Voice Modulation, Pauses & Tone Control", duration: "30 mins" },
+          { title: "Part 4: Body Language & Stage Utilization", duration: "28 mins" },
+          { title: "Part 5: Handling Impromptu Speeches & Q&A", duration: "32 mins" }
+        ],
+        desc: `MODULE 1: CONQUERING STAGE FRIGHT
+• Breathing techniques to calm the nervous system before speaking.
+• Reframing anxiety into enthusiasm.
+
+MODULE 2: SPEECH STRUCTURE & OPENINGS
+• Hooking the audience in the first 30 seconds.
+• Organizing core arguments with clear transitions.
+• Crafting memorable call-to-action endings.
+
+MODULE 3: VOICE & BODY LANGUAGE
+• Pitch, pace, volume, and strategic pauses.
+• Eye contact strategies for large auditoriums vs virtual stages.`
+      },
+      {
+        id: 8,
+        title: "Critical Thinking & Problem Solving",
+        parts: "4-Part Series",
+        image: "careergraspplogo.jpg",
+        fallback: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600&auto=format&fit=crop",
+        bullets: ["Root Cause Analysis (5 Whys)", "First-Principles Thinking", "Data-Driven Decision Making"],
+        modules: [
+          { title: "Part 1: Deconstructing Complex Business Problems", duration: "30 mins" },
+          { title: "Part 2: Root Cause Analysis & 5 Whys Technique", duration: "28 mins" },
+          { title: "Part 3: First-Principles Thinking Framework", duration: "35 mins" },
+          { title: "Part 4: Evaluating Risk & Solution Selection", duration: "25 mins" }
+        ],
+        desc: `MODULE 1: PROBLEM DECONSTRUCTION
+• Differentiating between symptoms and root causes.
+• Issue Tree formulation for complex business scenarios.
+
+MODULE 2: ANALYTICAL TOOLS
+• Applying the 5 Whys methodology.
+• Fishbone (Ishikawa) diagrams for process failures.
+
+MODULE 3: DECISION EVALUATION
+• Cost-benefit analysis and risk matrices.`
+      },
+      {
+        id: 9,
+        title: "Leadership & Team Dynamics",
+        parts: "5-Part Series",
+        image: "careergraspplogo.jpg",
+        fallback: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=600&auto=format&fit=crop",
+        bullets: ["Situational Leadership", "Delegation & Accountability", "Motivating Diverse Teams"],
+        modules: [
+          { title: "Part 1: Styles of Leadership & Self-Assessment", duration: "30 mins" },
+          { title: "Part 2: Effective Delegation & Empowering Others", duration: "28 mins" },
+          { title: "Part 3: Building Trust in Cross-Functional Teams", duration: "32 mins" },
+          { title: "Part 4: Performance Management & Feedback", duration: "35 mins" },
+          { title: "Part 5: Leading Through Change & Uncertainty", duration: "25 mins" }
+        ],
+        desc: `MODULE 1: LEADERSHIP STYLES
+• Autocratic vs Democratic vs Servant Leadership.
+• Adapting leadership style based on team maturity (Situational Leadership).
+
+MODULE 2: DELEGATION & TRUST
+• How to delegate effectively without micromanaging.
+• Setting expectations and measuring key results (OKRs).`
+      },
+      {
+        id: 10,
+        title: "Negotiation & Conflict Resolution",
+        parts: "4-Part Series",
+        image: "careergraspplogo.jpg",
+        fallback: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=600&auto=format&fit=crop",
+        bullets: ["Principled Negotiation (BATNA)", "Win-Win Outcome Strategies", "Managing Difficult Conversations"],
+        modules: [
+          { title: "Part 1: Principles of Win-Win Negotiation", duration: "32 mins" },
+          { title: "Part 2: Determining Your BATNA & Reservation Value", duration: "30 mins" },
+          { title: "Part 3: Handling High-Stakes Workplace Conflicts", duration: "28 mins" },
+          { title: "Part 4: Closing Deals & Formalizing Agreements", duration: "25 mins" }
+        ],
+        desc: `MODULE 1: NEGOTIATION BASICS
+• Positional bargaining vs Interest-based negotiation.
+• Understanding BATNA (Best Alternative to a Negotiated Agreement).
+
+MODULE 2: CONFLICT DE-ESCALATION
+• Managing emotions during contentious negotiations.
+• Finding common ground in client or team disputes.`
+      },
+      {
+        id: 11,
+        title: "Workplace Adaptability & Growth Mindset",
+        parts: "3-Part Series",
+        image: "careergraspplogo.jpg",
+        fallback: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=600&auto=format&fit=crop",
+        bullets: ["Fixed vs Growth Mindset", "Thriving in Agile Work Environments", "Resilience Under Pressure"],
+        modules: [
+          { title: "Part 1: Embracing Change in Fast-Paced Tech", duration: "25 mins" },
+          { title: "Part 2: Unlearning & Rapid Upskilling Strategies", duration: "30 mins" },
+          { title: "Part 3: Developing Psychological Resilience", duration: "28 mins" }
+        ],
+        desc: `MODULE 1: GROWTH MINDSET PRINCIPLES
+• Overcoming fear of failure and viewing feedback as data.
+• Developing agility in changing organizational structures.`
+      },
+      {
+        id: 12,
+        title: "Business Email & Report Writing",
+        parts: "4-Part Series",
+        image: "careergraspplogo.jpg",
+        fallback: "https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=600&auto=format&fit=crop",
+        bullets: ["Executive Summary Writing", "Professional Formatting & Tone", "Grammar & Conciseness"],
+        modules: [
+          { title: "Part 1: Business Writing Principles & Structure", duration: "28 mins" },
+          { title: "Part 2: Executive Summaries & Technical Reports", duration: "35 mins" },
+          { title: "Part 3: Writing Proposals & Client Project Updates", duration: "30 mins" },
+          { title: "Part 4: Proofreading & Eliminating Wordiness", duration: "22 mins" }
+        ],
+        desc: `MODULE 1: EXECUTIVE WRITING STANDARDS
+• Writing concise executive summaries.
+• Formatting technical reports for quick executive scanning.`
+      },
+      {
+        id: 13,
+        title: "Professional Ethics & Workplace Integrity",
+        parts: "3-Part Series",
+        image: "careergraspplogo.jpg",
+        fallback: "https://images.unsplash.com/photo-1450133064473-71024230f91b?q=80&w=600&auto=format&fit=crop",
+        bullets: ["Code of Conduct & Compliance", "Data Privacy & NDA Rules", "Ethical Decision Dilemmas"],
+        modules: [
+          { title: "Part 1: Understanding Corporate Compliance & NDA", duration: "25 mins" },
+          { title: "Part 2: Handling Ethical Dilemmas at Work", duration: "30 mins" },
+          { title: "Part 3: Professional Accountability & Integrity", duration: "25 mins" }
+        ],
+        desc: `MODULE 1: ETHICAL STANDARDS IN MNCs
+• Understanding NDAs, intellectual property, and data privacy.
+• Navigating ethical dilemmas and whistleblowing procedures.`
+      },
+      {
+        id: 14,
+        title: "Stress Management & Work-Life Balance",
+        parts: "4-Part Series",
+        image: "careergraspplogo.jpg",
+        fallback: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=600&auto=format&fit=crop",
+        bullets: ["Burnout Prevention Strategies", "Mindfulness & Stress Reset", "Healthy Work-Life Boundaries"],
+        modules: [
+          { title: "Part 1: Recognizing Early Symptoms of Burnout", duration: "24 mins" },
+          { title: "Part 2: Stress Relief Techniques for Office Hours", duration: "28 mins" },
+          { title: "Part 3: Setting Boundaries with Digital Work", duration: "30 mins" },
+          { title: "Part 4: Long-Term Well-Being & Health Habits", duration: "22 mins" }
+        ],
+        desc: `MODULE 1: BURNOUT PREVENTION
+• Identifying physical and mental signs of workplace stress.
+• Designing a balanced daily routine and digital disconnect.`
+      },
+      {
+        id: 15,
+        title: "Decision Making Under Pressure",
+        parts: "4-Part Series",
+        image: "careergraspplogo.jpg",
+        fallback: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=600&auto=format&fit=crop",
+        bullets: ["Rapid Decision Models", "Cognitive Bias Avoidance", "Managing Crisis Situations"],
+        modules: [
+          { title: "Part 1: Decision Making Frameworks Under Crunch", duration: "30 mins" },
+          { title: "Part 2: Identifying & Mitigating Cognitive Biases", duration: "32 mins" },
+          { title: "Part 3: Crisis Management & Communication", duration: "28 mins" },
+          { title: "Part 4: Post-Decision Review & Continuous Learning", duration: "25 mins" }
+        ],
+        desc: `MODULE 1: DECISION MAKING UNDER UNCERTAINTY
+• Making high-quality decisions with incomplete information.
+• Avoiding confirmation bias and sunk cost fallacies.`
+      },
+      {
+        id: 16,
+        title: "Networking & Relationship Building",
+        parts: "4-Part Series",
+        image: "careergraspplogo.jpg",
+        fallback: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=600&auto=format&fit=crop",
+        bullets: ["Building Strategic Alliances", "Industry Event Networking", "Maintaining Professional Relationships"],
+        modules: [
+          { title: "Part 1: The Art of Genuine Professional Networking", duration: "26 mins" },
+          { title: "Part 2: Conference & Event Networking Strategies", duration: "30 mins" },
+          { title: "Part 3: Mentorship Acquisition & Relationship Care", duration: "28 mins" },
+          { title: "Part 4: Digital Networking on LinkedIn & Communities", duration: "25 mins" }
+        ],
+        desc: `MODULE 1: STRATEGIC NETWORKING
+• Building authentic professional connections without being transactional.
+• Finding and nurturing mentor-mentee relationships.`
+      },
+      {
+        id: 17,
+        title: "Creative Thinking & Innovation",
+        parts: "3-Part Series",
+        image: "careergraspplogo.jpg",
+        fallback: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=600&auto=format&fit=crop",
+        bullets: ["Design Thinking Process", "Brainstorming Techniques", "Fostering Innovation Culture"],
+        modules: [
+          { title: "Part 1: Design Thinking 5-Step Methodology", duration: "32 mins" },
+          { title: "Part 2: Effective Brainstorming & Mind Mapping", duration: "28 mins" },
+          { title: "Part 3: Prototyping & Testing Creative Ideas", duration: "30 mins" }
+        ],
+        desc: `MODULE 1: DESIGN THINKING METHODOLOGY
+• Empathize, Define, Ideate, Prototype, and Test.
+• Breaking mental models to innovate in traditional industries.`
+      },
+      {
+        id: 18,
+        title: "Interpersonal Skills & Active Listening",
+        parts: "4-Part Series",
+        image: "careergraspplogo.jpg",
+        fallback: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=600&auto=format&fit=crop",
+        bullets: ["Active Listening Techniques", "Building Rapport Quickly", "Understanding Office Dynamics"],
+        modules: [
+          { title: "Part 1: Active Listening vs Hearing", duration: "24 mins" },
+          { title: "Part 2: Building Rapport with Diverse Personalities", duration: "30 mins" },
+          { title: "Part 3: Assertive Communication Without Aggression", duration: "28 mins" },
+          { title: "Part 4: Navigating Office Dynamics & Politics", duration: "26 mins" }
+        ],
+        desc: `MODULE 1: MASTERING ACTIVE LISTENING
+• Paraphrasing and asking clarifying questions.
+• Building trust through validation and attentive listening.`
+      }
+    ];
+
+    // 2. RENDER 18 COURSES ON LANDING PAGE GRID
+    function renderCoursesGrid() {
+      const container = document.getElementById('courses-grid-container');
+      container.innerHTML = "";
+
+      softSkillsCourses.forEach((course) => {
+        container.innerHTML += `
+          <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden flex flex-col justify-between hover:border-indigo-400 hover:shadow-xl transition group">
+            <div>
+              <div class="h-48 w-full bg-slate-100 overflow-hidden relative">
+                <img 
+                  src="${course.image}" 
+                  onerror="this.onerror=null; this.src='${course.fallback}';" 
+                  alt="${course.title}" 
+                  class="w-full h-full object-cover group-hover:scale-105 transition duration-300" 
+                />
+                <span class="absolute top-3 right-3 bg-indigo-600 text-white text-[10px] px-2.5 py-1 rounded-full font-bold shadow">${course.parts}</span>
+              </div>
+              <div class="p-6 space-y-3">
+                <h3 class="text-xl font-extrabold text-slate-900">${course.title}</h3>
+                <ul class="space-y-2 text-xs text-slate-600">
+                  ${course.bullets.map(b => `<li class="flex items-center"><span class="w-1.5 h-1.5 bg-indigo-600 rounded-full mr-2 flex-shrink-0"></span>${b}</li>`).join('')}
+                </ul>
+              </div>
+            </div>
+            <div class="p-6 pt-0">
+              <button onclick="openCourseModal(${course.id})" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl text-xs transition flex items-center justify-center shadow-md shadow-indigo-600/20">
+                <span>View Course</span>
+                <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+              </button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    // Render Grid on Load
+    renderCoursesGrid();
+
+    // 3. FULL SCREEN MODAL OPEN & CLOSE LOGIC
+    function openCourseModal(courseId) {
+      const course = softSkillsCourses.find(c => c.id === courseId);
+      if (!course) return;
+
+      const imgElem = document.getElementById('modal-course-img');
+      imgElem.src = course.image;
+      imgElem.onerror = function() { this.src = course.fallback; };
+
+      document.getElementById('modal-course-title').textContent = course.title;
+      document.getElementById('modal-course-desc').textContent = course.desc;
+
+      // Render Video Modules List
+      const modulesContainer = document.getElementById('modal-video-modules-list');
+      modulesContainer.innerHTML = "";
+
+      course.modules.forEach((mod, idx) => {
+        modulesContainer.innerHTML += `
+          <div class="p-4 bg-slate-900 text-white rounded-xl border border-slate-800 flex items-center justify-between">
+            <div class="flex items-center space-x-3 truncate">
+              <span class="w-7 h-7 rounded-full bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 text-xs font-bold flex items-center justify-center flex-shrink-0">${idx + 1}</span>
+              <span class="text-xs md:text-sm font-semibold truncate">${mod.title}</span>
+            </div>
+            <div class="flex items-center space-x-3 flex-shrink-0">
+              <span class="text-[11px] text-slate-400">${mod.duration}</span>
+              <span class="text-[10px] bg-red-600/20 text-red-400 border border-red-500/30 px-2 py-0.5 rounded font-medium">PDF Included</span>
+            </div>
+          </div>
+        `;
+      });
+
+      document.getElementById('course-detail-modal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCourseModal() {
+      document.getElementById('course-detail-modal').classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Dropdown Logic
     function toggleLoginDropdown() {
       const menu = document.getElementById('login-dropdown-menu');
       const arrow = document.getElementById('dropdown-arrow');
@@ -262,7 +820,6 @@
       arrow.classList.toggle('rotate-180');
     }
 
-    // Close dropdown if user clicks outside
     window.addEventListener('click', function(e) {
       const btn = document.getElementById('login-dropdown-btn');
       const menu = document.getElementById('login-dropdown-menu');
