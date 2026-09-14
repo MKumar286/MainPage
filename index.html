@@ -91,7 +91,7 @@
       
       <div class="text-center mb-16 space-y-3">
         <h2 class="text-3xl font-extrabold text-slate-900">Featured Soft Skills Programs</h2>
-        <p class="text-sm text-slate-600 max-w-xl mx-auto">Master essential corporate skills with our 18 specialized programs. Click "View Course" to inspect the complete syllabus and enroll for ₹250.</p>
+        <p class="text-sm text-slate-600 max-w-xl mx-auto">Master essential corporate skills with our 18 specialized programs. Click "View Course" to inspect syllabus & enrollment details.</p>
       </div>
 
       <div id="courses-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -154,7 +154,7 @@
           Back to Courses List
         </button>
         <div class="flex items-center space-x-3">
-          <span class="text-xs bg-emerald-100 text-emerald-800 border border-emerald-300 px-3 py-1 rounded-full font-bold">Special Offer: ₹250</span>
+          <span id="modal-top-offer-badge" class="text-xs bg-emerald-100 text-emerald-800 border border-emerald-300 px-3 py-1 rounded-full font-bold">Special Offer</span>
           <button onclick="closeCourseModal()" class="text-slate-400 hover:text-slate-700 text-2xl font-bold px-2">&times;</button>
         </div>
       </div>
@@ -172,7 +172,7 @@
             <h1 id="modal-course-title" class="text-3xl md:text-4xl font-extrabold text-slate-900"></h1>
           </div>
 
-          <!-- Description Section with Bold Module Headings & HTML Styling -->
+          <!-- Description Section -->
           <div class="bg-white border border-slate-200 p-6 md:p-8 rounded-2xl space-y-4 shadow-sm">
             <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-3 flex items-center">
               <svg class="w-5 h-5 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
@@ -199,16 +199,17 @@
 
         </div>
 
-        <!-- Right 1 Column: Light Payment Card (₹250) -->
+        <!-- Right 1 Column: DYNAMIC PAYMENT CARD -->
         <div class="space-y-6">
           <div class="bg-white text-slate-900 rounded-3xl p-8 border border-slate-200 shadow-xl sticky top-28 space-y-6">
             
             <div class="space-y-2 border-b border-slate-200 pb-6">
               <span class="text-xs bg-indigo-100 text-indigo-700 border border-indigo-200 px-3 py-1 rounded-full font-bold uppercase tracking-wider">Instant Access</span>
               <div class="flex items-baseline space-x-2 pt-2">
-                <span class="text-4xl font-black text-slate-900">₹250</span>
-                <span class="text-slate-400 text-sm line-through">₹2,999</span>
-                <span class="text-xs text-emerald-600 font-bold">91% OFF</span>
+                <!-- DYNAMIC PRICE DISPLAYED HERE -->
+                <span id="modal-course-price" class="text-4xl font-black text-slate-900">₹250</span>
+                <span id="modal-course-original-price" class="text-slate-400 text-sm line-through">₹2,999</span>
+                <span class="text-xs text-emerald-600 font-bold">Limited Offer</span>
               </div>
               <p class="text-xs text-slate-500">One-time payment. Lifetime unlimited access to all video parts & PDF notes.</p>
             </div>
@@ -233,9 +234,10 @@
             </div>
 
             <div class="pt-4 space-y-3">
-              <a href="register.html" class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-2xl text-center block shadow-lg shadow-indigo-600/30 transition text-sm">
-                Pay ₹250 & Enroll Now
-              </a>
+              <!-- DYNAMIC ENROLL BUTTON -->
+              <button id="modal-enroll-btn" class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-2xl text-center block shadow-lg shadow-indigo-600/30 transition text-sm">
+                Pay & Enroll Now
+              </button>
               <a href="course.html" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs text-center block transition">
                 Already Enrolled? Log In
               </a>
@@ -259,12 +261,12 @@
         <button onclick="closeVideoPlayerModal()" class="text-slate-400 hover:text-slate-800 font-bold text-2xl px-2">&times;</button>
       </div>
 
-      <!-- VIDEO PLAYER CONTAINER WITH TOP-RIGHT DRIVE POPOUT BLOCKER -->
+      <!-- VIDEO PLAYER CONTAINER -->
       <div id="video-container-box" class="relative w-full aspect-video min-h-[380px] md:min-h-[460px] bg-black rounded-xl overflow-hidden flex items-center justify-center shadow-inner border border-slate-200">
         <!-- Injected dynamically -->
       </div>
 
-      <!-- PLAYBACK TOOLBAR (ONLY PDF LINK RETAINED) -->
+      <!-- PLAYBACK TOOLBAR -->
       <div class="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-700 pt-2 gap-3 border-t border-slate-200">
         <p class="text-[11px] text-slate-500">Embedded video stream with full controls.</p>
         
@@ -293,17 +295,20 @@
 
   <!-- ================= JAVASCRIPT LOGIC ================= -->
   <script>
-    /* Sample PDF links separate from Video links */
     const samplePdfLinks = [
       "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
       "https://www.orimi.com/pdf-test.pdf"
     ];
 
-    /* 18 COURSES DATASET */
+    /* ==========================================================================
+       18 COURSES DATASET WITH INDIVIDUAL 'price' PROPERTY
+       You can change the price for any course below!
+       ========================================================================== */
     const softSkillsCourses = [
       {
         id: 1,
         title: "Corporate Communication & Etiquette",
+        price: 250, // <-- PRICE FOR COURSE 1
         parts: "4-Part Series",
         image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=600&auto=format&fit=crop",
         bullets: ["Professional Email Writing", "Body Language & Cues", "Cross-Cultural Communication"],
@@ -329,7 +334,6 @@
           }
         ],
 
-        // LESSON-SPECIFIC VIDEO URLS AND PDF URLS
         partsList: [
           {
             partTitle: "Part 1: Workplace Communication Fundamentals",
@@ -383,6 +387,7 @@
       {
         id: 2,
         title: "GD & Personal Interview Mastery",
+        price: 499, // <-- PRICE FOR COURSE 2
         parts: "6-Part Series",
         image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop",
         bullets: ["GD Entry & Subsuming Tactics", "Tricky HR & Behavioral Questions", "STAR Storytelling Technique"],
@@ -453,6 +458,7 @@
       {
         id: 3,
         title: "Quantitative Aptitude & Logic",
+        price: 399, // <-- PRICE FOR COURSE 3
         parts: "8-Part Series",
         image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=600&auto=format&fit=crop",
         bullets: ["Speed Math & Short Tricks", "Logical Reasoning & Data Interpretation", "Placement Exam Problem Sets"],
@@ -490,7 +496,7 @@
       }
     ];
 
-    // Helper templates for remaining courses 4 to 18
+    // Helper templates with dynamic prices for courses 4 to 18
     const titles = [
       "Resume Building & LinkedIn Branding", "Emotional Intelligence & Workplace Empathy",
       "Time Management & Productivity Hacks", "Public Speaking & Stage Confidence", "Critical Thinking & Problem Solving",
@@ -498,6 +504,7 @@
       "Business Email & Report Writing", "Professional Ethics & Workplace Integrity", "Stress Management & Work-Life Balance",
       "Decision Making Under Pressure", "Networking & Relationship Building", "Creative Thinking & Innovation", "Interpersonal Skills & Active Listening"
     ];
+    const pricesList = [299, 349, 299, 449, 399, 499, 349, 299, 249, 199, 299, 399, 349, 299, 249];
     const imgs = [
       "https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=600&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=600&auto=format&fit=crop",
@@ -521,6 +528,7 @@
       softSkillsCourses.push({
         id: i,
         title: titleName,
+        price: pricesList[i - 4], // <-- ASSIGN PRICE FOR COURSES 4 TO 18
         parts: "4-Part Series",
         image: imgs[i - 4],
         bullets: ["Core Concept Fundamentals", "Practical Case Studies & Drills", "Interactive Session PDF Notes"],
@@ -588,7 +596,7 @@
       });
     }
 
-    // Render Grid Cards
+    // Render Grid Cards (Displaying price badge on each course card)
     function renderCoursesGrid() {
       const container = document.getElementById('courses-grid-container');
       container.innerHTML = "";
@@ -603,6 +611,7 @@
                   alt="${course.title}" 
                   class="w-full h-full object-cover group-hover:scale-105 transition duration-300" 
                 />
+                <span class="absolute top-3 left-3 bg-emerald-600 text-white text-[11px] px-2.5 py-1 rounded-full font-extrabold shadow">₹${course.price}</span>
                 <span class="absolute top-3 right-3 bg-indigo-600 text-white text-[10px] px-2.5 py-1 rounded-full font-bold shadow">${course.parts}</span>
               </div>
               <div class="p-6 space-y-3">
@@ -614,7 +623,7 @@
             </div>
             <div class="p-6 pt-0">
               <button onclick="openCourseModal(${course.id})" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl text-xs transition flex items-center justify-center shadow-md shadow-indigo-600/20">
-                <span>View Course</span>
+                <span>View Course (₹${course.price})</span>
                 <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
               </button>
             </div>
@@ -625,13 +634,17 @@
 
     renderCoursesGrid();
 
-    // OPEN COURSE MODAL
+    // OPEN COURSE MODAL (UPDATES MODAL DYNAMICALLY WITH SPECIFIC COURSE PRICE)
     function openCourseModal(courseId) {
       const course = softSkillsCourses.find(c => c.id === courseId);
       if (!course) return;
 
       document.getElementById('modal-course-img').src = course.image;
       document.getElementById('modal-course-title').textContent = course.title;
+
+      // UPDATE MODAL PRICE DYNAMICALLY
+      document.getElementById('modal-course-price').textContent = `₹${course.price}`;
+      document.getElementById('modal-enroll-btn').textContent = `Pay ₹${course.price} & Enroll Now`;
 
       // Render BOLD Module Headings
       const descContainer = document.getElementById('modal-course-desc');
@@ -711,9 +724,7 @@
       document.body.style.overflow = 'auto';
     }
 
-    /* ==========================================================================
-       ROBUST GOOGLE DRIVE IFRAME STREAM PLAYER (WITH TOP-RIGHT POPOUT BLOCKER)
-       ========================================================================== */
+    /* Stream video modal */
     function playLessonVideo(title, rawVideoUrl, rawPdfUrl) {
       document.getElementById('video-modal-title').textContent = title;
       const containerBox = document.getElementById('video-container-box');
@@ -726,7 +737,6 @@
         }
       }
 
-      // Embed via official Google Drive iframe preview + Overlay Blocker for top-right Drive Popout icon
       if (driveFileId) {
         const embedUrl = `https://drive.google.com/file/d/${driveFileId}/preview`;
         containerBox.innerHTML = `
@@ -737,20 +747,16 @@
               allow="autoplay; fullscreen; picture-in-picture" 
               allowfullscreen>
             </iframe>
-            <!-- Top Right Overlay Blocker (Hides/Disables Google Drive Pop-out Arrow Icon) -->
             <div class="absolute top-0 right-0 w-14 h-14 bg-black z-10"></div>
           </div>`;
       } else {
-        // Direct MP4 link fallback
         containerBox.innerHTML = `
           <video class="w-full h-full object-contain rounded-xl" controls controlsList="nodownload" autoplay>
             <source src="${rawVideoUrl}" type="video/mp4" />
           </video>`;
       }
 
-      // Link PDF button inside modal to session PDF URL
       document.getElementById('video-pdf-link').href = rawPdfUrl;
-
       document.getElementById('video-player-modal').classList.remove('hidden');
     }
 
@@ -760,7 +766,6 @@
       document.getElementById('video-player-modal').classList.add('hidden');
     }
 
-    // Dropdown Toggle
     function toggleLoginDropdown() {
       const menu = document.getElementById('login-dropdown-menu');
       const arrow = document.getElementById('dropdown-arrow');
