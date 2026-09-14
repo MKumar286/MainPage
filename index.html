@@ -27,10 +27,9 @@
         </div>
       </a>
 
-      <!-- HEADER NAVIGATION: COURSES BUTTON & LOGIN DROPDOWN -->
+      <!-- HEADER NAVIGATION -->
       <div class="flex items-center space-x-4">
         
-        <!-- Courses Button -->
         <a href="#courses-section" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-xl text-xs font-semibold transition flex items-center shadow-sm">
           <svg class="w-4 h-4 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
           Courses
@@ -43,9 +42,7 @@
             <svg class="w-4 h-4 ml-2 transition-transform duration-200" id="dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
           </button>
 
-          <!-- Dropdown Options -->
           <div id="login-dropdown-menu" class="hidden absolute right-0 mt-2 w-56 rounded-xl bg-white border border-slate-200 shadow-2xl z-50 overflow-hidden py-1 divide-y divide-slate-100">
-            
             <a href="course.html" class="flex items-center px-4 py-3 text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition">
               <svg class="w-4 h-4 mr-3 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
               <div>
@@ -69,7 +66,6 @@
                 <span class="text-[10px] text-slate-500 font-normal">Course creation & system management</span>
               </div>
             </a>
-
           </div>
         </div>
 
@@ -77,7 +73,7 @@
     </div>
   </header>
 
-  <!-- ================= 3/4 SPACE EMBEDDED STARTING HERO BANNER ================= -->
+  <!-- ================= HERO BANNER ================= -->
   <section class="w-full bg-white flex items-center justify-center my-4">
     <div class="w-full md:w-3/4 mx-auto flex items-center justify-center">
       <img 
@@ -89,7 +85,7 @@
     </div>
   </section>
 
-  <!-- ================= SOFTSKILLS COURSES LIST SECTION (18 COURSES) ================= -->
+  <!-- ================= COURSES LIST SECTION ================= -->
   <section id="courses-section" class="py-16 bg-slate-50 border-t border-slate-200">
     <div class="max-w-7xl mx-auto px-6">
       
@@ -98,7 +94,6 @@
         <p class="text-sm text-slate-600 max-w-xl mx-auto">Master essential corporate skills with our 18 specialized programs. Click "View Course" to inspect the complete syllabus and enroll for ₹250.</p>
       </div>
 
-      <!-- Course Cards Grid -->
       <div id="courses-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <!-- Injected via JavaScript -->
       </div>
@@ -110,7 +105,6 @@
     <div class="max-w-6xl mx-auto px-6">
       <div class="bg-slate-50 border border-slate-200 rounded-3xl p-8 md:p-12 grid grid-cols-1 md:grid-cols-3 gap-8 items-center shadow-lg">
         
-        <!-- Author Profile Image -->
         <div class="flex flex-col items-center text-center space-y-3">
           <div class="w-40 h-40 rounded-full overflow-hidden border-4 border-indigo-600 shadow-xl bg-slate-200">
             <img 
@@ -126,7 +120,6 @@
           </div>
         </div>
 
-        <!-- Author Biography -->
         <div class="md:col-span-2 space-y-4">
           <span class="text-xs bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full font-semibold border border-indigo-200">About the Author & Mentor</span>
           <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900">Empowering 20,000+ Students to Bridge the Campus-to-Corporate Gap</h2>
@@ -150,37 +143,37 @@
     </div>
   </section>
 
-  <!-- ================= FULL SCREEN COURSE DETAIL & PAYMENT MODAL ================= -->
-  <div id="course-detail-modal" class="hidden fixed inset-0 z-50 bg-slate-950/95 overflow-y-auto p-4 md:p-8">
-    <div class="max-w-7xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden min-h-[90vh] flex flex-col">
+  <!-- ================= FULL SCREEN COURSE DETAIL MODAL ================= -->
+  <div id="course-detail-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm overflow-y-auto p-4 md:p-8">
+    <div class="max-w-7xl mx-auto bg-slate-50 rounded-3xl shadow-2xl overflow-hidden min-h-[90vh] flex flex-col border border-slate-200">
       
       <!-- Top Modal Nav Bar -->
-      <div class="bg-slate-900 text-white p-6 flex justify-between items-center border-b border-slate-800 sticky top-0 z-30">
-        <button onclick="closeCourseModal()" class="inline-flex items-center text-indigo-400 hover:text-white font-semibold text-sm transition">
+      <div class="bg-white text-slate-900 p-6 flex justify-between items-center border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <button onclick="closeCourseModal()" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-semibold text-sm transition">
           <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
           Back to Courses List
         </button>
         <div class="flex items-center space-x-3">
-          <span class="text-xs bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full font-semibold">Special Offer: ₹250</span>
-          <button onclick="closeCourseModal()" class="text-slate-400 hover:text-white text-2xl font-bold px-2">&times;</button>
+          <span class="text-xs bg-emerald-100 text-emerald-800 border border-emerald-300 px-3 py-1 rounded-full font-bold">Special Offer: ₹250</span>
+          <button onclick="closeCourseModal()" class="text-slate-400 hover:text-slate-700 text-2xl font-bold px-2">&times;</button>
         </div>
       </div>
 
-      <!-- Main Layout: 2/3 Syllabus & Interactive Video Parts | 1/3 Payment Card -->
+      <!-- Main Layout -->
       <div class="p-6 md:p-10 grid grid-cols-1 lg:grid-cols-3 gap-10 flex-1">
         
         <!-- Left 2 Columns -->
         <div class="lg:col-span-2 space-y-8">
           
           <div class="space-y-4">
-            <div class="h-64 w-full rounded-2xl overflow-hidden bg-slate-100 border border-slate-200">
+            <div class="h-64 w-full rounded-2xl overflow-hidden bg-white border border-slate-200 shadow-sm">
               <img id="modal-course-img" src="" alt="Course Cover" class="w-full h-full object-cover" />
             </div>
             <h1 id="modal-course-title" class="text-3xl md:text-4xl font-extrabold text-slate-900"></h1>
           </div>
 
           <!-- Description -->
-          <div class="bg-slate-50 border border-slate-200 p-8 rounded-2xl space-y-4 shadow-sm">
+          <div class="bg-white border border-slate-200 p-8 rounded-2xl space-y-4 shadow-sm">
             <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-3 flex items-center">
               <svg class="w-5 h-5 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
               Complete Course Syllabus & Detailed Overview
@@ -188,7 +181,7 @@
             <p id="modal-course-desc" class="text-slate-700 text-sm leading-relaxed whitespace-pre-line"></p>
           </div>
 
-          <!-- VIDEO PARTS & 3-4 SUB-LESSONS EXPANDABLE ACCORDION SECTION -->
+          <!-- VIDEO PARTS & SUB-LESSONS ACCORDION -->
           <div class="space-y-4 pt-4 border-t border-slate-200">
             <div class="flex items-center justify-between">
               <h3 class="text-2xl font-bold text-slate-900 flex items-center">
@@ -198,7 +191,6 @@
               <span class="text-xs text-indigo-600 font-semibold">Click any Part to expand lessons</span>
             </div>
 
-            <!-- Accordion List Container -->
             <div id="modal-parts-accordion-list" class="space-y-4">
               <!-- Injected via JS -->
             </div>
@@ -206,35 +198,35 @@
 
         </div>
 
-        <!-- Right 1 Column: Highlighted Payment Card (₹250) -->
+        <!-- Right 1 Column: Light Payment Card (₹250) -->
         <div class="space-y-6">
-          <div class="bg-slate-900 text-white rounded-3xl p-8 border border-slate-800 shadow-2xl sticky top-28 space-y-6">
+          <div class="bg-white text-slate-900 rounded-3xl p-8 border border-slate-200 shadow-xl sticky top-28 space-y-6">
             
-            <div class="space-y-2 border-b border-slate-800 pb-6">
-              <span class="text-xs bg-indigo-600/30 text-indigo-300 border border-indigo-500/40 px-3 py-1 rounded-full font-semibold uppercase tracking-wider">Instant Access</span>
+            <div class="space-y-2 border-b border-slate-200 pb-6">
+              <span class="text-xs bg-indigo-100 text-indigo-700 border border-indigo-200 px-3 py-1 rounded-full font-bold uppercase tracking-wider">Instant Access</span>
               <div class="flex items-baseline space-x-2 pt-2">
-                <span class="text-4xl font-black text-white">₹250</span>
+                <span class="text-4xl font-black text-slate-900">₹250</span>
                 <span class="text-slate-400 text-sm line-through">₹2,999</span>
-                <span class="text-xs text-emerald-400 font-bold">91% OFF</span>
+                <span class="text-xs text-emerald-600 font-bold">91% OFF</span>
               </div>
-              <p class="text-xs text-slate-400">One-time payment. Lifetime unlimited access to all video parts & PDF notes.</p>
+              <p class="text-xs text-slate-500">One-time payment. Lifetime unlimited access to all video parts & PDF notes.</p>
             </div>
 
-            <div class="space-y-3 text-xs text-slate-300">
+            <div class="space-y-3 text-xs text-slate-600">
               <div class="flex items-center space-x-2">
-                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                 <span>3 to 4 High HD Videos Per Part</span>
               </div>
               <div class="flex items-center space-x-2">
-                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                <span>Direct Session PDF Download Buttons</span>
+                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <span>Google Drive Stream & PDF Support</span>
               </div>
               <div class="flex items-center space-x-2">
-                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                <span>Play, Pause & Audio Mute Controls</span>
+                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <span>Full Screen & Speed Controls</span>
               </div>
               <div class="flex items-center space-x-2">
-                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                 <span>Verified Certificate of Completion</span>
               </div>
             </div>
@@ -243,7 +235,7 @@
               <a href="register.html" class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-2xl text-center block shadow-lg shadow-indigo-600/30 transition text-sm">
                 Pay ₹250 & Enroll Now
               </a>
-              <a href="course.html" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-xl text-xs text-center block transition">
+              <a href="course.html" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs text-center block transition">
                 Already Enrolled? Log In
               </a>
             </div>
@@ -256,33 +248,28 @@
     </div>
   </div>
 
-  <!-- ================= INLINE VIDEO PREVIEW PLAYER MODAL ================= -->
-  <div id="video-player-modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-4xl overflow-hidden shadow-2xl space-y-4 p-4">
-      <div class="flex justify-between items-center text-white pb-2 border-b border-slate-800">
-        <h4 id="video-modal-title" class="font-bold text-sm text-indigo-400 truncate max-w-lg"></h4>
-        <button onclick="closeVideoPlayerModal()" class="text-slate-400 hover:text-white font-bold text-xl">&times;</button>
+  <!-- ================= EMBEDDED GOOGLE DRIVE VIDEO PLAYER MODAL ================= -->
+  <div id="video-player-modal" class="hidden fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col p-4 md:p-6 space-y-4">
+      
+      <!-- Video Modal Header -->
+      <div class="flex justify-between items-center pb-3 border-b border-slate-200">
+        <h4 id="video-modal-title" class="font-extrabold text-sm md:text-base text-slate-900 truncate max-w-lg"></h4>
+        <button onclick="closeVideoPlayerModal()" class="text-slate-400 hover:text-slate-800 font-bold text-2xl px-2">&times;</button>
       </div>
 
-      <!-- Player Box -->
-      <div class="relative aspect-video bg-black rounded-xl overflow-hidden flex items-center justify-center">
-        <video id="inline-video-element" class="w-full h-full object-contain" controls>
-          <source id="inline-video-source" src="" type="video/mp4" />
-        </video>
+      <!-- EMBEDDED CONTAINER -->
+      <div id="video-container-box" class="relative w-full aspect-video max-h-[60vh] bg-slate-900 rounded-xl overflow-hidden flex items-center justify-center shadow-inner border border-slate-200">
+        <!-- Injected dynamically: Google Drive iframe or standard video stream -->
       </div>
 
-      <!-- Video Controls Toolbar (Play/Pause, Mute Toggle, PDF view) -->
-      <div class="flex items-center justify-between text-xs text-white pt-2">
-        <div class="flex items-center space-x-3">
-          <button id="video-play-pause-btn" onclick="togglePlayPause()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold flex items-center">
-            ▶ Play / Pause
-          </button>
-          <button id="video-mute-btn" onclick="toggleMuteAudio()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg font-semibold flex items-center text-slate-300">
-            🔊 Mute / Unmute
-          </button>
-        </div>
-        <a id="video-pdf-link" href="#" target="_blank" class="px-4 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold inline-flex items-center">
-          📄 View Session PDF
+      <!-- Action Footer Toolbar -->
+      <div class="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-700 pt-2 gap-3 border-t border-slate-100">
+        <p class="text-[11px] text-slate-500">Google Drive Player with native play/pause, speed control & full-screen controls.</p>
+        
+        <a id="video-pdf-link" href="#" target="_blank" class="w-full sm:w-auto px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold shadow-md shadow-red-600/20 transition flex items-center justify-center">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          View Session PDF Notes
         </a>
       </div>
     </div>
@@ -303,7 +290,20 @@
 
   <!-- ================= JAVASCRIPT LOGIC ================= -->
   <script>
-    // 18 SOFTSKILLS COURSES DATASET WITH 3-4 SUB-LESSONS & PDF BUTTON PER PART
+    // YOUR REAL GOOGLE DRIVE VIDEO LINKS ARRAY
+    const googleDriveVideos = [
+      "https://drive.google.com/file/d/1SwWrTypvpt8lIwWJgDcMFo-ax7t0arQg/view?usp=sharing",
+      "https://drive.google.com/file/d/1uXC7EsUOUNzE3Mal6Z7pFpiqbTspbMZu/view?usp=sharing",
+      "https://drive.google.com/file/d/1XUjqs8ZXdS7czBPHvmRwckQ-_0aZctbw/view?usp=sharing"
+    ];
+
+    // Helper to get a random Google Drive video link
+    function getRandomDriveVideo() {
+      const idx = Math.floor(Math.random() * googleDriveVideos.length);
+      return googleDriveVideos[idx];
+    }
+
+    // 18 SOFTSKILLS COURSES DATASET
     const softSkillsCourses = [
       {
         id: 1,
@@ -315,33 +315,33 @@
           {
             partTitle: "Part 1: Workplace Communication Fundamentals",
             lessons: [
-              { title: "Lesson 1.1: Core Concepts & Active Listening Rules", duration: "8 mins", sampleVideo: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", pdfUrl: "#" },
-              { title: "Lesson 1.2: Verbal Clarity & Tone Modulation", duration: "7 mins", sampleVideo: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4", pdfUrl: "#" },
-              { title: "Lesson 1.3: Overcoming Communication Barriers in Office", duration: "9 mins", sampleVideo: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4", pdfUrl: "#" }
+              { title: "Lesson 1.1: Core Concepts & Active Listening Rules", duration: "8 mins", sampleVideo: getRandomDriveVideo(), pdfUrl: "#" },
+              { title: "Lesson 1.2: Verbal Clarity & Tone Modulation", duration: "7 mins", sampleVideo: getRandomDriveVideo(), pdfUrl: "#" },
+              { title: "Lesson 1.3: Overcoming Communication Barriers in Office", duration: "9 mins", sampleVideo: getRandomDriveVideo(), pdfUrl: "#" }
             ]
           },
           {
             partTitle: "Part 2: Executive Email Writing & Digital Etiquette",
             lessons: [
-              { title: "Lesson 2.1: Structuring Subject Lines & Clear CTAs", duration: "10 mins", sampleVideo: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoylikes.mp4", pdfUrl: "#" },
-              { title: "Lesson 2.2: Professional Greetings & Formal Sign-offs", duration: "8 mins", sampleVideo: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4", pdfUrl: "#" },
-              { title: "Lesson 2.3: Managing Thread CC/BCC & Incident Reports", duration: "14 mins", sampleVideo: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4", pdfUrl: "#" }
+              { title: "Lesson 2.1: Structuring Subject Lines & Clear CTAs", duration: "10 mins", sampleVideo: getRandomDriveVideo(), pdfUrl: "#" },
+              { title: "Lesson 2.2: Professional Greetings & Formal Sign-offs", duration: "8 mins", sampleVideo: getRandomDriveVideo(), pdfUrl: "#" },
+              { title: "Lesson 2.3: Managing Thread CC/BCC & Incident Reports", duration: "14 mins", sampleVideo: getRandomDriveVideo(), pdfUrl: "#" }
             ]
           },
           {
             partTitle: "Part 3: Non-Verbal Signals & Body Language Mastery",
             lessons: [
-              { title: "Lesson 3.1: Posture & Hand Gesture Control in Meetings", duration: "9 mins", sampleVideo: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackSeeTheWorld.mp4", pdfUrl: "#" },
-              { title: "Lesson 3.2: Virtual Video Call Setup & Lighting", duration: "8 mins", sampleVideo: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4", pdfUrl: "#" },
-              { title: "Lesson 3.3: Reading Unstated Stakeholder Cues", duration: "11 mins", sampleVideo: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4", pdfUrl: "#" }
+              { title: "Lesson 3.1: Posture & Hand Gesture Control in Meetings", duration: "9 mins", sampleVideo: getRandomDriveVideo(), pdfUrl: "#" },
+              { title: "Lesson 3.2: Virtual Video Call Setup & Lighting", duration: "8 mins", sampleVideo: getRandomDriveVideo(), pdfUrl: "#" },
+              { title: "Lesson 3.3: Reading Unstated Stakeholder Cues", duration: "11 mins", sampleVideo: getRandomDriveVideo(), pdfUrl: "#" }
             ]
           },
           {
             partTitle: "Part 4: Cross-Cultural Collaboration in MNCs",
             lessons: [
-              { title: "Lesson 4.1: Cultural Sensitivity & Global Accent Basics", duration: "10 mins", sampleVideo: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4", pdfUrl: "#" },
-              { title: "Lesson 4.2: Conflict De-escalation & Diplomatic Feedback", duration: "12 mins", sampleVideo: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", pdfUrl: "#" },
-              { title: "Lesson 4.3: Executive Pitching & Presentation Storytelling", duration: "8 mins", sampleVideo: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4", pdfUrl: "#" }
+              { title: "Lesson 4.1: Cultural Sensitivity & Global Accent Basics", duration: "10 mins", sampleVideo: getRandomDriveVideo(), pdfUrl: "#" },
+              { title: "Lesson 4.2: Conflict De-escalation & Diplomatic Feedback", duration: "12 mins", sampleVideo: getRandomDriveVideo(), pdfUrl: "#" },
+              { title: "Lesson 4.3: Executive Pitching & Presentation Storytelling", duration: "8 mins", sampleVideo: getRandomDriveVideo(), pdfUrl: "#" }
             ]
           }
         ],
@@ -352,8 +352,7 @@
 
 MODULE 2: WRITTEN COMMUNICATION & EMAIL ETIQUETTE
 • Structuring executive emails for leadership readability.
-• Writing clear subject lines and actionable call-to-actions.
-• Professional greeting standards and formal sign-offs.`
+• Writing clear subject lines and actionable call-to-actions.`
       },
       {
         id: 2,
@@ -365,17 +364,17 @@ MODULE 2: WRITTEN COMMUNICATION & EMAIL ETIQUETTE
           {
             partTitle: "Part 1: Group Discussion Frameworks & Rules",
             lessons: [
-              { title: "Lesson 1.1: GD Evaluation Metrics & Scoring Rubrics", duration: "10 mins", sampleVideo: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", pdfUrl: "#" },
-              { title: "Lesson 1.2: Formulating Arguments in 60 Seconds", duration: "12 mins", sampleVideo: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4", pdfUrl: "#" },
-              { title: "Lesson 1.3: Types of GDs: Abstract, Factual & Case Studies", duration: "13 mins", sampleVideo: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4", pdfUrl: "#" }
+              { title: "Lesson 1.1: GD Evaluation Metrics & Scoring Rubrics", duration: "10 mins", sampleVideo: getRandomDriveVideo(), pdfUrl: "#" },
+              { title: "Lesson 1.2: Formulating Arguments in 60 Seconds", duration: "12 mins", sampleVideo: getRandomDriveVideo(), pdfUrl: "#" },
+              { title: "Lesson 1.3: Types of GDs: Abstract, Factual & Case Studies", duration: "13 mins", sampleVideo: getRandomDriveVideo(), pdfUrl: "#" }
             ]
           },
           {
             partTitle: "Part 2: Strategic Entry & Moderation Tactics",
             lessons: [
-              { title: "Lesson 2.1: Initiating a GD Without Interrupting", duration: "9 mins", sampleVideo: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoylikes.mp4", pdfUrl: "#" },
-              { title: "Lesson 2.2: Steering Off-Track Discussions Back to Topic", duration: "8 mins", sampleVideo: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4", pdfUrl: "#" },
-              { title: "Lesson 2.3: Summarizing & Concluding GD Sessions", duration: "10 mins", sampleVideo: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4", pdfUrl: "#" }
+              { title: "Lesson 2.1: Initiating a GD Without Interrupting", duration: "9 mins", sampleVideo: getRandomDriveVideo(), pdfUrl: "#" },
+              { title: "Lesson 2.2: Steering Off-Track Discussions Back to Topic", duration: "8 mins", sampleVideo: getRandomDriveVideo(), pdfUrl: "#" },
+              { title: "Lesson 2.3: Summarizing & Concluding GD Sessions", duration: "10 mins", sampleVideo: getRandomDriveVideo(), pdfUrl: "#" }
             ]
           }
         ],
@@ -385,7 +384,7 @@ MODULE 2: WRITTEN COMMUNICATION & EMAIL ETIQUETTE
       }
     ];
 
-    // Build remaining 16 courses dynamically with default sub-lessons
+    // Populate Remaining 16 Courses with Random Google Drive Videos
     for (let i = 3; i <= 18; i++) {
       const titles = [
         "Quantitative Aptitude & Logic", "Resume Building & LinkedIn Branding", "Emotional Intelligence & Workplace Empathy",
@@ -423,17 +422,17 @@ MODULE 2: WRITTEN COMMUNICATION & EMAIL ETIQUETTE
           {
             partTitle: `Part 1: Introduction to ${titles[i - 3]}`,
             lessons: [
-              { title: "Lesson 1.1: Core Concepts & Principles", duration: "10 mins", sampleVideo: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", pdfUrl: "#" },
-              { title: "Lesson 1.2: Key Metrics & Problem Solving", duration: "12 mins", sampleVideo: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4", pdfUrl: "#" },
-              { title: "Lesson 1.3: Real-World Case Studies", duration: "14 mins", sampleVideo: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4", pdfUrl: "#" }
+              { title: "Lesson 1.1: Core Concepts & Principles", duration: "10 mins", sampleVideo: getRandomDriveVideo(), pdfUrl: "#" },
+              { title: "Lesson 1.2: Key Metrics & Problem Solving", duration: "12 mins", sampleVideo: getRandomDriveVideo(), pdfUrl: "#" },
+              { title: "Lesson 1.3: Real-World Case Studies", duration: "14 mins", sampleVideo: getRandomDriveVideo(), pdfUrl: "#" }
             ]
           },
           {
             partTitle: `Part 2: Advanced ${titles[i - 3]} Techniques`,
             lessons: [
-              { title: "Lesson 2.1: Advanced Frameworks", duration: "11 mins", sampleVideo: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoylikes.mp4", pdfUrl: "#" },
-              { title: "Lesson 2.2: Execution Strategies", duration: "13 mins", sampleVideo: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4", pdfUrl: "#" },
-              { title: "Lesson 2.3: Final Assessment Drills", duration: "15 mins", sampleVideo: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4", pdfUrl: "#" }
+              { title: "Lesson 2.1: Advanced Frameworks", duration: "11 mins", sampleVideo: getRandomDriveVideo(), pdfUrl: "#" },
+              { title: "Lesson 2.2: Execution Strategies", duration: "13 mins", sampleVideo: getRandomDriveVideo(), pdfUrl: "#" },
+              { title: "Lesson 2.3: Final Assessment Drills", duration: "15 mins", sampleVideo: getRandomDriveVideo(), pdfUrl: "#" }
             ]
           }
         ],
@@ -443,7 +442,7 @@ MODULE 2: WRITTEN COMMUNICATION & EMAIL ETIQUETTE
       });
     }
 
-    // 2. RENDER COURSES GRID
+    // Render Grid Cards
     function renderCoursesGrid() {
       const container = document.getElementById('courses-grid-container');
       container.innerHTML = "";
@@ -480,7 +479,7 @@ MODULE 2: WRITTEN COMMUNICATION & EMAIL ETIQUETTE
 
     renderCoursesGrid();
 
-    // 3. FULL SCREEN COURSE MODAL WITH NESTED EXPANDABLE PARTS
+    // Open Course Modal
     function openCourseModal(courseId) {
       const course = softSkillsCourses.find(c => c.id === courseId);
       if (!course) return;
@@ -496,17 +495,17 @@ MODULE 2: WRITTEN COMMUNICATION & EMAIL ETIQUETTE
         const partId = `part_accordion_${pIdx}`;
         
         let lessonsHtml = part.lessons.map((les, lIdx) => `
-          <div class="p-3 bg-slate-800 border border-slate-700 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-3 text-white">
+          <div class="p-3.5 bg-white border border-slate-200 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-3 text-slate-800 shadow-sm hover:border-indigo-300 transition">
             <div class="flex items-center space-x-3">
-              <span class="w-6 h-6 rounded-full bg-indigo-600 text-white text-[11px] font-bold flex items-center justify-center flex-shrink-0">${lIdx + 1}</span>
-              <span class="text-xs font-semibold text-slate-200">${les.title} <span class="text-[10px] text-slate-400 font-normal">(${les.duration})</span></span>
+              <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-[11px] font-bold flex items-center justify-center flex-shrink-0">${lIdx + 1}</span>
+              <span class="text-xs font-semibold text-slate-800">${les.title} <span class="text-[10px] text-slate-500 font-normal">(${les.duration})</span></span>
             </div>
             
             <div class="flex items-center space-x-2 flex-shrink-0">
-              <button onclick="playLessonVideo('${les.title}', '${les.sampleVideo}', '${les.pdfUrl}')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition flex items-center">
+              <button onclick="playLessonVideo('${les.title}', '${les.sampleVideo}', '${les.pdfUrl}')" class="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition flex items-center shadow-sm">
                 ▶ Play Video
               </button>
-              <a href="${les.pdfUrl}" target="_blank" class="px-3 py-1.5 bg-red-600/20 hover:bg-red-600 text-red-300 hover:text-white border border-red-500/30 rounded-lg text-xs font-semibold transition flex items-center">
+              <a href="${les.pdfUrl}" target="_blank" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-lg text-xs font-semibold transition flex items-center">
                 📄 View PDF
               </a>
             </div>
@@ -515,15 +514,15 @@ MODULE 2: WRITTEN COMMUNICATION & EMAIL ETIQUETTE
 
         accordionContainer.innerHTML += `
           <div class="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm">
-            <button onclick="togglePartAccordion('${partId}')" class="w-full p-4 bg-slate-900 text-white font-bold text-sm flex items-center justify-between hover:bg-slate-800 transition">
+            <button onclick="togglePartAccordion('${partId}')" class="w-full p-4 bg-slate-100 text-slate-900 font-bold text-sm flex items-center justify-between hover:bg-slate-200 transition border-b border-slate-200">
               <span class="flex items-center">
-                <span class="w-2.5 h-2.5 rounded-full bg-indigo-400 mr-3"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-indigo-600 mr-3"></span>
                 ${part.partTitle}
               </span>
-              <span class="text-xs text-indigo-400 font-normal">Expand (${part.lessons.length} Lessons) ▼</span>
+              <span class="text-xs text-indigo-600 font-semibold">Expand (${part.lessons.length} Lessons) ▼</span>
             </button>
 
-            <div id="${partId}" class="p-4 bg-slate-950 space-y-3 hidden">
+            <div id="${partId}" class="p-4 bg-slate-50 space-y-3 hidden">
               ${lessonsHtml}
             </div>
           </div>
@@ -544,38 +543,60 @@ MODULE 2: WRITTEN COMMUNICATION & EMAIL ETIQUETTE
       document.body.style.overflow = 'auto';
     }
 
-    // 4. INLINE VIDEO PLAYER MODAL & AUDIO MUTE CONTROLS
-    function playLessonVideo(title, videoUrl, pdfUrl) {
+    // REGEX-POWERED GOOGLE DRIVE VIDEO & PDF LINK CONVERTER FOR IFRAME EMBEDDING
+    function playLessonVideo(title, rawVideoUrl, rawPdfUrl) {
       document.getElementById('video-modal-title').textContent = title;
-      const videoEl = document.getElementById('inline-video-element');
-      const sourceEl = document.getElementById('inline-video-source');
-      sourceEl.src = videoUrl;
-      videoEl.load();
-      videoEl.play();
+      const containerBox = document.getElementById('video-container-box');
+      
+      let videoUrl = rawVideoUrl;
+      let pdfUrl = rawPdfUrl;
 
-      document.getElementById('video-pdf-link').href = pdfUrl;
+      // Extract Drive File ID safely using Regex
+      if (videoUrl.includes('drive.google.com')) {
+        const driveIdMatch = videoUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (driveIdMatch && driveIdMatch[1]) {
+          const fileId = driveIdMatch[1];
+          videoUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+        }
+
+        // Embed inside iframe for flawless Google Drive playback & native controls
+        containerBox.innerHTML = `
+          <iframe 
+            src="${videoUrl}" 
+            class="w-full h-full min-h-[350px] md:min-h-[420px] rounded-xl border-0" 
+            allow="autoplay; fullscreen" 
+            allowfullscreen>
+          </iframe>`;
+      } else {
+        // Fallback Standard Direct MP4 Player
+        containerBox.innerHTML = `
+          <video class="w-full h-full object-contain rounded-xl" controls controlsList="nodownload">
+            <source src="${videoUrl}" type="video/mp4" />
+            Your browser does not support this video format.
+          </video>`;
+      }
+
+      // Format PDF Link
+      if (pdfUrl.includes('drive.google.com')) {
+        const pdfIdMatch = pdfUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (pdfIdMatch && pdfIdMatch[1]) {
+          pdfUrl = `https://drive.google.com/file/d/${pdfIdMatch[1]}/preview`;
+        }
+      }
+      
+      const pdfBtn = document.getElementById('video-pdf-link');
+      pdfBtn.href = pdfUrl;
+
       document.getElementById('video-player-modal').classList.remove('hidden');
     }
 
     function closeVideoPlayerModal() {
-      const videoEl = document.getElementById('inline-video-element');
-      videoEl.pause();
+      const containerBox = document.getElementById('video-container-box');
+      containerBox.innerHTML = ""; // Stop audio/video stream on close
       document.getElementById('video-player-modal').classList.add('hidden');
     }
 
-    function togglePlayPause() {
-      const videoEl = document.getElementById('inline-video-element');
-      if (videoEl.paused) videoEl.play();
-      else videoEl.pause();
-    }
-
-    function toggleMuteAudio() {
-      const videoEl = document.getElementById('inline-video-element');
-      videoEl.muted = !videoEl.muted;
-      document.getElementById('video-mute-btn').textContent = videoEl.muted ? "🔇 Unmute Audio" : "🔊 Mute Audio";
-    }
-
-    // Dropdown Logic
+    // Dropdown Toggle
     function toggleLoginDropdown() {
       const menu = document.getElementById('login-dropdown-menu');
       const arrow = document.getElementById('dropdown-arrow');
