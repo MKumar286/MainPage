@@ -21,7 +21,7 @@
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       
       <!-- Brand Logo -->
-      <a href="#" class="flex items-center space-x-3">
+      <a href="index.html" class="flex items-center space-x-3">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center font-black text-white text-xl shadow-md shadow-indigo-500/20">
           C
         </div>
@@ -264,7 +264,7 @@
         <button onclick="closeVideoPlayerModal()" class="text-slate-400 hover:text-slate-800 font-bold text-2xl px-2">&times;</button>
       </div>
 
-      <!-- VIDEO PLAYER CONTAINER -->
+      <!-- VIDEO PLAYER CONTAINER WITH DRIVE OVERLAY BLOCKER -->
       <div id="video-container-box" class="relative w-full aspect-video min-h-[380px] md:min-h-[460px] bg-black rounded-xl overflow-hidden flex items-center justify-center shadow-inner border border-slate-200">
         <!-- Injected dynamically -->
       </div>
@@ -298,8 +298,8 @@
 
   <!-- ================= JAVASCRIPT LOGIC ================= -->
   <script>
-    // Configurable Razorpay Key ID (Replace with your actual Razorpay Key ID from Dashboard)
-    const RAZORPAY_KEY_ID = "rzp_test_TXFnqgy3pZvwzL"; 
+    // Configurable Razorpay Key ID (Replace with your actual Key ID from Razorpay Dashboard)
+    const RAZORPAY_KEY_ID = "rzp_test_YOUR_KEY_HERE"; 
 
     const samplePdfLinks = [
       "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
@@ -637,7 +637,7 @@
 
     renderCoursesGrid();
 
-    // OPEN COURSE MODAL (UPDATES MODAL & WIRES UP RAZORPAY ENROLL BUTTON)
+    // OPEN COURSE MODAL
     function openCourseModal(courseId) {
       const course = softSkillsCourses.find(c => c.id === courseId);
       if (!course) return;
@@ -725,30 +725,35 @@
     }
 
     /* ==========================================================================
-       STEP 2: RAZORPAY PAYMENT INITIATION FUNCTION
+       RAZORPAY PAYMENT & AUTOMATED STUDENT PROFILE CREATOR
        ========================================================================== */
     function initiateRazorpayPayment(courseId) {
       const course = softSkillsCourses.find(c => c.id === courseId);
       if (!course) return;
 
+      // Check if student profile exists, otherwise prompt for Name & Email
+      let studentProfile = JSON.parse(localStorage.getItem('careergraspp_user_profile'));
+      
+      let studentName = studentProfile ? studentProfile.name : prompt("Enter Student Full Name for Certificate & Profile:");
+      if (!studentName) return alert("Student Name is required to enroll!");
+
+      let studentEmail = studentProfile ? studentProfile.email : prompt("Enter Student Email Address:");
+      if (!studentEmail) return alert("Student Email is required for access!");
+
       const options = {
-        "key": RAZORPAY_KEY_ID, 
-        "amount": course.price * 100, // Amount in Paise (e.g. ₹250 = 25000 paise)
+        "key": RAZORPAY_KEY_ID, // Ensure your key ID is set above
+        "amount": course.price * 100, // Amount in Paise
         "currency": "INR",
-        "name": "Careergraspp",
+        "name": "Careergraspp Soft Skills Academy",
         "description": `Enrollment for ${course.title}`,
         "image": "careergraspplogo.jpg",
         "handler": function (response) {
-          // Success callback: Executed after payment completed
-          console.log("Razorpay Payment Success Response:", response);
-          
-          // Delegate to success handler (Prepared for Step 3!)
-          onPaymentSuccess(response.razorpay_payment_id, course);
+          // Create / Update Student Profile & Unlock Course
+          onPaymentSuccess(response.razorpay_payment_id, course, studentName, studentEmail);
         },
         "prefill": {
-          "name": "",
-          "email": "",
-          "contact": ""
+          "name": studentName,
+          "email": studentEmail
         },
         "theme": {
           "color": "#4F46E5"
@@ -765,33 +770,40 @@
     }
 
     /* ==========================================================================
-   STEP 3: POST-PAYMENT SAVING & AUTOMATIC REDIRECT
-   ========================================================================== */
-async function onPaymentSuccess(paymentId, course) {
-  const user = firebase.auth().currentUser;
+       POST-PAYMENT PROFILE CREATION & DIRECT DASHBOARD REDIRECT
+       ========================================================================== */
+    function onPaymentSuccess(paymentId, course, name, email) {
+      // 1. Get existing profile or initialize a new one
+      let profile = JSON.parse(localStorage.getItem('careergraspp_user_profile')) || {
+        name: name,
+        email: email,
+        enrolledCourses: [],
+        transactions: [],
+        joinedDate: new Date().toLocaleDateString()
+      };
 
-  if (user) {
-    // Save to Firebase Firestore under student's user profile
-    await db.collection("users").doc(user.uid).set({
-      enrolledCourses: firebase.firestore.FieldValue.arrayUnion(course.id),
-      payments: firebase.firestore.FieldValue.arrayUnion({
+      // 2. Add course to enrolled list if not already present
+      if (!profile.enrolledCourses.includes(course.id)) {
+        profile.enrolledCourses.push(course.id);
+      }
+
+      // 3. Record transaction details
+      profile.transactions.push({
         paymentId: paymentId,
         courseId: course.id,
-        price: course.price,
-        timestamp: new Date()
-      })
-    }, { merge: true });
+        courseTitle: course.title,
+        amount: course.price,
+        date: new Date().toLocaleString()
+      });
 
-    window.location.href = `course.html?unlocked=${course.id}`;
-  } else {
-    // Guest User: Save locally first, then redirect to register.html
-    let enrolled = JSON.parse(localStorage.getItem('careergraspp_enrolled_courses') || '[]');
-    if (!enrolled.includes(course.id)) enrolled.push(course.id);
-    localStorage.setItem('careergraspp_enrolled_courses', JSON.stringify(enrolled));
+      // 4. Save Student Profile to Local Storage (Session)
+      localStorage.setItem('careergraspp_user_profile', JSON.stringify(profile));
 
-    window.location.href = `course.html?unlocked=${course.id}`;
-  }
-}
+      // 5. Alert & Direct Redirect to Student Dashboard (course.html)
+      alert(`🎉 Payment Successful!\n\nWelcome ${name}!\nTransaction ID: ${paymentId}\nCourse Unlocked: ${course.title}\n\nRedirecting directly to your Student Profile...`);
+      
+      window.location.href = `course.html?unlocked=${course.id}`;
+    }
 
     function togglePartAccordion(partId) {
       const el = document.getElementById(partId);
@@ -826,6 +838,7 @@ async function onPaymentSuccess(paymentId, course) {
               allow="autoplay; fullscreen; picture-in-picture" 
               allowfullscreen>
             </iframe>
+            <!-- Top Right Overlay Blocker (Hides/Disables Google Drive Pop-out Arrow Icon) -->
             <div class="absolute top-0 right-0 w-14 h-14 bg-black z-10"></div>
           </div>`;
       } else {
