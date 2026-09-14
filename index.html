@@ -6,6 +6,10 @@
   <title>Careergraspp - Soft Skills & Placement Training</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  
+  <!-- ================= RAZORPAY CHECKOUT SDK ================= -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
   <style>
     body { font-family: 'Inter', sans-serif; }
   </style>
@@ -206,7 +210,6 @@
             <div class="space-y-2 border-b border-slate-200 pb-6">
               <span class="text-xs bg-indigo-100 text-indigo-700 border border-indigo-200 px-3 py-1 rounded-full font-bold uppercase tracking-wider">Instant Access</span>
               <div class="flex items-baseline space-x-2 pt-2">
-                <!-- DYNAMIC PRICE DISPLAYED HERE -->
                 <span id="modal-course-price" class="text-4xl font-black text-slate-900">₹250</span>
                 <span id="modal-course-original-price" class="text-slate-400 text-sm line-through">₹2,999</span>
                 <span class="text-xs text-emerald-600 font-bold">Limited Offer</span>
@@ -234,7 +237,7 @@
             </div>
 
             <div class="pt-4 space-y-3">
-              <!-- DYNAMIC ENROLL BUTTON -->
+              <!-- RAZORPAY ENROLL BUTTON -->
               <button id="modal-enroll-btn" class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-2xl text-center block shadow-lg shadow-indigo-600/30 transition text-sm">
                 Pay & Enroll Now
               </button>
@@ -295,20 +298,20 @@
 
   <!-- ================= JAVASCRIPT LOGIC ================= -->
   <script>
+    // Configurable Razorpay Key ID (Replace with your actual Razorpay Key ID from Dashboard)
+    const RAZORPAY_KEY_ID = "rzp_test_YOUR_KEY_HERE"; 
+
     const samplePdfLinks = [
       "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
       "https://www.orimi.com/pdf-test.pdf"
     ];
 
-    /* ==========================================================================
-       18 COURSES DATASET WITH INDIVIDUAL 'price' PROPERTY
-       You can change the price for any course below!
-       ========================================================================== */
+    /* 18 COURSES DATASET WITH INDIVIDUAL 'price' PROPERTY */
     const softSkillsCourses = [
       {
         id: 1,
         title: "Corporate Communication & Etiquette",
-        price: 250, // <-- PRICE FOR COURSE 1
+        price: 250,
         parts: "4-Part Series",
         image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=600&auto=format&fit=crop",
         bullets: ["Professional Email Writing", "Body Language & Cues", "Cross-Cultural Communication"],
@@ -387,7 +390,7 @@
       {
         id: 2,
         title: "GD & Personal Interview Mastery",
-        price: 499, // <-- PRICE FOR COURSE 2
+        price: 499,
         parts: "6-Part Series",
         image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop",
         bullets: ["GD Entry & Subsuming Tactics", "Tricky HR & Behavioral Questions", "STAR Storytelling Technique"],
@@ -458,7 +461,7 @@
       {
         id: 3,
         title: "Quantitative Aptitude & Logic",
-        price: 399, // <-- PRICE FOR COURSE 3
+        price: 399,
         parts: "8-Part Series",
         image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=600&auto=format&fit=crop",
         bullets: ["Speed Math & Short Tricks", "Logical Reasoning & Data Interpretation", "Placement Exam Problem Sets"],
@@ -496,7 +499,7 @@
       }
     ];
 
-    // Helper templates with dynamic prices for courses 4 to 18
+    // Helper templates for remaining courses 4 to 18
     const titles = [
       "Resume Building & LinkedIn Branding", "Emotional Intelligence & Workplace Empathy",
       "Time Management & Productivity Hacks", "Public Speaking & Stage Confidence", "Critical Thinking & Problem Solving",
@@ -528,7 +531,7 @@
       softSkillsCourses.push({
         id: i,
         title: titleName,
-        price: pricesList[i - 4], // <-- ASSIGN PRICE FOR COURSES 4 TO 18
+        price: pricesList[i - 4],
         parts: "4-Part Series",
         image: imgs[i - 4],
         bullets: ["Core Concept Fundamentals", "Practical Case Studies & Drills", "Interactive Session PDF Notes"],
@@ -596,7 +599,7 @@
       });
     }
 
-    // Render Grid Cards (Displaying price badge on each course card)
+    // Render Grid Cards
     function renderCoursesGrid() {
       const container = document.getElementById('courses-grid-container');
       container.innerHTML = "";
@@ -634,7 +637,7 @@
 
     renderCoursesGrid();
 
-    // OPEN COURSE MODAL (UPDATES MODAL DYNAMICALLY WITH SPECIFIC COURSE PRICE)
+    // OPEN COURSE MODAL (UPDATES MODAL & WIRES UP RAZORPAY ENROLL BUTTON)
     function openCourseModal(courseId) {
       const course = softSkillsCourses.find(c => c.id === courseId);
       if (!course) return;
@@ -644,7 +647,14 @@
 
       // UPDATE MODAL PRICE DYNAMICALLY
       document.getElementById('modal-course-price').textContent = `₹${course.price}`;
-      document.getElementById('modal-enroll-btn').textContent = `Pay ₹${course.price} & Enroll Now`;
+      
+      const enrollBtn = document.getElementById('modal-enroll-btn');
+      enrollBtn.textContent = `Pay ₹${course.price} & Enroll Now`;
+      
+      // ATTACH RAZORPAY PAYMENT TRIGGER TO THE ENROLL BUTTON
+      enrollBtn.onclick = function() {
+        initiateRazorpayPayment(course.id);
+      };
 
       // Render BOLD Module Headings
       const descContainer = document.getElementById('modal-course-desc');
@@ -712,6 +722,52 @@
 
       document.getElementById('course-detail-modal').classList.remove('hidden');
       document.body.style.overflow = 'hidden';
+    }
+
+    /* ==========================================================================
+       STEP 2: RAZORPAY PAYMENT INITIATION FUNCTION
+       ========================================================================== */
+    function initiateRazorpayPayment(courseId) {
+      const course = softSkillsCourses.find(c => c.id === courseId);
+      if (!course) return;
+
+      const options = {
+        "key": RAZORPAY_KEY_ID, 
+        "amount": course.price * 100, // Amount in Paise (e.g. ₹250 = 25000 paise)
+        "currency": "INR",
+        "name": "Careergraspp",
+        "description": `Enrollment for ${course.title}`,
+        "image": "careergraspplogo.jpg",
+        "handler": function (response) {
+          // Success callback: Executed after payment completed
+          console.log("Razorpay Payment Success Response:", response);
+          
+          // Delegate to success handler (Prepared for Step 3!)
+          onPaymentSuccess(response.razorpay_payment_id, course);
+        },
+        "prefill": {
+          "name": "",
+          "email": "",
+          "contact": ""
+        },
+        "theme": {
+          "color": "#4F46E5"
+        }
+      };
+
+      const rzp = new Razorpay(options);
+      
+      rzp.on('payment.failed', function (response){
+        alert(`Payment Failed: ${response.error.description}`);
+      });
+
+      rzp.open();
+    }
+
+    // Success Handler Function (Placeholder ready for Step 3 redirection & unlocking)
+    function onPaymentSuccess(paymentId, course) {
+      alert(`🎉 Payment Successful!\n\nTransaction ID: ${paymentId}\nCourse: ${course.title}\nAmount Paid: ₹${course.price}`);
+      // Step 3 will handle storing enrollment in Firebase/localStorage & redirecting to course.html!
     }
 
     function togglePartAccordion(partId) {
