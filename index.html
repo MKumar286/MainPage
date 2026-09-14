@@ -77,28 +77,28 @@
     </div>
   </header>
 
-  <!-- ================= 3/4 SPACE EMBEDDED STARTING HERO BANNER ================= -->
-  <section class="w-full bg-white flex items-center justify-center py-8">
-    <div class="w-full md:w-3/4 px-4 mx-auto flex items-center justify-center min-h-[300px]">
+  <!-- ================= 3/4 SPACE EMBEDDED STARTING HERO BANNER (NO CARD BORDER) ================= -->
+  <section class="w-full bg-white flex items-center justify-center my-4">
+    <div class="w-full md:w-3/4 mx-auto flex items-center justify-center">
       <img 
         src="careergraspplogo.jpg" 
         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop';" 
         alt="Careergraspp Main Banner" 
-        class="w-full h-auto max-h-[75vh] object-contain rounded-2xl shadow-xl border border-slate-100" 
+        class="w-full h-auto max-h-[75vh] object-contain rounded-2xl" 
       />
     </div>
   </section>
 
   <!-- ================= SOFTSKILLS COURSES LIST SECTION (18 COURSES) ================= -->
-  <section id="courses-section" class="py-20 bg-slate-50 border-t border-slate-200">
+  <section id="courses-section" class="py-16 bg-slate-50 border-t border-slate-200">
     <div class="max-w-7xl mx-auto px-6">
       
       <div class="text-center mb-16 space-y-3">
         <h2 class="text-3xl font-extrabold text-slate-900">Featured Soft Skills Programs</h2>
-        <p class="text-sm text-slate-600 max-w-xl mx-auto">Master essential corporate skills with our 18 specialized programs. Click "View Course" to inspect the complete 50+ line syllabus and enroll for ₹250.</p>
+        <p class="text-sm text-slate-600 max-w-xl mx-auto">Master essential corporate skills with our 18 specialized programs. Click "View Course" to inspect the complete syllabus and enroll for ₹250.</p>
       </div>
 
-      <!-- Course Cards Grid (Rendered via JS for 18 items) -->
+      <!-- Course Cards Grid -->
       <div id="courses-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <!-- Injected via JavaScript -->
       </div>
@@ -180,7 +180,7 @@
             <h1 id="modal-course-title" class="text-3xl md:text-4xl font-extrabold text-slate-900"></h1>
           </div>
 
-          <!-- Complete Description (50+ Lines Supported) -->
+          <!-- Complete Description -->
           <div class="bg-slate-50 border border-slate-200 p-8 rounded-2xl space-y-4 shadow-sm">
             <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-3 flex items-center">
               <svg class="w-5 h-5 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
@@ -216,7 +216,6 @@
               <p class="text-xs text-slate-400">One-time payment. Lifetime unlimited access to all video parts & PDF notes.</p>
             </div>
 
-            <!-- Highlights Checklist -->
             <div class="space-y-3 text-xs text-slate-300">
               <div class="flex items-center space-x-2">
                 <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
@@ -240,7 +239,6 @@
               </div>
             </div>
 
-            <!-- Enrollment Action Button -->
             <div class="pt-4 space-y-3">
               <a href="register.html" class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-2xl text-center block shadow-lg shadow-indigo-600/30 transition text-sm">
                 Pay ₹250 & Enroll Now
@@ -273,14 +271,13 @@
 
   <!-- ================= JAVASCRIPT LOGIC ================= -->
   <script>
-    // 18 SOFTSKILLS COURSES DATASET WITH 50+ LINE DETAILED SYLLABUS
+    // 18 SOFTSKILLS COURSES DATASET WITH INDIVIDUAL RELEVANT IMAGES
     const softSkillsCourses = [
       {
         id: 1,
         title: "Corporate Communication & Etiquette",
         parts: "4-Part Series",
-        image: "careergraspplogo.jpg",
-        fallback: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=600&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=600&auto=format&fit=crop",
         bullets: ["Professional Email Writing", "Body Language & Cues", "Cross-Cultural Communication"],
         modules: [
           { title: "Part 1: Workplace Communication Fundamentals", duration: "24 mins" },
@@ -321,15 +318,13 @@ MODULE 5: PRESENTATION & STORYTELLING FOR EXECUTIVES
 
 MODULE 6: CONTINUOUS IMPROVEMENT & WORKSHOP EXERCISES
 • Self-auditing communication patterns.
-• Daily articulation drills and vocabulary expansion.
-• Real-world scenario simulations and case studies.`
+• Daily articulation drills and vocabulary expansion.`
       },
       {
         id: 2,
         title: "GD & Personal Interview Mastery",
         parts: "6-Part Series",
-        image: "careergraspplogo.jpg",
-        fallback: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop",
         bullets: ["GD Entry & Subsuming Tactics", "Tricky HR & Behavioral Questions", "STAR Storytelling Technique"],
         modules: [
           { title: "Part 1: Group Discussion Frameworks & Rules", duration: "35 mins" },
@@ -348,7 +343,6 @@ MODULE 2: STRATEGIC GD ENTRY & LEADER TACTICS
 • How to initiate a GD smoothly without interrupting others.
 • Techniques for bringing off-track discussions back to core focus.
 • Summarizing key consensus points at mid-way and closing stages.
-• Handling dominant speakers politely while asserting your viewpoint.
 
 MODULE 3: PERSONAL INTERVIEW (PI) ESSENTIALS
 • Deconstructing "Tell Me About Yourself" into a winning elevator pitch.
@@ -356,26 +350,13 @@ MODULE 3: PERSONAL INTERVIEW (PI) ESSENTIALS
 • Demonstrating company research and alignment with corporate culture.
 
 MODULE 4: BEHAVIORAL INTERVIEWS & STAR METHOD
-• Structuring answers using Situation, Task, Action, Result.
-• Preparing authentic stories for failure, conflict, and achievement.
-• Handling weakness questions with self-awareness and remediation.
-
-MODULE 5: TECHNICAL INTERVIEW COMMUNICATION
-• Explaining complex technical logic in plain business terms.
-• What to do when you don't know the exact answer to a question.
-• Demonstrating problem-solving methodology out loud.
-
-MODULE 6: POST-INTERVIEW ETIQUETTE & OFFER EVALUATION
-• Asking insightful questions to the panel at the end of the interview.
-• Drafting effective post-interview thank you notes.
-• Evaluating job offers and negotiating terms respectfully.`
+• Structuring answers using Situation, Task, Action, Result.`
       },
       {
         id: 3,
         title: "Quantitative Aptitude & Logic",
         parts: "8-Part Series",
-        image: "careergraspplogo.jpg",
-        fallback: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=600&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=600&auto=format&fit=crop",
         bullets: ["Speed Math & Short Tricks", "Logical Reasoning & Data Interpretation", "Placement Exam Problem Sets"],
         modules: [
           { title: "Part 1: Vedic Math & Rapid Calculations", duration: "45 mins" },
@@ -390,7 +371,6 @@ MODULE 6: POST-INTERVIEW ETIQUETTE & OFFER EVALUATION
         desc: `MODULE 1: SPEED MATH & COMPUTATIONAL EFFICIENCY
 • Vedic math shortcuts for 3-digit multiplication and square roots.
 • Memorization charts for fraction-to-percentage conversions.
-• Divisibility rules and unit digit calculation short tricks.
 
 MODULE 2: ARITHMETIC APTITUDE CORE
 • Percentages, profit, loss, and discount problem solving.
@@ -399,30 +379,13 @@ MODULE 2: ARITHMETIC APTITUDE CORE
 
 MODULE 3: TIME, WORK, AND MOTION
 • Time and work equations solved via LCM methodology.
-• Pipes and cisterns inlet/outlet flow rate calculations.
-• Relative speed, train crossings, and river boat problems.
-
-MODULE 4: ADVANCED QUANTITATIVE TOPICS
-• Permutations, combinations, and probability concepts.
-• Number systems, HCF, LCM, and remainder theorems.
-• Mensuration, area, and volume formulas simplified.
-
-MODULE 5: LOGICAL REASONING
-• Linear and circular seating arrangement puzzles.
-• Blood relations, direction sense, and coding-decoding.
-• Syllogisms and Venn diagram logic derivation.
-
-MODULE 6: DATA INTERPRETATION & EXAM STRATEGY
-• Analyzing bar graphs, pie charts, and line charts under time pressure.
-• Time allocation strategy for TCS, Infosys, and Accenture exams.
-• Negative marking avoidance strategies.`
+• Pipes and cisterns inlet/outlet flow rate calculations.`
       },
       {
         id: 4,
         title: "Resume Building & LinkedIn Branding",
         parts: "4-Part Series",
-        image: "careergraspplogo.jpg",
-        fallback: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=600&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=600&auto=format&fit=crop",
         bullets: ["ATS-Friendly Resume Templates", "Action Verbs & Impact Metrics", "LinkedIn Profile Optimization"],
         modules: [
           { title: "Part 1: Single-Page Resume Architecture", duration: "30 mins" },
@@ -433,28 +396,16 @@ MODULE 6: DATA INTERPRETATION & EXAM STRATEGY
         desc: `MODULE 1: ATS RESUME ARCHITECTURE
 • Designing single-page ATS-compliant resume layouts.
 • Section hierarchy: Summary, Skills, Projects, Experience, Education.
-• Font, margin, and formatting rules that pass automated scanners.
 
 MODULE 2: CRAFTING HIGH-IMPACT BULLET POINTS
 • Using the Google XYZ formula: Accomplished [X] as measured by [Y], by doing [Z].
-• Strong action verbs to replace weak passive phrases.
-• Quantifying project outcomes with percentages and numbers.
-
-MODULE 3: LINKEDIN PROFILE OPTIMIZATION
-• Writing a search-optimized headline and compelling summary.
-• Structuring featured section with project links and certifications.
-• Requesting recommendations and recommendations etiquette.
-
-MODULE 4: OUTREACH & NETWORKING STRATEGY
-• Cold messaging recruiters and alumni for referrals.
-• Engaging with industry content to build visibility.`
+• Quantifying project outcomes with percentages and numbers.`
       },
       {
         id: 5,
         title: "Emotional Intelligence & Workplace Empathy",
         parts: "5-Part Series",
-        image: "careergraspplogo.jpg",
-        fallback: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=600&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=600&auto=format&fit=crop",
         bullets: ["Self-Awareness & Self-Regulation", "Empathy in Teamwork", "Managing High-Stress Situations"],
         modules: [
           { title: "Part 1: The 5 Pillars of Emotional Intelligence", duration: "28 mins" },
@@ -465,24 +416,17 @@ MODULE 4: OUTREACH & NETWORKING STRATEGY
         ],
         desc: `MODULE 1: EQ VS IQ IN CORPORATE SUCCESS
 • Why EQ accounts for 80% of executive career progression.
-• The Daniel Goleman EQ framework: Self-awareness, Self-regulation, Motivation, Empathy, Social Skills.
+• The Daniel Goleman EQ framework.
 
 MODULE 2: SELF-AWARENESS & IMPULSE CONTROL
 • Identifying personal emotional triggers in work environments.
-• Pausing before responding under stress or criticism.
-• Daily reflection methods for emotional clarity.
-
-MODULE 3: EMPATHY & ACTIVE LISTENING
-• Distinguishing between sympathy and active empathy.
-• Understanding customer and team member pain points.
-• Validating others' perspectives without compromising standards.`
+• Pausing before responding under stress or criticism.`
       },
       {
         id: 6,
         title: "Time Management & Productivity Hacks",
         parts: "4-Part Series",
-        image: "careergraspplogo.jpg",
-        fallback: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=600&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=600&auto=format&fit=crop",
         bullets: ["Eisenhower Matrix Prioritization", "Pomodoro & Time-Blocking", "Eliminating Procrastination"],
         modules: [
           { title: "Part 1: The Psychology of Procrastination", duration: "25 mins" },
@@ -493,23 +437,16 @@ MODULE 3: EMPATHY & ACTIVE LISTENING
         desc: `MODULE 1: OVERCOMING PROCRASTINATION
 • Root causes of task avoidance: Fear of failure vs perfectionism.
 • The 2-minute rule for small tasks.
-• Breaking complex deliverables into manageable micro-steps.
 
 MODULE 2: PRIORITIZATION FRAMEWORKS
 • Urgent vs Important: Using the Eisenhower Matrix effectively.
-• The 80/20 Pareto principle applied to workload.
-• Setting boundaries and learning to say no to low-value tasks.
-
-MODULE 3: DEEP WORK & DAILY SYSTEMS
-• Time-blocking techniques for uninterrupted focus.
-• Setting up digital distraction shields (notifications, email checking schedules).`
+• The 80/20 Pareto principle applied to workload.`
       },
       {
         id: 7,
         title: "Public Speaking & Stage Confidence",
         parts: "5-Part Series",
-        image: "careergraspplogo.jpg",
-        fallback: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?q=80&w=600&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?q=80&w=600&auto=format&fit=crop",
         bullets: ["Overcoming Stage Fright", "Vocal Variety & Projection", "Engaging Large Audiences"],
         modules: [
           { title: "Part 1: Physiology of Public Speaking Anxiety", duration: "26 mins" },
@@ -524,19 +461,13 @@ MODULE 3: DEEP WORK & DAILY SYSTEMS
 
 MODULE 2: SPEECH STRUCTURE & OPENINGS
 • Hooking the audience in the first 30 seconds.
-• Organizing core arguments with clear transitions.
-• Crafting memorable call-to-action endings.
-
-MODULE 3: VOICE & BODY LANGUAGE
-• Pitch, pace, volume, and strategic pauses.
-• Eye contact strategies for large auditoriums vs virtual stages.`
+• Organizing core arguments with clear transitions.`
       },
       {
         id: 8,
         title: "Critical Thinking & Problem Solving",
         parts: "4-Part Series",
-        image: "careergraspplogo.jpg",
-        fallback: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600&auto=format&fit=crop",
         bullets: ["Root Cause Analysis (5 Whys)", "First-Principles Thinking", "Data-Driven Decision Making"],
         modules: [
           { title: "Part 1: Deconstructing Complex Business Problems", duration: "30 mins" },
@@ -550,17 +481,13 @@ MODULE 3: VOICE & BODY LANGUAGE
 
 MODULE 2: ANALYTICAL TOOLS
 • Applying the 5 Whys methodology.
-• Fishbone (Ishikawa) diagrams for process failures.
-
-MODULE 3: DECISION EVALUATION
-• Cost-benefit analysis and risk matrices.`
+• Fishbone (Ishikawa) diagrams for process failures.`
       },
       {
         id: 9,
         title: "Leadership & Team Dynamics",
         parts: "5-Part Series",
-        image: "careergraspplogo.jpg",
-        fallback: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=600&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=600&auto=format&fit=crop",
         bullets: ["Situational Leadership", "Delegation & Accountability", "Motivating Diverse Teams"],
         modules: [
           { title: "Part 1: Styles of Leadership & Self-Assessment", duration: "30 mins" },
@@ -574,15 +501,13 @@ MODULE 3: DECISION EVALUATION
 • Adapting leadership style based on team maturity (Situational Leadership).
 
 MODULE 2: DELEGATION & TRUST
-• How to delegate effectively without micromanaging.
-• Setting expectations and measuring key results (OKRs).`
+• How to delegate effectively without micromanaging.`
       },
       {
         id: 10,
         title: "Negotiation & Conflict Resolution",
         parts: "4-Part Series",
-        image: "careergraspplogo.jpg",
-        fallback: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=600&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=600&auto=format&fit=crop",
         bullets: ["Principled Negotiation (BATNA)", "Win-Win Outcome Strategies", "Managing Difficult Conversations"],
         modules: [
           { title: "Part 1: Principles of Win-Win Negotiation", duration: "32 mins" },
@@ -595,15 +520,13 @@ MODULE 2: DELEGATION & TRUST
 • Understanding BATNA (Best Alternative to a Negotiated Agreement).
 
 MODULE 2: CONFLICT DE-ESCALATION
-• Managing emotions during contentious negotiations.
-• Finding common ground in client or team disputes.`
+• Managing emotions during contentious negotiations.`
       },
       {
         id: 11,
         title: "Workplace Adaptability & Growth Mindset",
         parts: "3-Part Series",
-        image: "careergraspplogo.jpg",
-        fallback: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=600&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=600&auto=format&fit=crop",
         bullets: ["Fixed vs Growth Mindset", "Thriving in Agile Work Environments", "Resilience Under Pressure"],
         modules: [
           { title: "Part 1: Embracing Change in Fast-Paced Tech", duration: "25 mins" },
@@ -618,8 +541,7 @@ MODULE 2: CONFLICT DE-ESCALATION
         id: 12,
         title: "Business Email & Report Writing",
         parts: "4-Part Series",
-        image: "careergraspplogo.jpg",
-        fallback: "https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=600&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=600&auto=format&fit=crop",
         bullets: ["Executive Summary Writing", "Professional Formatting & Tone", "Grammar & Conciseness"],
         modules: [
           { title: "Part 1: Business Writing Principles & Structure", duration: "28 mins" },
@@ -635,8 +557,7 @@ MODULE 2: CONFLICT DE-ESCALATION
         id: 13,
         title: "Professional Ethics & Workplace Integrity",
         parts: "3-Part Series",
-        image: "careergraspplogo.jpg",
-        fallback: "https://images.unsplash.com/photo-1450133064473-71024230f91b?q=80&w=600&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1450133064473-71024230f91b?q=80&w=600&auto=format&fit=crop",
         bullets: ["Code of Conduct & Compliance", "Data Privacy & NDA Rules", "Ethical Decision Dilemmas"],
         modules: [
           { title: "Part 1: Understanding Corporate Compliance & NDA", duration: "25 mins" },
@@ -651,8 +572,7 @@ MODULE 2: CONFLICT DE-ESCALATION
         id: 14,
         title: "Stress Management & Work-Life Balance",
         parts: "4-Part Series",
-        image: "careergraspplogo.jpg",
-        fallback: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=600&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=600&auto=format&fit=crop",
         bullets: ["Burnout Prevention Strategies", "Mindfulness & Stress Reset", "Healthy Work-Life Boundaries"],
         modules: [
           { title: "Part 1: Recognizing Early Symptoms of Burnout", duration: "24 mins" },
@@ -668,8 +588,7 @@ MODULE 2: CONFLICT DE-ESCALATION
         id: 15,
         title: "Decision Making Under Pressure",
         parts: "4-Part Series",
-        image: "careergraspplogo.jpg",
-        fallback: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=600&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=600&auto=format&fit=crop",
         bullets: ["Rapid Decision Models", "Cognitive Bias Avoidance", "Managing Crisis Situations"],
         modules: [
           { title: "Part 1: Decision Making Frameworks Under Crunch", duration: "30 mins" },
@@ -685,8 +604,7 @@ MODULE 2: CONFLICT DE-ESCALATION
         id: 16,
         title: "Networking & Relationship Building",
         parts: "4-Part Series",
-        image: "careergraspplogo.jpg",
-        fallback: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=600&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=600&auto=format&fit=crop",
         bullets: ["Building Strategic Alliances", "Industry Event Networking", "Maintaining Professional Relationships"],
         modules: [
           { title: "Part 1: The Art of Genuine Professional Networking", duration: "26 mins" },
@@ -702,8 +620,7 @@ MODULE 2: CONFLICT DE-ESCALATION
         id: 17,
         title: "Creative Thinking & Innovation",
         parts: "3-Part Series",
-        image: "careergraspplogo.jpg",
-        fallback: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=600&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=600&auto=format&fit=crop",
         bullets: ["Design Thinking Process", "Brainstorming Techniques", "Fostering Innovation Culture"],
         modules: [
           { title: "Part 1: Design Thinking 5-Step Methodology", duration: "32 mins" },
@@ -718,8 +635,7 @@ MODULE 2: CONFLICT DE-ESCALATION
         id: 18,
         title: "Interpersonal Skills & Active Listening",
         parts: "4-Part Series",
-        image: "careergraspplogo.jpg",
-        fallback: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=600&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=600&auto=format&fit=crop",
         bullets: ["Active Listening Techniques", "Building Rapport Quickly", "Understanding Office Dynamics"],
         modules: [
           { title: "Part 1: Active Listening vs Hearing", duration: "24 mins" },
@@ -745,7 +661,6 @@ MODULE 2: CONFLICT DE-ESCALATION
               <div class="h-48 w-full bg-slate-100 overflow-hidden relative">
                 <img 
                   src="${course.image}" 
-                  onerror="this.onerror=null; this.src='${course.fallback}';" 
                   alt="${course.title}" 
                   class="w-full h-full object-cover group-hover:scale-105 transition duration-300" 
                 />
@@ -769,7 +684,6 @@ MODULE 2: CONFLICT DE-ESCALATION
       });
     }
 
-    // Render Grid on Load
     renderCoursesGrid();
 
     // 3. FULL SCREEN MODAL OPEN & CLOSE LOGIC
@@ -779,12 +693,10 @@ MODULE 2: CONFLICT DE-ESCALATION
 
       const imgElem = document.getElementById('modal-course-img');
       imgElem.src = course.image;
-      imgElem.onerror = function() { this.src = course.fallback; };
 
       document.getElementById('modal-course-title').textContent = course.title;
       document.getElementById('modal-course-desc').textContent = course.desc;
 
-      // Render Video Modules List
       const modulesContainer = document.getElementById('modal-video-modules-list');
       modulesContainer.innerHTML = "";
 
