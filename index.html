@@ -764,11 +764,34 @@
       rzp.open();
     }
 
-    // Success Handler Function (Placeholder ready for Step 3 redirection & unlocking)
-    function onPaymentSuccess(paymentId, course) {
-      alert(`🎉 Payment Successful!\n\nTransaction ID: ${paymentId}\nCourse: ${course.title}\nAmount Paid: ₹${course.price}`);
-      // Step 3 will handle storing enrollment in Firebase/localStorage & redirecting to course.html!
-    }
+    /* ==========================================================================
+   STEP 3: POST-PAYMENT SAVING & AUTOMATIC REDIRECT
+   ========================================================================== */
+async function onPaymentSuccess(paymentId, course) {
+  const user = firebase.auth().currentUser;
+
+  if (user) {
+    // Save to Firebase Firestore under student's user profile
+    await db.collection("users").doc(user.uid).set({
+      enrolledCourses: firebase.firestore.FieldValue.arrayUnion(course.id),
+      payments: firebase.firestore.FieldValue.arrayUnion({
+        paymentId: paymentId,
+        courseId: course.id,
+        price: course.price,
+        timestamp: new Date()
+      })
+    }, { merge: true });
+
+    window.location.href = `course.html?unlocked=${course.id}`;
+  } else {
+    // Guest User: Save locally first, then redirect to register.html
+    let enrolled = JSON.parse(localStorage.getItem('careergraspp_enrolled_courses') || '[]');
+    if (!enrolled.includes(course.id)) enrolled.push(course.id);
+    localStorage.setItem('careergraspp_enrolled_courses', JSON.stringify(enrolled));
+
+    window.location.href = `course.html?unlocked=${course.id}`;
+  }
+}
 
     function togglePartAccordion(partId) {
       const el = document.getElementById(partId);
