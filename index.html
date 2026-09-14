@@ -62,8 +62,9 @@
               </div>
             </a>
 
-            <a href="index.html" class="flex items-center px-4 py-3 text-xs font-semibold text-slate-700 hover:bg-purple-50 hover:text-purple-600 transition">
-              <svg class="w-4 h-4 mr-3 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            <!-- Redirects to super_admin.html -->
+            <a href="super_admin.html" class="flex items-center px-4 py-3 text-xs font-semibold text-slate-700 hover:bg-purple-50 hover:text-purple-600 transition">
+              <svg class="w-4 h-4 mr-3 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
               <div>
                 <span class="block text-slate-900">Admin Login</span>
                 <span class="text-[10px] text-slate-500 font-normal">Course creation & system management</span>
@@ -77,7 +78,7 @@
     </div>
   </header>
 
-  <!-- ================= 3/4 SPACE EMBEDDED STARTING HERO BANNER (NO CARD BORDER) ================= -->
+  <!-- ================= 3/4 SPACE EMBEDDED STARTING HERO BANNER ================= -->
   <section class="w-full bg-white flex items-center justify-center my-4">
     <div class="w-full md:w-3/4 mx-auto flex items-center justify-center">
       <img 
@@ -166,13 +167,12 @@
         </div>
       </div>
 
-      <!-- Main Layout: 2/3 Description & Video Modules | 1/3 Payment Card -->
+      <!-- Main Layout -->
       <div class="p-6 md:p-10 grid grid-cols-1 lg:grid-cols-3 gap-10 flex-1">
         
-        <!-- Left 2 Columns: 50+ Line Syllabus & Video Modules -->
+        <!-- Left 2 Columns -->
         <div class="lg:col-span-2 space-y-8">
           
-          <!-- Banner & Header -->
           <div class="space-y-4">
             <div class="h-64 w-full rounded-2xl overflow-hidden bg-slate-100 border border-slate-200">
               <img id="modal-course-img" src="" alt="Course Cover" class="w-full h-full object-cover" />
@@ -180,7 +180,6 @@
             <h1 id="modal-course-title" class="text-3xl md:text-4xl font-extrabold text-slate-900"></h1>
           </div>
 
-          <!-- Complete Description -->
           <div class="bg-slate-50 border border-slate-200 p-8 rounded-2xl space-y-4 shadow-sm">
             <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-3 flex items-center">
               <svg class="w-5 h-5 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
@@ -189,15 +188,12 @@
             <p id="modal-course-desc" class="text-slate-700 text-sm leading-relaxed whitespace-pre-line"></p>
           </div>
 
-          <!-- Video Modules Option Section -->
           <div class="space-y-4 pt-4 border-t border-slate-200">
             <h3 class="text-2xl font-bold text-slate-900 flex items-center">
               <svg class="w-6 h-6 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
               Included Video Modules & Lesson Parts
             </h3>
-            <div id="modal-video-modules-list" class="space-y-3">
-              <!-- Modules injected via JS -->
-            </div>
+            <div id="modal-video-modules-list" class="space-y-3"></div>
           </div>
 
         </div>
@@ -264,14 +260,13 @@
         <a href="#courses-section" class="hover:text-indigo-600 transition">Courses</a>
         <a href="course.html" class="hover:text-indigo-600 transition">Student Login</a>
         <a href="college-admin.html" class="hover:text-indigo-600 transition">Organization Login</a>
-        <a href="index.html" class="hover:text-indigo-600 transition">Admin Login</a>
+        <a href="super_admin.html" class="hover:text-indigo-600 transition">Admin Login</a>
       </div>
     </div>
   </footer>
 
   <!-- ================= JAVASCRIPT LOGIC ================= -->
   <script>
-    // 18 SOFTSKILLS COURSES DATASET WITH INDIVIDUAL RELEVANT IMAGES
     const softSkillsCourses = [
       {
         id: 1,
@@ -302,23 +297,10 @@ MODULE 3: NON-VERBAL COMMUNICATION & BODY LANGUAGE
 • The power of posture, eye contact, and hand gestures in meetings.
 • Virtual meeting etiquette (Zoom, MS Teams, Google Meet).
 • Camera presence, lighting, and background professionality.
-• Reading room dynamics and unstated stakeholder cues.
 
 MODULE 4: WORKPLACE DIPLOMACY & CONFLICT RESOLUTION
 • Communicating constructiveness during feedback sessions.
-• De-escalating intense team disagreements diplomatically.
-• Establishing boundaries while maintaining camaraderie.
-• Handling constructive criticism from senior managers.
-
-MODULE 5: PRESENTATION & STORYTELLING FOR EXECUTIVES
-• Structuring technical data into compelling narratives.
-• Slide design principles for executive updates.
-• Handling Q&A sessions with poise and confidence.
-• Managing public speaking anxiety and stage fright.
-
-MODULE 6: CONTINUOUS IMPROVEMENT & WORKSHOP EXERCISES
-• Self-auditing communication patterns.
-• Daily articulation drills and vocabulary expansion.`
+• De-escalating intense team disagreements diplomatically.`
       },
       {
         id: 2,
@@ -337,20 +319,10 @@ MODULE 6: CONTINUOUS IMPROVEMENT & WORKSHOP EXERCISES
         desc: `MODULE 1: GROUP DISCUSSION MECHANICS & EVALUATION
 • How interviewers rate GD participants on leadership and logic.
 • Types of GD topics: Factual, Abstract, Controversial, Case Studies.
-• Formulating initial thoughts within 60 seconds of topic announcement.
 
 MODULE 2: STRATEGIC GD ENTRY & LEADER TACTICS
 • How to initiate a GD smoothly without interrupting others.
-• Techniques for bringing off-track discussions back to core focus.
-• Summarizing key consensus points at mid-way and closing stages.
-
-MODULE 3: PERSONAL INTERVIEW (PI) ESSENTIALS
-• Deconstructing "Tell Me About Yourself" into a winning elevator pitch.
-• Highlighting academic projects, internships, and extracurriculars.
-• Demonstrating company research and alignment with corporate culture.
-
-MODULE 4: BEHAVIORAL INTERVIEWS & STAR METHOD
-• Structuring answers using Situation, Task, Action, Result.`
+• Techniques for bringing off-track discussions back to core focus.`
       },
       {
         id: 3,
@@ -370,16 +342,7 @@ MODULE 4: BEHAVIORAL INTERVIEWS & STAR METHOD
         ],
         desc: `MODULE 1: SPEED MATH & COMPUTATIONAL EFFICIENCY
 • Vedic math shortcuts for 3-digit multiplication and square roots.
-• Memorization charts for fraction-to-percentage conversions.
-
-MODULE 2: ARITHMETIC APTITUDE CORE
-• Percentages, profit, loss, and discount problem solving.
-• Simple and compound interest formulas and quick mental approximations.
-• Ratio, proportion, mixtures, and alligation techniques.
-
-MODULE 3: TIME, WORK, AND MOTION
-• Time and work equations solved via LCM methodology.
-• Pipes and cisterns inlet/outlet flow rate calculations.`
+• Memorization charts for fraction-to-percentage conversions.`
       },
       {
         id: 4,
@@ -395,11 +358,7 @@ MODULE 3: TIME, WORK, AND MOTION
         ],
         desc: `MODULE 1: ATS RESUME ARCHITECTURE
 • Designing single-page ATS-compliant resume layouts.
-• Section hierarchy: Summary, Skills, Projects, Experience, Education.
-
-MODULE 2: CRAFTING HIGH-IMPACT BULLET POINTS
-• Using the Google XYZ formula: Accomplished [X] as measured by [Y], by doing [Z].
-• Quantifying project outcomes with percentages and numbers.`
+• Section hierarchy: Summary, Skills, Projects, Experience, Education.`
       },
       {
         id: 5,
@@ -415,12 +374,7 @@ MODULE 2: CRAFTING HIGH-IMPACT BULLET POINTS
           { title: "Part 5: EQ in Leadership & Client Relations", duration: "32 mins" }
         ],
         desc: `MODULE 1: EQ VS IQ IN CORPORATE SUCCESS
-• Why EQ accounts for 80% of executive career progression.
-• The Daniel Goleman EQ framework.
-
-MODULE 2: SELF-AWARENESS & IMPULSE CONTROL
-• Identifying personal emotional triggers in work environments.
-• Pausing before responding under stress or criticism.`
+• Why EQ accounts for 80% of executive career progression.`
       },
       {
         id: 6,
@@ -435,12 +389,7 @@ MODULE 2: SELF-AWARENESS & IMPULSE CONTROL
           { title: "Part 4: Digital Distraction Detox & Focus Systems", duration: "22 mins" }
         ],
         desc: `MODULE 1: OVERCOMING PROCRASTINATION
-• Root causes of task avoidance: Fear of failure vs perfectionism.
-• The 2-minute rule for small tasks.
-
-MODULE 2: PRIORITIZATION FRAMEWORKS
-• Urgent vs Important: Using the Eisenhower Matrix effectively.
-• The 80/20 Pareto principle applied to workload.`
+• Root causes of task avoidance: Fear of failure vs perfectionism.`
       },
       {
         id: 7,
@@ -456,12 +405,7 @@ MODULE 2: PRIORITIZATION FRAMEWORKS
           { title: "Part 5: Handling Impromptu Speeches & Q&A", duration: "32 mins" }
         ],
         desc: `MODULE 1: CONQUERING STAGE FRIGHT
-• Breathing techniques to calm the nervous system before speaking.
-• Reframing anxiety into enthusiasm.
-
-MODULE 2: SPEECH STRUCTURE & OPENINGS
-• Hooking the audience in the first 30 seconds.
-• Organizing core arguments with clear transitions.`
+• Breathing techniques to calm the nervous system before speaking.`
       },
       {
         id: 8,
@@ -476,12 +420,7 @@ MODULE 2: SPEECH STRUCTURE & OPENINGS
           { title: "Part 4: Evaluating Risk & Solution Selection", duration: "25 mins" }
         ],
         desc: `MODULE 1: PROBLEM DECONSTRUCTION
-• Differentiating between symptoms and root causes.
-• Issue Tree formulation for complex business scenarios.
-
-MODULE 2: ANALYTICAL TOOLS
-• Applying the 5 Whys methodology.
-• Fishbone (Ishikawa) diagrams for process failures.`
+• Differentiating between symptoms and root causes.`
       },
       {
         id: 9,
@@ -497,11 +436,7 @@ MODULE 2: ANALYTICAL TOOLS
           { title: "Part 5: Leading Through Change & Uncertainty", duration: "25 mins" }
         ],
         desc: `MODULE 1: LEADERSHIP STYLES
-• Autocratic vs Democratic vs Servant Leadership.
-• Adapting leadership style based on team maturity (Situational Leadership).
-
-MODULE 2: DELEGATION & TRUST
-• How to delegate effectively without micromanaging.`
+• Autocratic vs Democratic vs Servant Leadership.`
       },
       {
         id: 10,
@@ -516,11 +451,7 @@ MODULE 2: DELEGATION & TRUST
           { title: "Part 4: Closing Deals & Formalizing Agreements", duration: "25 mins" }
         ],
         desc: `MODULE 1: NEGOTIATION BASICS
-• Positional bargaining vs Interest-based negotiation.
-• Understanding BATNA (Best Alternative to a Negotiated Agreement).
-
-MODULE 2: CONFLICT DE-ESCALATION
-• Managing emotions during contentious negotiations.`
+• Positional bargaining vs Interest-based negotiation.`
       },
       {
         id: 11,
@@ -534,8 +465,7 @@ MODULE 2: CONFLICT DE-ESCALATION
           { title: "Part 3: Developing Psychological Resilience", duration: "28 mins" }
         ],
         desc: `MODULE 1: GROWTH MINDSET PRINCIPLES
-• Overcoming fear of failure and viewing feedback as data.
-• Developing agility in changing organizational structures.`
+• Overcoming fear of failure and viewing feedback as data.`
       },
       {
         id: 12,
@@ -550,8 +480,7 @@ MODULE 2: CONFLICT DE-ESCALATION
           { title: "Part 4: Proofreading & Eliminating Wordiness", duration: "22 mins" }
         ],
         desc: `MODULE 1: EXECUTIVE WRITING STANDARDS
-• Writing concise executive summaries.
-• Formatting technical reports for quick executive scanning.`
+• Writing concise executive summaries.`
       },
       {
         id: 13,
@@ -565,8 +494,7 @@ MODULE 2: CONFLICT DE-ESCALATION
           { title: "Part 3: Professional Accountability & Integrity", duration: "25 mins" }
         ],
         desc: `MODULE 1: ETHICAL STANDARDS IN MNCs
-• Understanding NDAs, intellectual property, and data privacy.
-• Navigating ethical dilemmas and whistleblowing procedures.`
+• Understanding NDAs, intellectual property, and data privacy.`
       },
       {
         id: 14,
@@ -581,8 +509,7 @@ MODULE 2: CONFLICT DE-ESCALATION
           { title: "Part 4: Long-Term Well-Being & Health Habits", duration: "22 mins" }
         ],
         desc: `MODULE 1: BURNOUT PREVENTION
-• Identifying physical and mental signs of workplace stress.
-• Designing a balanced daily routine and digital disconnect.`
+• Identifying physical and mental signs of workplace stress.`
       },
       {
         id: 15,
@@ -597,8 +524,7 @@ MODULE 2: CONFLICT DE-ESCALATION
           { title: "Part 4: Post-Decision Review & Continuous Learning", duration: "25 mins" }
         ],
         desc: `MODULE 1: DECISION MAKING UNDER UNCERTAINTY
-• Making high-quality decisions with incomplete information.
-• Avoiding confirmation bias and sunk cost fallacies.`
+• Making high-quality decisions with incomplete information.`
       },
       {
         id: 16,
@@ -613,8 +539,7 @@ MODULE 2: CONFLICT DE-ESCALATION
           { title: "Part 4: Digital Networking on LinkedIn & Communities", duration: "25 mins" }
         ],
         desc: `MODULE 1: STRATEGIC NETWORKING
-• Building authentic professional connections without being transactional.
-• Finding and nurturing mentor-mentee relationships.`
+• Building authentic professional connections without being transactional.`
       },
       {
         id: 17,
@@ -628,8 +553,7 @@ MODULE 2: CONFLICT DE-ESCALATION
           { title: "Part 3: Prototyping & Testing Creative Ideas", duration: "30 mins" }
         ],
         desc: `MODULE 1: DESIGN THINKING METHODOLOGY
-• Empathize, Define, Ideate, Prototype, and Test.
-• Breaking mental models to innovate in traditional industries.`
+• Empathize, Define, Ideate, Prototype, and Test.`
       },
       {
         id: 18,
@@ -644,12 +568,10 @@ MODULE 2: CONFLICT DE-ESCALATION
           { title: "Part 4: Navigating Office Dynamics & Politics", duration: "26 mins" }
         ],
         desc: `MODULE 1: MASTERING ACTIVE LISTENING
-• Paraphrasing and asking clarifying questions.
-• Building trust through validation and attentive listening.`
+• Paraphrasing and asking clarifying questions.`
       }
     ];
 
-    // 2. RENDER 18 COURSES ON LANDING PAGE GRID
     function renderCoursesGrid() {
       const container = document.getElementById('courses-grid-container');
       container.innerHTML = "";
@@ -686,14 +608,11 @@ MODULE 2: CONFLICT DE-ESCALATION
 
     renderCoursesGrid();
 
-    // 3. FULL SCREEN MODAL OPEN & CLOSE LOGIC
     function openCourseModal(courseId) {
       const course = softSkillsCourses.find(c => c.id === courseId);
       if (!course) return;
 
-      const imgElem = document.getElementById('modal-course-img');
-      imgElem.src = course.image;
-
+      document.getElementById('modal-course-img').src = course.image;
       document.getElementById('modal-course-title').textContent = course.title;
       document.getElementById('modal-course-desc').textContent = course.desc;
 
@@ -724,7 +643,6 @@ MODULE 2: CONFLICT DE-ESCALATION
       document.body.style.overflow = 'auto';
     }
 
-    // Dropdown Logic
     function toggleLoginDropdown() {
       const menu = document.getElementById('login-dropdown-menu');
       const arrow = document.getElementById('dropdown-arrow');
