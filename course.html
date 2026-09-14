@@ -17,7 +17,7 @@
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       
       <!-- Brand Logo -->
-      <a href="home.html" class="flex items-center space-x-3">
+      <a href="index.html" class="flex items-center space-x-3">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center font-black text-white text-xl shadow-md shadow-indigo-500/20">
           C
         </div>
@@ -29,7 +29,7 @@
 
       <!-- Navigation Links -->
       <div class="flex items-center space-x-4">
-        <a href="home.html#courses-section" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition flex items-center">
+        <a href="index.html#courses-section" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition flex items-center">
           <svg class="w-4 h-4 mr-1.5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
           Browse All Courses
         </a>
@@ -115,7 +115,7 @@
         <!-- Embedded video preview injected dynamically -->
       </div>
 
-      <!-- PLAYBACK TOOLBAR (NO OPEN IN DRIVE BUTTON) -->
+      <!-- PLAYBACK TOOLBAR -->
       <div class="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-700 pt-2 gap-3 border-t border-slate-200">
         <p class="text-[11px] text-slate-500">Careergraspp Streaming Player with full controls.</p>
         
@@ -134,8 +134,8 @@
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between text-xs text-slate-600 gap-4">
       <p>© 2026 Careergraspp LMS. All rights reserved.</p>
       <div class="flex space-x-6">
-        <a href="home.html#courses-section" class="hover:text-indigo-600 transition">Browse Courses</a>
-        <a href="home.html" class="hover:text-indigo-600 transition">Home</a>
+        <a href="index.html#courses-section" class="hover:text-indigo-600 transition">Browse Courses</a>
+        <a href="index.html" class="hover:text-indigo-600 transition">Home</a>
       </div>
     </div>
   </footer>
@@ -147,7 +147,7 @@
       "https://www.orimi.com/pdf-test.pdf"
     ];
 
-    /* 18 COURSES DATASET (Matching home.html) */
+    /* 18 COURSES DATASET (Matching index.html) */
     const softSkillsCourses = [
       {
         id: 1,
@@ -305,7 +305,7 @@
 
             <div class="p-5 pt-0">
               ${!isUnlocked ? `
-                <a href="home.html#courses-section" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs rounded-xl text-center block shadow-md shadow-indigo-600/20 transition">
+                <a href="index.html#courses-section" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs rounded-xl text-center block shadow-md shadow-indigo-600/20 transition">
                   Unlock Course (₹${course.price})
                 </a>
               ` : `
@@ -379,7 +379,7 @@
     function logoutStudent() {
       if (confirm("Are you sure you want to log out?")) {
         localStorage.removeItem('careergraspp_user_profile');
-        window.location.href = "home.html";
+        window.location.href = "index.html";
       }
     }
   </script>
