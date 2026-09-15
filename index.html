@@ -171,7 +171,7 @@
     /* 1. FIREBASE CONFIGURATION */
     const firebaseConfig = {
       apiKey: "AIzaSyBh9VQBgh3dSRug89_2NaVEOD7GPhHKvyE",
-     authDomain: "careergrasppfinal.firebaseapp.com",
+      authDomain: "careergrasppfinal.firebaseapp.com",
       projectId: "careergrasppfinal",
       storageBucket: "careergrasppfinal.firebasestorage.app",
       messagingSenderId: "243374148181",
@@ -285,13 +285,11 @@
       document.body.style.overflow = 'hidden';
     }
 
-    /* ================= FIREBASE INTEGRATED ENROLLMENT FLOW ================= */
     async function startEnrollmentFlow(courseId) {
       pendingCourseIdToEnroll = courseId;
       const activeEmail = localStorage.getItem('careergraspp_active_email');
 
       if (activeEmail) {
-        // Fetch real-time student profile from Firestore
         const userDoc = await db.collection('students').doc(activeEmail).get();
         if (userDoc.exists) {
           const profile = userDoc.data();
@@ -300,7 +298,6 @@
         }
       }
 
-      // If no profile found in Firestore, open Registration Modal
       document.getElementById('student-info-modal').classList.remove('hidden');
     }
 
@@ -349,12 +346,10 @@
       rzp.open();
     }
 
-    /* ================= FIREBASE FIRESTORE DATA WRITER ================= */
     async function onPaymentSuccess(paymentId, course, name, email, phone) {
       const userDocRef = db.collection('students').doc(email);
 
       try {
-        // Atomic merge write into Firebase Firestore
         await userDocRef.set({
           name: name,
           email: email,
@@ -370,10 +365,9 @@
           joinedDate: new Date().toLocaleDateString()
         }, { merge: true });
 
-        // Store current active email pointer
         localStorage.setItem('careergraspp_active_email', email);
 
-        alert(`🎉 Payment Successful!\n\nWelcome ${name}!\nTransaction ID: ${paymentId}\nCourse Unlocked: ${course.title}\n\nSaved to Cloud. Redirecting...`);
+        alert(`🎉 Payment Successful!\n\nWelcome ${name}!\nTransaction ID: ${paymentId}\nCourse Unlocked: ${course.title}\n\nRedirecting to your Student Portal...`);
         window.location.href = `course.html?unlocked=${course.id}&email=${encodeURIComponent(email)}`;
       } catch (err) {
         console.error("Firestore Error:", err);
