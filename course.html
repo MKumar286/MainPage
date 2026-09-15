@@ -73,7 +73,7 @@
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4 border-b border-slate-200 pb-5">
       <div>
         <h2 class="text-2xl font-extrabold text-slate-900">Enrolled Learning Modules</h2>
-        <p class="text-xs text-slate-500">Access your purchased course video lessons and session notes below.</p>
+        <p class="text-xs text-slate-500">Access your course overview, video lessons, and session PDF notes below.</p>
       </div>
     </div>
 
@@ -103,23 +103,22 @@
     © 2026 Careergraspp LMS. Cloud-Powered Learning.
   </footer>
 
-  <!-- ================= JAVASCRIPT & FIREBASE READ LOGIC ================= -->
+  <!-- ================= JAVASCRIPT & FIREBASE LOGIC ================= -->
   <script>
     /* 1. FIREBASE CONFIGURATION */
-    /* 1. FIREBASE CONFIGURATION */
-      const firebaseConfig = {
-           apiKey: "AIzaSyBh9VQBgh3dSRug89_2NaVEOD7GPhHKvyE",
-           authDomain: "careergrasppfinal.firebaseapp.com",
-           projectId: "careergrasppfinal",
-           storageBucket: "careergrasppfinal.firebasestorage.app",
-           messagingSenderId: "243374148181",
-           appId: "1:243374148181:web:7f6a37b9ac71caf76022dc"
-         };
+    const firebaseConfig = {
+      apiKey: "AIzaSyBh9VQBgh3dSRug89_2NaVEOD7GPhHKvyE",
+      authDomain: "careergrasppfinal.firebaseapp.com",
+      projectId: "careergrasppfinal",
+      storageBucket: "careergrasppfinal.firebasestorage.app",
+      messagingSenderId: "243374148181",
+      appId: "1:243374148181:web:7f6a37b9ac71caf76022dc"
+    };
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-const db = firebase.firestore();
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
 
     const samplePdfLinks = [
       "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
@@ -132,28 +131,92 @@ const db = firebase.firestore();
         title: "Corporate Communication & Etiquette",
         price: 250,
         image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=600&auto=format&fit=crop",
-        lessons: [
-          { title: "Lesson 1.1: Core Concepts & Active Listening Rules", duration: "8 mins", videoUrl: "https://drive.google.com/file/d/1SwWrTypvpt8lIwWJgDcMFo-ax7t0arQg/view?usp=sharing", pdfUrl: samplePdfLinks[0] },
-          { title: "Lesson 1.2: Verbal Clarity & Tone Modulation", duration: "7 mins", videoUrl: "https://drive.google.com/file/d/1uXC7EsUOUNzE3Mal6Z7pFpiqbTspbMZu/view?usp=sharing", pdfUrl: samplePdfLinks[1] }
+        modulesOverview: [
+          {
+            title: "MODULE 1: FOUNDATIONS OF PROFESSIONAL COMMUNICATION",
+            points: [
+              "Understanding the 7 Cs of Communication in corporate settings.",
+              "Active Listening techniques for clear team collaboration.",
+              "Overcoming verbal barriers and clarity in articulation."
+            ]
+          },
+          {
+            title: "MODULE 2: WRITTEN COMMUNICATION & EMAIL ETIQUETTE",
+            points: [
+              "Structuring executive emails for leadership readability.",
+              "Managing email threads, CC/BCC etiquette, and response timelines."
+            ]
+          }
+        ],
+        partsList: [
+          {
+            partTitle: "Part 1: Workplace Communication Fundamentals",
+            lessons: [
+              { title: "Lesson 1.1: Core Concepts & Active Listening Rules", duration: "8 mins", videoUrl: "https://drive.google.com/file/d/1SwWrTypvpt8lIwWJgDcMFo-ax7t0arQg/view?usp=sharing", pdfUrl: samplePdfLinks[0] },
+              { title: "Lesson 1.2: Verbal Clarity & Tone Modulation", duration: "7 mins", videoUrl: "https://drive.google.com/file/d/1uXC7EsUOUNzE3Mal6Z7pFpiqbTspbMZu/view?usp=sharing", pdfUrl: samplePdfLinks[1] },
+              { title: "Lesson 1.3: Overcoming Communication Barriers in Office", duration: "9 mins", videoUrl: "https://drive.google.com/file/d/1XUjqs8ZXdS7czBPHvmRwckQ-_0aZctbw/view?usp=sharing", pdfUrl: samplePdfLinks[0] }
+            ]
+          },
+          {
+            partTitle: "Part 2: Executive Email Writing & Digital Etiquette",
+            lessons: [
+              { title: "Lesson 2.1: Structuring Subject Lines & Clear CTAs", duration: "10 mins", videoUrl: "https://drive.google.com/file/d/1SwWrTypvpt8lIwWJgDcMFo-ax7t0arQg/view?usp=sharing", pdfUrl: samplePdfLinks[1] },
+              { title: "Lesson 2.2: Professional Greetings & Formal Sign-offs", duration: "8 mins", videoUrl: "https://drive.google.com/file/d/1uXC7EsUOUNzE3Mal6Z7pFpiqbTspbMZu/view?usp=sharing", pdfUrl: samplePdfLinks[0] }
+            ]
+          }
         ]
       },
+
       {
         id: 2,
         title: "GD & Personal Interview Mastery",
         price: 499,
         image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop",
-        lessons: [
-          { title: "Lesson 1.1: GD Evaluation Metrics & Rules", duration: "10 mins", videoUrl: "https://drive.google.com/file/d/1uXC7EsUOUNzE3Mal6Z7pFpiqbTspbMZu/view?usp=sharing", pdfUrl: samplePdfLinks[0] },
-          { title: "Lesson 1.2: Formulating Arguments in 60 Seconds", duration: "12 mins", videoUrl: "https://drive.google.com/file/d/1XUjqs8ZXdS7czBPHvmRwckQ-_0aZctbw/view?usp=sharing", pdfUrl: samplePdfLinks[1] }
+        modulesOverview: [
+          {
+            title: "MODULE 1: GROUP DISCUSSION MECHANICS & EVALUATION",
+            points: [
+              "How interviewers rate GD participants on leadership and logic.",
+              "Formulating high-impact arguments within 60 seconds."
+            ]
+          }
+        ],
+        partsList: [
+          {
+            partTitle: "Part 1: Group Discussion Frameworks & Rules",
+            lessons: [
+              { title: "Lesson 1.1: GD Evaluation Metrics & Scoring Rubrics", duration: "10 mins", videoUrl: "https://drive.google.com/file/d/1uXC7EsUOUNzE3Mal6Z7pFpiqbTspbMZu/view?usp=sharing", pdfUrl: samplePdfLinks[0] },
+              { title: "Lesson 1.2: Formulating Arguments in 60 Seconds", duration: "12 mins", videoUrl: "https://drive.google.com/file/d/1XUjqs8ZXdS7czBPHvmRwckQ-_0aZctbw/view?usp=sharing", pdfUrl: samplePdfLinks[1] }
+            ]
+          },
+          {
+            partTitle: "Part 2: Strategic Entry & Moderation Tactics",
+            lessons: [
+              { title: "Lesson 2.1: Initiating a GD Without Interrupting", duration: "9 mins", videoUrl: "https://drive.google.com/file/d/1uXC7EsUOUNzE3Mal6Z7pFpiqbTspbMZu/view?usp=sharing", pdfUrl: samplePdfLinks[1] }
+            ]
+          }
         ]
       },
+
       {
         id: 3,
         title: "Quantitative Aptitude & Logic",
         price: 399,
         image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=600&auto=format&fit=crop",
-        lessons: [
-          { title: "Lesson 1.1: Rapid Multiplication & Square Roots", duration: "15 mins", videoUrl: "https://drive.google.com/file/d/1XUjqs8ZXdS7czBPHvmRwckQ-_0aZctbw/view?usp=sharing", pdfUrl: samplePdfLinks[0] }
+        modulesOverview: [
+          {
+            title: "MODULE 1: SPEED MATH & COMPUTATIONAL EFFICIENCY",
+            points: ["Vedic math shortcuts for 3-digit multiplication and square roots."]
+          }
+        ],
+        partsList: [
+          {
+            partTitle: "Part 1: Vedic Math & Rapid Calculations",
+            lessons: [
+              { title: "Lesson 1.1: Rapid Multiplication & Square Root Tricks", duration: "15 mins", videoUrl: "https://drive.google.com/file/d/1XUjqs8ZXdS7czBPHvmRwckQ-_0aZctbw/view?usp=sharing", pdfUrl: samplePdfLinks[0] },
+              { title: "Lesson 1.2: Percentages, Profit & Loss Masterclass", duration: "18 mins", videoUrl: "https://drive.google.com/file/d/1SwWrTypvpt8lIwWJgDcMFo-ax7t0arQg/view?usp=sharing", pdfUrl: samplePdfLinks[1] }
+            ]
+          }
         ]
       }
     ];
@@ -163,13 +226,26 @@ const db = firebase.firestore();
     const imgs = ["https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=600&auto=format&fit=crop", "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=600&auto=format&fit=crop", "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=600&auto=format&fit=crop", "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?q=80&w=600&auto=format&fit=crop", "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600&auto=format&fit=crop", "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=600&auto=format&fit=crop", "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=600&auto=format&fit=crop", "https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=600&auto=format&fit=crop", "https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=600&auto=format&fit=crop", "https://images.unsplash.com/photo-1450133064473-71024230f91b?q=80&w=600&auto=format&fit=crop", "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=600&auto=format&fit=crop", "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=600&auto=format&fit=crop", "https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=600&auto=format&fit=crop", "https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=600&auto=format&fit=crop", "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=600&auto=format&fit=crop"];
 
     for (let i = 4; i <= 18; i++) {
+      const titleName = titles[i - 4];
       softSkillsCourses.push({
         id: i,
-        title: titles[i - 4],
+        title: titleName,
         price: pricesList[i - 4],
         image: imgs[i - 4],
-        lessons: [
-          { title: "Lesson 1.1: Core Concepts", duration: "10 mins", videoUrl: "https://drive.google.com/file/d/1SwWrTypvpt8lIwWJgDcMFo-ax7t0arQg/view?usp=sharing", pdfUrl: samplePdfLinks[0] }
+        modulesOverview: [
+          {
+            title: `MODULE 1: CORE ESSENTIALS OF ${titleName.toUpperCase()}`,
+            points: [`Detailed industry breakdown and core frameworks of ${titleName}.`, "Practical implementation strategies."]
+          }
+        ],
+        partsList: [
+          {
+            partTitle: `Part 1: Foundations of ${titleName}`,
+            lessons: [
+              { title: "Lesson 1.1: Core Concepts & Principles", duration: "10 mins", videoUrl: "https://drive.google.com/file/d/1SwWrTypvpt8lIwWJgDcMFo-ax7t0arQg/view?usp=sharing", pdfUrl: samplePdfLinks[0] },
+              { title: "Lesson 1.2: Key Metrics & Drills", duration: "12 mins", videoUrl: "https://drive.google.com/file/d/1uXC7EsUOUNzE3Mal6Z7pFpiqbTspbMZu/view?usp=sharing", pdfUrl: samplePdfLinks[1] }
+            ]
+          }
         ]
       });
     }
@@ -193,7 +269,6 @@ const db = firebase.firestore();
       await fetchStudentFromFirestore(email, unlockedId);
     });
 
-    /* FETCH STUDENT PROFILE REALTIME FROM FIREBASE */
     async function fetchStudentFromFirestore(email, unlockedId) {
       try {
         const docRef = db.collection('students').doc(email.toLowerCase());
@@ -241,10 +316,29 @@ const db = firebase.firestore();
       }
 
       paidCourses.forEach(course => {
-        let lessonsHtml = course.lessons.map(les => `
-          <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between gap-2 text-xs">
-            <span class="font-medium text-slate-800 truncate">${les.title}</span>
-            <button onclick="playLessonVideo('${les.title}', '${les.videoUrl}', '${les.pdfUrl}')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg transition text-[11px] flex-shrink-0 flex items-center shadow-sm">▶ Play</button>
+        let modulesHtml = (course.modulesOverview || []).map(mod => `
+          <div class="bg-indigo-50/70 border-l-4 border-indigo-600 p-3 rounded-r-xl space-y-1 my-2">
+            <p class="font-extrabold text-[11px] text-slate-900 uppercase tracking-wide">${mod.title}</p>
+            <ul class="space-y-1 pl-1">
+              ${mod.points.map(pt => `<li class="text-[11px] text-slate-700 flex items-start"><span class="text-indigo-600 font-bold mr-1.5">•</span><span>${pt}</span></li>`).join('')}
+            </ul>
+          </div>
+        `).join('');
+
+        let partsHtml = (course.partsList || []).map(part => `
+          <div class="space-y-2 mt-3">
+            <p class="font-extrabold text-xs text-slate-800 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">${part.partTitle}</p>
+            <div class="space-y-1.5">
+              ${part.lessons.map(les => `
+                <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between gap-2 text-xs">
+                  <span class="font-medium text-slate-800 truncate">${les.title} <span class="text-[10px] text-slate-500">(${les.duration})</span></span>
+                  <div class="flex items-center space-x-1.5 flex-shrink-0">
+                    <button onclick="playLessonVideo('${les.title}', '${les.videoUrl}', '${les.pdfUrl}')" class="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg transition text-[11px] shadow-sm">▶ Play</button>
+                    <a href="${les.pdfUrl}" target="_blank" class="px-2.5 py-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-lg transition text-[11px]">📄 PDF</a>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
           </div>
         `).join('');
 
@@ -255,14 +349,22 @@ const db = firebase.firestore();
                 <img src="${course.image}" alt="${course.title}" class="w-full h-full object-cover" />
                 <span class="absolute top-3 left-3 bg-emerald-600 text-white text-[10px] px-2.5 py-1 rounded-full font-extrabold shadow">✓ UNLOCKED</span>
               </div>
+              
               <div class="p-5 space-y-4">
                 <h3 class="text-lg font-bold text-slate-900 line-clamp-1">${course.title}</h3>
-                <div class="space-y-2 pt-1">
-                  <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Available Video Lessons</p>
-                  ${lessonsHtml}
+                
+                <div>
+                  <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Course Overview & Syllabus</p>
+                  ${modulesHtml}
+                </div>
+
+                <div>
+                  <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Unlocked Video Parts</p>
+                  ${partsHtml}
                 </div>
               </div>
             </div>
+
             <div class="p-5 pt-0">
               <div class="w-full py-2 bg-emerald-50 border border-emerald-200 text-emerald-700 font-bold text-xs rounded-xl text-center">Full Access Active</div>
             </div>
