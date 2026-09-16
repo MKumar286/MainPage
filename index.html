@@ -756,14 +756,23 @@
       window.location.href = "course.html";
     }
 
-    function executeAdminAuth(event) {
-      event.preventDefault();
-      const email = document.getElementById('login-admin-email').value.trim();
-      localStorage.setItem('careergraspp_active_email', email);
-      localStorage.setItem('careergraspp_role', 'admin');
-      closeUnifiedLoginModal();
-      window.location.href = "course.html";
-    }
+   function executeAdminAuth(event) {
+  event.preventDefault();
+  const email = document.getElementById('login-admin-email').value.trim().toLowerCase();
+  const key = document.getElementById('login-admin-key').value.trim();
+
+  // CREDENTIAL VALIDATION
+  if (email === 'use-careergraspp@gmail.com' && key === 'Kumar@2422') {
+    localStorage.setItem('careergraspp_active_email', email);
+    localStorage.setItem('careergraspp_role', 'admin');
+    closeUnifiedLoginModal();
+    
+    // NAVIGATE DIRECTLY TO ADMIN DATABASE TABLE PAGE
+    window.location.href = "admin-database.html";
+  } else {
+    alert("❌ Invalid Admin Credentials!\n\nPlease use:\nEmail: use-careergraspp@gmail.com\nPassword: Kumar@2422");
+  }
+}
 
     function togglePartAccordion(partId) {
       const el = document.getElementById(partId);
