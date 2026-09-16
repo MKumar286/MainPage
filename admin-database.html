@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Database & Sales Portal - Careergraspp Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- FIREBASE SDKs (v9 Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen selection:bg-indigo-600 selection:text-white">
+
+  <!-- ================= HEADER NAVBAR ================= -->
+  <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-40 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-indigo-600 flex items-center justify-center font-black text-white text-xl shadow">
+          ⚙️
+        </div>
+        <div>
+          <span class="text-xl font-extrabold tracking-tight text-white">Career<span class="text-indigo-400">graspp</span> Admin</span>
+          <span class="block text-[10px] text-amber-400 font-bold tracking-widest uppercase -mt-0.5">Student Database Analytics</span>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <a href="course.html" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold transition border border-slate-700">
+          🎓 Student Portal
+        </a>
+        <a href="index.html" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition shadow-sm">
+          🌐 Main Website
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN DATABASE CONTAINER ================= -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+
+    <!-- METRICS SUMMARY CARDS -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex items-center justify-between">
+        <div>
+          <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Students Registered</p>
+          <h3 id="stat-total-students" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+        </div>
+        <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center text-xl font-bold">👥</div>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex items-center justify-between">
+        <div>
+          <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Courses Sold</p>
+          <h3 id="stat-total-purchases" class="text-3xl font-black text-emerald-600 mt-1">0</h3>
+        </div>
+        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl font-bold">📚</div>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex items-center justify-between">
+        <div>
+          <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Avg Courses / Student</p>
+          <h3 id="stat-avg-courses" class="text-3xl font-black text-amber-500 mt-1">0</h3>
+        </div>
+        <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-xl font-bold">📊</div>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex items-center justify-between">
+        <div>
+          <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Database Status</p>
+          <h3 class="text-base font-black text-emerald-600 mt-1 flex items-center">
+            <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse mr-2"></span> Connected
+          </h3>
+        </div>
+        <div class="w-12 h-12 bg-slate-100 text-slate-600 rounded-xl flex items-center justify-center text-xl font-bold">🔥</div>
+      </div>
+    </div>
+
+    <!-- TABLE CONTROLS & BAR -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+      
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+        <div>
+          <h2 class="text-xl font-black text-slate-900">Student Enrollment Table</h2>
+          <p class="text-xs text-slate-500">Live data fetched from Firebase Firestore database collection (`students`)</p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <!-- SEARCH BOX -->
+          <div class="relative flex-1 sm:w-64">
+            <input type="text" id="search-input" onkeyup="filterDatabaseTable()" placeholder="Search student, email, course..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-indigo-600 focus:bg-white transition" />
+            <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          </div>
+
+          <button onclick="loadStudentDatabase()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition border border-slate-200 flex items-center">
+            🔄 Refresh Data
+          </button>
+          
+          <button onclick="exportToCSV()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-xl text-xs transition shadow-sm flex items-center">
+            📥 Download CSV / Excel
+          </button>
+        </div>
+      </div>
+
+      <!-- TABLE DISPLAY -->
+      <div class="overflow-x-auto rounded-xl border border-slate-200">
+        <table class="w-full text-left text-xs text-slate-700 border-collapse">
+          <thead class="bg-slate-100 text-slate-900 font-extrabold uppercase border-b border-slate-200 text-[10px] tracking-wider">
+            <tr>
+              <th class="p-3.5 w-12 text-center">#</th>
+              <th class="p-3.5">Student Details</th>
+              <th class="p-3.5">Contact Number</th>
+              <th class="p-3.5 text-center">Courses Bought</th>
+              <th class="p-3.5">Enrolled Course IDs & Names</th>
+              <th class="p-3.5">Joined Date</th>
+            </tr>
+          </thead>
+          <tbody id="student-table-body" class="divide-y divide-slate-200 bg-white">
+            <tr>
+              <td colspan="6" class="p-8 text-center text-slate-400 font-medium">
+                Fetching student records from Firebase Firestore...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ================= SCRIPT & FIRESTORE INTEGRATION ================= -->
+  <script>
+    /* 1. FIREBASE CONFIGURATION */
+    const firebaseConfig = {
+      apiKey: "AIzaSyBh9VQBgh3dSRug89_2NaVEOD7GPhHKvyE",
+      authDomain: "careergrasppfinal.firebaseapp.com",
+      projectId: "careergrasppfinal",
+      storageBucket: "careergrasppfinal.firebasestorage.app",
+      messagingSenderId: "243374148181",
+      appId: "1:243374148181:web:7f6a37b9ac71caf76022dc"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
+
+    /* 2. COURSE ID TO NAME MAPPING DICTIONARY */
+    const courseCatalog = {
+      1: "Corporate Communication & Etiquette",
+      2: "GD & Personal Interview Mastery",
+      3: "Quantitative Aptitude & Logic",
+      4: "Resume Building & LinkedIn Branding",
+      5: "Emotional Intelligence & Workplace Empathy",
+      6: "Time Management & Productivity Hacks",
+      7: "Public Speaking & Stage Confidence",
+      8: "Critical Thinking & Problem Solving",
+      9: "Leadership & Team Dynamics",
+      10: "Negotiation & Conflict Resolution",
+      11: "Workplace Adaptability & Growth Mindset",
+      12: "Business Email & Report Writing",
+      13: "Professional Ethics & Workplace Integrity",
+      14: "Stress Management & Work-Life Balance",
+      15: "Decision Making Under Pressure",
+      16: "Networking & Relationship Building",
+      17: "Creative Thinking & Innovation",
+      18: "Interpersonal Skills & Active Listening"
+    };
+
+    let allStudentsData = [];
+
+    // Automatically load data when page loads
+    document.addEventListener('DOMContentLoaded', loadStudentDatabase);
+
+    /* 3. FETCH AND DISPLAY DATA IN TABLE FORMAT */
+    async function loadStudentDatabase() {
+      const tbody = document.getElementById('student-table-body');
+      tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400 font-medium">Loading records from Firebase...</td></tr>`;
+
+      try {
+        const snapshot = await db.collection('students').get();
+        allStudentsData = [];
+        tbody.innerHTML = "";
+
+        if (snapshot.empty) {
+          tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400 font-medium">No student records found in database.</td></tr>`;
+          updateMetrics(0, 0);
+          return;
+        }
+
+        let totalCoursesBoughtAll = 0;
+        let index = 1;
+
+        snapshot.forEach((doc) => {
+          const student = doc.data();
+          const email = student.email || doc.id;
+          const name = student.name || "N/A";
+          const phone = student.phone || "N/A";
+          const joinedDate = student.joinedDate || "Recent";
+          
+          // Enrolled Courses Array [1, 2, ...]
+          const enrolledArray = student.enrolledCourses || [];
+          const courseCount = enrolledArray.length;
+          totalCoursesBoughtAll += courseCount;
+
+          // Map IDs to Course Names
+          const mappedCourseList = enrolledArray.map(id => {
+            const courseName = courseCatalog[id] || `Course ID #${id}`;
+            return { id: id, name: courseName };
+          });
+
+          // Store for search & CSV export
+          allStudentsData.push({
+            index: index++,
+            name: name,
+            email: email,
+            phone: phone,
+            courseCount: courseCount,
+            courses: mappedCourseList,
+            joinedDate: joinedDate
+          });
+        });
+
+        renderTableRows(allStudentsData);
+        updateMetrics(allStudentsData.length, totalCoursesBoughtAll);
+
+      } catch (err) {
+        console.error("Firestore Fetch Error:", err);
+        tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-red-500 font-bold">Failed to load database: ${err.message}</td></tr>`;
+      }
+    }
+
+    /* 4. RENDER ROWS INTO HTML TABLE */
+    function renderTableRows(dataList) {
+      const tbody = document.getElementById('student-table-body');
+      tbody.innerHTML = "";
+
+      if (dataList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">No matching student records found.</td></tr>`;
+        return;
+      }
+
+      dataList.forEach(student => {
+        // Construct visual badges for Course ID and Name
+        let coursesBadgeHtml = student.courses.length > 0
+          ? student.courses.map(c => `
+              <div class="inline-flex items-center space-x-1.5 bg-indigo-50 text-indigo-700 border border-indigo-200 px-2.5 py-1 rounded-lg text-[11px] font-semibold m-0.5">
+                <span class="bg-indigo-600 text-white font-black text-[9px] px-1.5 py-0.5 rounded">ID: ${c.id}</span>
+                <span>${c.name}</span>
+              </div>
+            `).join('')
+          : `<span class="text-slate-400 italic">No active courses</span>`;
+
+        tbody.innerHTML += `
+          <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+            <td class="p-3.5 text-center font-black text-slate-400 text-xs">${student.index}</td>
+            <td class="p-3.5">
+              <span class="font-extrabold text-slate-900 block text-xs">${student.name}</span>
+              <span class="text-[11px] text-slate-500">${student.email}</span>
+            </td>
+            <td class="p-3.5 font-medium text-slate-700">${student.phone}</td>
+            <td class="p-3.5 text-center">
+              <span class="inline-block px-3 py-1 bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-full font-black text-xs shadow-xs">
+                ${student.courseCount} ${student.courseCount === 1 ? 'Course' : 'Courses'}
+              </span>
+            </td>
+            <td class="p-3.5">
+              <div class="flex flex-wrap items-center">${coursesBadgeHtml}</div>
+            </td>
+            <td class="p-3.5 text-slate-500 text-[11px] font-medium">${student.joinedDate}</td>
+          </tr>
+        `;
+      });
+    }
+
+    /* 5. METRICS STATS CALCULATOR */
+    function updateMetrics(totalStudents, totalPurchases) {
+      document.getElementById('stat-total-students').textContent = totalStudents;
+      document.getElementById('stat-total-purchases').textContent = totalPurchases;
+      
+      const avg = totalStudents > 0 ? (totalPurchases / totalStudents).toFixed(1) : "0";
+      document.getElementById('stat-avg-courses').textContent = avg;
+    }
+
+    /* 6. REAL-TIME SEARCH FILTER */
+    function filterDatabaseTable() {
+      const query = document.getElementById('search-input').value.toLowerCase().trim();
+      
+      const filtered = allStudentsData.filter(s => {
+        const matchesName = s.name.toLowerCase().includes(query);
+        const matchesEmail = s.email.toLowerCase().includes(query);
+        const matchesPhone = s.phone.toLowerCase().includes(query);
+        const matchesCourse = s.courses.some(c => c.name.toLowerCase().includes(query) || c.id.toString() === query);
+
+        return matchesName || matchesEmail || matchesPhone || matchesCourse;
+      });
+
+      renderTableRows(filtered);
+    }
+
+    /* 7. EXPORT TO CSV / EXCEL FILE */
+    function exportToCSV() {
+      if (!allStudentsData || allStudentsData.length === 0) {
+        alert("No student data available to download.");
+        return;
+      }
+
+      let csvContent = "data:text/csv;charset=utf-8,";
+      // CSV Headers
+      csvContent += "S.No,Student Name,Email Address,Phone Number,Total Courses Purchased,Enrolled Course IDs,Enrolled Course Titles,Joined Date\n";
+
+      allStudentsData.forEach((s) => {
+        const courseIds = `"${s.courses.map(c => c.id).join(' | ')}"`;
+        const courseTitles = `"${s.courses.map(c => c.name).join(' | ')}"`;
+        const name = `"${s.name.replace(/"/g, '""')}"`;
+        const email = `"${s.email.replace(/"/g, '""')}"`;
+        const phone = `"${s.phone.replace(/"/g, '""')}"`;
+        const joined = `"${s.joinedDate.replace(/"/g, '""')}"`;
+
+        csvContent += `${s.index},${name},${email},${phone},${s.courseCount},${courseIds},${courseTitles},${joined}\n`;
+      });
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `Careergraspp_Student_Database_${new Date().toISOString().slice(0, 10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  </script>
+</body>
+</html>
