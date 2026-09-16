@@ -826,6 +826,26 @@ function executeAdminAuth(event) {
       document.getElementById('login-dropdown-menu').classList.toggle('hidden');
       document.getElementById('dropdown-arrow').classList.toggle('rotate-180');
     }
+// =========================================================
+    // Dynamic Updation of the courses from Admin
+    // =========================================================
+   document.addEventListener('DOMContentLoaded', function() {
+      const storedCourses = localStorage.getItem('careergraspp_courses');
+      if (storedCourses) {
+        try {
+          const liveCourses = JSON.parse(storedCourses);
+          
+          // If you have a dynamic homepage rendering function:
+          if (typeof renderHomepageCourses === 'function') {
+            renderHomepageCourses(liveCourses);
+          }
+        } catch(e) {
+          console.log("Using default fallback courses");
+        }
+      }
+    });
+    // =========================================================
+    
   </script>
 </body>
 </html>
