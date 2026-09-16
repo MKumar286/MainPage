@@ -756,21 +756,30 @@
       window.location.href = "course.html";
     }
 
-   function executeAdminAuth(event) {
+function executeAdminAuth(event) {
   event.preventDefault();
-  const email = document.getElementById('login-admin-email').value.trim().toLowerCase();
-  const key = document.getElementById('login-admin-key').value.trim();
 
-  // CREDENTIAL VALIDATION
-  if (email === 'use-careergraspp@gmail.com' && key === 'Kumar@2422') {
+  const emailInput = document.getElementById('login-admin-email');
+  const keyInput = document.getElementById('login-admin-key');
+
+  const email = emailInput ? emailInput.value.trim().toLowerCase() : '';
+  const key = keyInput ? keyInput.value.trim() : '';
+
+  const TARGET_EMAIL = "use-careergraspp@gmail.com";
+  const TARGET_KEY = "Kumar@2422";
+
+  if (email === TARGET_EMAIL && key === TARGET_KEY) {
     localStorage.setItem('careergraspp_active_email', email);
     localStorage.setItem('careergraspp_role', 'admin');
-    closeUnifiedLoginModal();
+
+    if (typeof closeUnifiedLoginModal === 'function') {
+      closeUnifiedLoginModal();
+    }
     
-    // NAVIGATE DIRECTLY TO ADMIN DATABASE TABLE PAGE
+    // Redirect directly to the admin database panel
     window.location.href = "admin-database.html";
   } else {
-    alert("❌ Invalid Admin Credentials!\n\nPlease use:\nEmail: use-careergraspp@gmail.com\nPassword: Kumar@2422");
+    alert(`❌ Invalid Admin Credentials!\n\nExpected:\nEmail: ${TARGET_EMAIL}\nPassword: ${TARGET_KEY}\n\nYou Entered:\nEmail: ${email}\nPassword: ${key}`);
   }
 }
 
