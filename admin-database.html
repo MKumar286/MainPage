@@ -145,7 +145,7 @@
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100">
             <div>
               <h2 class="text-xl font-black text-slate-900">Individual Student Records</h2>
-              <p class="text-xs text-slate-500">Live student database showing emails, phone numbers, and purchased course names.</p>
+              <p class="text-xs text-slate-500">Click on any <strong>Student Details</strong> cell to inspect full student profile, completed lessons & payment history.</p>
             </div>
 
             <div class="flex flex-wrap items-center gap-2">
@@ -164,13 +164,13 @@
             </div>
           </div>
 
-          <!-- DATA TABLE -->
+          <!-- DATA TABLE WITH CLICKABLE STUDENT DETAILS -->
           <div class="overflow-x-auto rounded-xl border border-slate-200">
             <table class="w-full text-left text-xs text-slate-700 border-collapse">
               <thead class="bg-slate-100 text-slate-900 font-extrabold uppercase border-b border-slate-200 text-[10px] tracking-wider">
                 <tr>
                   <th class="p-3.5 w-12 text-center">#</th>
-                  <th class="p-3.5">Student Details</th>
+                  <th class="p-3.5">Student Details (Click to view Profile)</th>
                   <th class="p-3.5">Contact Number</th>
                   <th class="p-3.5 text-center">Courses Bought</th>
                   <th class="p-3.5">Enrolled Course IDs & Titles</th>
@@ -212,6 +212,72 @@
 
     </main>
 
+  </div>
+
+  <!-- ================= INDIVIDUAL STUDENT PROFILE MODAL ================= -->
+  <div id="student-profile-modal" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+      
+      <!-- MODAL HEADER -->
+      <div class="p-6 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800 shrink-0">
+        <div class="flex items-center space-x-4">
+          <div id="modal-avatar" class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 border border-indigo-400 flex items-center justify-center text-xl font-black text-white shadow">
+            S
+          </div>
+          <div>
+            <h3 id="modal-student-name" class="font-extrabold text-lg text-white leading-tight">Student Profile</h3>
+            <span id="modal-student-email" class="text-xs text-indigo-300">student@example.com</span>
+          </div>
+        </div>
+        <button onclick="closeStudentProfileModal()" class="text-slate-400 hover:text-white font-bold text-2xl px-2">&times;</button>
+      </div>
+
+      <!-- MODAL BODY CONTAINER -->
+      <div class="p-6 overflow-y-auto space-y-6">
+        
+        <!-- CONTACT & ACCOUNT DETAILS -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200 text-xs">
+          <div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Phone Number</span>
+            <span id="modal-student-phone" class="font-bold text-slate-900">--</span>
+          </div>
+          <div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Registration Date</span>
+            <span id="modal-student-joined" class="font-bold text-slate-900">--</span>
+          </div>
+          <div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Completed Lessons</span>
+            <span id="modal-completed-lessons" class="font-bold text-emerald-600">0 Lessons</span>
+          </div>
+        </div>
+
+        <!-- ENROLLED COURSES BREAKDOWN -->
+        <div class="space-y-3">
+          <h4 class="text-xs font-black text-slate-400 uppercase tracking-wider">Unlocked Courses & Access Validity</h4>
+          <div id="modal-courses-list" class="space-y-2">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- TRANSACTION & PAYMENT HISTORY -->
+        <div class="space-y-3 pt-4 border-t border-slate-100">
+          <h4 class="text-xs font-black text-slate-400 uppercase tracking-wider">Razorpay Payment Log</h4>
+          <div id="modal-transactions-list" class="space-y-2 text-xs">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- MODAL FOOTER -->
+      <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-between items-center text-xs text-slate-500">
+        <span>Firebase Student Document ID: <strong id="modal-doc-id">--</strong></span>
+        <button onclick="closeStudentProfileModal()" class="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition">
+          Close Profile
+        </button>
+      </div>
+
+    </div>
   </div>
 
   <!-- ================= JAVASCRIPT LOGIC ================= -->
@@ -317,7 +383,10 @@
             phone: phone,
             courseCount: courseCount,
             courses: mappedCourseList,
-            joinedDate: joinedDate
+            joinedDate: joinedDate,
+            completedLessons: student.completedLessons || [],
+            transactions: student.transactions || [],
+            rawProfile: student
           });
         });
 
@@ -330,7 +399,7 @@
       }
     }
 
-    /* 5. RENDER TABLE ROWS */
+    /* 5. RENDER TABLE ROWS WITH CLICKABLE STUDENT DETAILS */
     function renderTableRows(dataList) {
       const tbody = document.getElementById('student-table-body');
       tbody.innerHTML = "";
@@ -352,27 +421,97 @@
 
         tbody.innerHTML += `
           <tr class="hover:bg-slate-50 transition border-b border-slate-100">
-            <td class="p-3 text-center font-black text-slate-400 text-xs">${student.index}</td>
-            <td class="p-3">
-              <span class="font-extrabold text-slate-900 block text-xs">${student.name}</span>
-              <span class="text-[11px] text-slate-500">${student.email}</span>
+            <td class="p-3.5 text-center font-black text-slate-400 text-xs">${student.index}</td>
+            
+            <!-- CLICKABLE STUDENT DETAILS CELL -->
+            <td class="p-3.5 cursor-pointer group" onclick="openStudentProfile('${student.email}')">
+              <div class="p-2 -m-2 rounded-xl group-hover:bg-indigo-50/70 border border-transparent group-hover:border-indigo-200 transition">
+                <span class="font-extrabold text-indigo-600 group-hover:text-indigo-800 text-xs flex items-center">
+                  <span>${student.name}</span>
+                  <svg class="w-3.5 h-3.5 ml-1.5 text-indigo-500 opacity-0 group-hover:opacity-100 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                </span>
+                <span class="text-[11px] text-slate-500 group-hover:text-indigo-600 block">${student.email}</span>
+                <span class="text-[9px] text-indigo-500 font-bold opacity-0 group-hover:opacity-100 transition mt-0.5 block">🔍 Click to inspect profile</span>
+              </div>
             </td>
-            <td class="p-3 font-medium text-slate-700">${student.phone}</td>
-            <td class="p-3 text-center">
+
+            <td class="p-3.5 font-medium text-slate-700">${student.phone}</td>
+            <td class="p-3.5 text-center">
               <span class="inline-block px-2.5 py-0.5 bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-full font-extrabold text-[11px]">
                 ${student.courseCount} ${student.courseCount === 1 ? 'Course' : 'Courses'}
               </span>
             </td>
-            <td class="p-3">
+            <td class="p-3.5">
               <div class="flex flex-wrap items-center">${coursesBadgeHtml}</div>
             </td>
-            <td class="p-3 text-slate-500 text-[11px] font-medium">${student.joinedDate}</td>
+            <td class="p-3.5 text-slate-500 text-[11px] font-medium">${student.joinedDate}</td>
           </tr>
         `;
       });
     }
 
-    /* 6. TAB SWITCHING LOGIC */
+    /* 6. OPEN INDIVIDUAL STUDENT PROFILE MODAL */
+    function openStudentProfile(email) {
+      const student = allStudentsData.find(s => s.email.toLowerCase() === email.toLowerCase());
+      if (!student) return;
+
+      document.getElementById('modal-student-name').textContent = student.name;
+      document.getElementById('modal-student-email').textContent = student.email;
+      document.getElementById('modal-student-phone').textContent = student.phone;
+      document.getElementById('modal-student-joined').textContent = student.joinedDate;
+      document.getElementById('modal-avatar').textContent = (student.name || 'S').charAt(0).toUpperCase();
+      document.getElementById('modal-doc-id').textContent = student.email;
+      document.getElementById('modal-completed-lessons').textContent = `${student.completedLessons.length} Lessons Marked Done`;
+
+      // Render Courses List in Modal
+      const coursesContainer = document.getElementById('modal-courses-list');
+      coursesContainer.innerHTML = "";
+      if (student.courses.length === 0) {
+        coursesContainer.innerHTML = `<p class="text-xs text-slate-400 italic">Student has not enrolled in any courses.</p>`;
+      } else {
+        student.courses.forEach(c => {
+          coursesContainer.innerHTML += `
+            <div class="p-3 bg-indigo-50/60 border border-indigo-200 rounded-xl flex items-center justify-between text-xs">
+              <div class="flex items-center space-x-2.5">
+                <span class="w-6 h-6 rounded-lg bg-indigo-600 text-white font-black text-[10px] flex items-center justify-center">#${c.id}</span>
+                <span class="font-bold text-slate-900">${c.name}</span>
+              </div>
+              <span class="bg-emerald-100 text-emerald-800 border border-emerald-300 font-extrabold text-[10px] px-2.5 py-0.5 rounded-full">Active Access</span>
+            </div>
+          `;
+        });
+      }
+
+      // Render Razorpay Transactions
+      const txContainer = document.getElementById('modal-transactions-list');
+      txContainer.innerHTML = "";
+      if (student.transactions.length === 0) {
+        txContainer.innerHTML = `<p class="text-xs text-slate-400 italic">No stored Razorpay payment records.</p>`;
+      } else {
+        student.transactions.forEach(tx => {
+          txContainer.innerHTML += `
+            <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <span class="font-bold text-slate-900 block">${tx.courseTitle || 'Course Purchase'}</span>
+                <span class="text-[10px] text-slate-500 font-mono">Payment ID: ${tx.paymentId || 'N/A'}</span>
+              </div>
+              <div class="sm:text-right">
+                <span class="text-xs font-black text-emerald-600 block">₹${tx.amount || 250}</span>
+                <span class="text-[10px] text-slate-400">${tx.date || ''}</span>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      document.getElementById('student-profile-modal').classList.remove('hidden');
+    }
+
+    function closeStudentProfileModal() {
+      document.getElementById('student-profile-modal').classList.add('hidden');
+    }
+
+    /* 7. TAB SWITCHING LOGIC */
     function switchAdminTab(tabKey) {
       const tabs = ['students', 'org', 'courses', 'tests', 'quizzes'];
       tabs.forEach(t => {
@@ -390,7 +529,7 @@
       });
     }
 
-    /* 7. METRICS UPDATER */
+    /* 8. METRICS UPDATER */
     function updateMetrics(totalStudents, totalPurchases) {
       document.getElementById('stat-total-students').textContent = totalStudents;
       document.getElementById('stat-total-purchases').textContent = totalPurchases;
@@ -398,7 +537,7 @@
       document.getElementById('stat-avg-courses').textContent = avg;
     }
 
-    /* 8. SEARCH FILTER */
+    /* 9. SEARCH FILTER */
     function filterDatabaseTable() {
       const query = document.getElementById('search-input').value.toLowerCase().trim();
       const filtered = allStudentsData.filter(s => {
@@ -410,7 +549,7 @@
       renderTableRows(filtered);
     }
 
-    /* 9. EXPORT CSV */
+    /* 10. EXPORT CSV */
     function exportToCSV() {
       if (!allStudentsData || allStudentsData.length === 0) return alert("No student data available.");
       let csvContent = "data:text/csv;charset=utf-8,S.No,Student Name,Email Address,Phone Number,Total Courses Purchased,Enrolled Course IDs,Enrolled Course Titles,Joined Date\n";
