@@ -21,75 +21,75 @@
   <div class="min-h-screen flex flex-col md:flex-row w-full">
 
     <!-- ================= ADMIN LEFT SIDEBAR ================= -->
-    <aside class="w-full md:w-64 lg:w-72 bg-slate-900 text-white p-4 md:p-5 shrink-0 border-r border-slate-800 md:min-h-screen md:sticky md:top-0 md:h-screen flex flex-col justify-between z-30 overflow-y-auto">
+    <aside class="w-full md:w-56 lg:w-64 bg-slate-900 text-white p-3.5 md:p-4 shrink-0 border-r border-slate-800 md:min-h-screen md:sticky md:top-0 md:h-screen flex flex-col justify-between z-30 overflow-y-auto">
       
-      <div class="space-y-6">
+      <div class="space-y-5">
         <!-- Brand Header -->
-        <a href="admin-database.html" class="flex items-center space-x-3">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-indigo-600 flex items-center justify-center font-black text-white text-lg shadow-md">
+        <a href="admin-database.html" class="flex items-center space-x-2.5">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-500 to-indigo-600 flex items-center justify-center font-black text-white text-base shadow-md">
             ⚙️
           </div>
           <div>
-            <span class="text-base font-extrabold tracking-tight text-white">Career<span class="text-indigo-400">graspp</span></span>
-            <span class="block text-[9px] text-amber-400 font-bold tracking-widest uppercase -mt-0.5">Admin Control Center</span>
+            <span class="text-sm font-extrabold tracking-tight text-white">Career<span class="text-indigo-400">graspp</span></span>
+            <span class="block text-[8px] text-amber-400 font-bold tracking-widest uppercase -mt-0.5">Admin Control Center</span>
           </div>
         </a>
 
         <!-- Admin Info Card -->
-        <div class="bg-slate-800/80 border border-slate-700/80 rounded-xl p-3.5 space-y-2 shadow-sm">
-          <div class="flex items-center space-x-2.5">
-            <div class="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 text-sm font-bold">
+        <div class="bg-slate-800/80 border border-slate-700/80 rounded-xl p-3 space-y-1 shadow-sm">
+          <div class="flex items-center space-x-2">
+            <div class="w-7 h-7 rounded-lg bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xs font-bold">
               👑
             </div>
             <div class="overflow-hidden">
-              <span class="block text-[9px] font-bold text-emerald-400 uppercase tracking-wider">Super Admin</span>
-              <p class="text-xs font-bold text-white truncate">use-careergraspp@gmail.com</p>
+              <span class="block text-[8px] font-bold text-emerald-400 uppercase tracking-wider">Super Admin</span>
+              <p class="text-[11px] font-bold text-white truncate">use-careergraspp@gmail.com</p>
             </div>
           </div>
         </div>
 
         <!-- SIDEBAR NAVIGATION MENU -->
-        <nav class="space-y-1.5 pt-2">
-          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-2">Management Portal</p>
+        <nav class="space-y-1 pt-1">
+          <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider px-2.5 mb-1.5">Management Portal</p>
           
           <!-- 1. Individual Students -->
-          <button id="nav-students" onclick="switchAdminTab('students')" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition bg-indigo-600 text-white shadow-md">
-            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          <button id="nav-students" onclick="switchAdminTab('students')" class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-bold transition bg-indigo-600 text-white shadow-sm">
+            <svg class="w-3.5 h-3.5 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
             <span>Individual Students</span>
           </button>
 
           <!-- 2. Manage Organization -->
-          <button id="nav-org" onclick="switchAdminTab('org')" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition text-slate-300 hover:bg-slate-800 hover:text-white">
-            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0V11m0 0h4m-4 0V7m4 4V7m0 4h4m-4-4h4"/></svg>
+          <button id="nav-org" onclick="switchAdminTab('org')" class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-bold transition text-slate-300 hover:bg-slate-800 hover:text-white">
+            <svg class="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0V11m0 0h4m-4 0V7m4 4V7m0 4h4m-4-4h4"/></svg>
             <span>Manage Organization</span>
           </button>
 
           <!-- 3. Manage Courses -->
-          <button id="nav-courses" onclick="switchAdminTab('courses')" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition text-slate-300 hover:bg-slate-800 hover:text-white">
-            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          <button id="nav-courses" onclick="switchAdminTab('courses')" class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-bold transition text-slate-300 hover:bg-slate-800 hover:text-white">
+            <svg class="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
             <span>Manage Courses</span>
           </button>
 
           <!-- 4. Tests -->
-          <button id="nav-tests" onclick="switchAdminTab('tests')" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition text-slate-300 hover:bg-slate-800 hover:text-white">
-            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          <button id="nav-tests" onclick="switchAdminTab('tests')" class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-bold transition text-slate-300 hover:bg-slate-800 hover:text-white">
+            <svg class="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
             <span>Tests</span>
           </button>
 
           <!-- 5. Quizzes -->
-          <button id="nav-quizzes" onclick="switchAdminTab('quizzes')" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition text-slate-300 hover:bg-slate-800 hover:text-white">
-            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <button id="nav-quizzes" onclick="switchAdminTab('quizzes')" class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-bold transition text-slate-300 hover:bg-slate-800 hover:text-white">
+            <svg class="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             <span>Quizzes</span>
           </button>
         </nav>
       </div>
 
       <!-- Action Footer -->
-      <div class="pt-4 border-t border-slate-800 space-y-2 mt-4">
-        <a href="index.html" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-bold transition flex items-center justify-center space-x-1.5 border border-slate-700">
+      <div class="pt-3 border-t border-slate-800 space-y-1.5 mt-3">
+        <a href="index.html" class="w-full py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-[11px] font-bold transition flex items-center justify-center space-x-1 border border-slate-700">
           <span>🌐 View Website</span>
         </a>
-        <button onclick="adminLogout()" class="w-full py-2 bg-red-600/10 hover:bg-red-600/20 text-red-400 rounded-lg text-xs font-bold transition border border-red-500/30 flex items-center justify-center space-x-1.5">
+        <button onclick="adminLogout()" class="w-full py-1.5 bg-red-600/10 hover:bg-red-600/20 text-red-400 rounded-lg text-[11px] font-bold transition border border-red-500/30 flex items-center justify-center space-x-1">
           <span>🚪 Admin Logout</span>
         </button>
       </div>
@@ -97,89 +97,90 @@
     </aside>
 
     <!-- ================= MAIN CONTENT AREA ================= -->
-    <main class="flex-1 p-4 md:p-6 lg:p-8 min-h-screen space-y-6 overflow-y-auto">
+    <main class="flex-1 p-3 md:p-5 lg:p-6 min-h-screen space-y-4 overflow-hidden flex flex-col">
 
       <!-- ================= SECTION 1: INDIVIDUAL STUDENTS DATABASE ================= -->
-      <div id="section-students" class="space-y-6">
+      <div id="section-students" class="space-y-4 flex-1 flex flex-col min-h-0">
         
         <!-- TOP METRICS CARDS -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex items-center justify-between">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 shrink-0">
+          <div class="bg-white border border-slate-200 rounded-xl p-3 shadow-sm flex items-center justify-between">
             <div>
-              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Registered Students</p>
-              <h3 id="stat-total-students" class="text-2xl font-black text-slate-900 mt-0.5">0</h3>
+              <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Registered Students</p>
+              <h3 id="stat-total-students" class="text-xl font-black text-slate-900 mt-0.5">0</h3>
             </div>
-            <div class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center text-lg font-bold">👥</div>
+            <div class="w-8 h-8 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center text-sm font-bold">👥</div>
           </div>
 
-          <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex items-center justify-between">
+          <div class="bg-white border border-slate-200 rounded-xl p-3 shadow-sm flex items-center justify-between">
             <div>
-              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Courses Sold</p>
-              <h3 id="stat-total-purchases" class="text-2xl font-black text-emerald-600 mt-0.5">0</h3>
+              <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Total Courses Sold</p>
+              <h3 id="stat-total-purchases" class="text-xl font-black text-emerald-600 mt-0.5">0</h3>
             </div>
-            <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-lg font-bold">📚</div>
+            <div class="w-8 h-8 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center text-sm font-bold">📚</div>
           </div>
 
-          <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex items-center justify-between">
+          <div class="bg-white border border-slate-200 rounded-xl p-3 shadow-sm flex items-center justify-between">
             <div>
-              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Avg Courses / Student</p>
-              <h3 id="stat-avg-courses" class="text-2xl font-black text-amber-500 mt-0.5">0</h3>
+              <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Avg Courses / Student</p>
+              <h3 id="stat-avg-courses" class="text-xl font-black text-amber-500 mt-0.5">0</h3>
             </div>
-            <div class="w-10 h-10 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-lg font-bold">📊</div>
+            <div class="w-8 h-8 bg-amber-50 text-amber-600 rounded-lg flex items-center justify-center text-sm font-bold">📊</div>
           </div>
 
-          <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex items-center justify-between">
+          <div class="bg-white border border-slate-200 rounded-xl p-3 shadow-sm flex items-center justify-between">
             <div>
-              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Firestore Connection</p>
-              <h3 class="text-xs font-black text-emerald-600 mt-1 flex items-center">
-                <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse mr-1.5"></span> Live Sync
+              <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Firestore Connection</p>
+              <h3 class="text-[11px] font-black text-emerald-600 mt-0.5 flex items-center">
+                <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse mr-1"></span> Live Sync
               </h3>
             </div>
-            <div class="w-10 h-10 bg-slate-100 text-slate-600 rounded-xl flex items-center justify-center text-lg font-bold">🔥</div>
+            <div class="w-8 h-8 bg-slate-100 text-slate-600 rounded-lg flex items-center justify-center text-sm font-bold">🔥</div>
           </div>
         </div>
 
-        <!-- TABLE CONTROLS & DATABASE DISPLAY -->
-        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
+        <!-- TABLE CONTROLS & DATABASE DISPLAY CONTAINER -->
+        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex-1 flex flex-col min-h-0 space-y-3">
           
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 shrink-0">
             <div>
-              <h2 class="text-xl font-black text-slate-900">Individual Student Records</h2>
-              <p class="text-xs text-slate-500">Click on any <strong>Student Details</strong> cell to inspect full student profile, completed lessons & payment history.</p>
+              <h2 class="text-base font-black text-slate-900 tracking-tight">Individual Student Records</h2>
+              <p class="text-[11px] text-slate-500">Compact view of student data, enrolled courses, and direct profile launcher.</p>
             </div>
 
-            <div class="flex flex-wrap items-center gap-2">
-              <div class="relative flex-1 sm:w-64">
-                <input type="text" id="search-input" onkeyup="filterDatabaseTable()" placeholder="Search student name, email, course..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-indigo-600 focus:bg-white transition" />
-                <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <div class="flex items-center space-x-2">
+              <div class="relative flex-1 sm:w-56">
+                <input type="text" id="search-input" onkeyup="filterDatabaseTable()" placeholder="Search name, email, course..." class="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[11px] focus:outline-none focus:border-indigo-600 focus:bg-white transition" />
+                <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
               </div>
 
-              <button onclick="loadStudentDatabase()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition border border-slate-200 flex items-center">
+              <button onclick="loadStudentDatabase()" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg text-[11px] transition border border-slate-200 shrink-0">
                 🔄 Refresh
               </button>
               
-              <button onclick="exportToCSV()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-xl text-xs transition shadow-sm flex items-center">
-                📥 Download CSV / Excel
+              <button onclick="exportToCSV()" class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-lg text-[11px] transition shadow-xs shrink-0">
+                📥 Export CSV
               </button>
             </div>
           </div>
 
-          <!-- DATA TABLE WITH CLICKABLE STUDENT DETAILS -->
-          <div class="overflow-x-auto rounded-xl border border-slate-200">
-            <table class="w-full text-left text-xs text-slate-700 border-collapse">
-              <thead class="bg-slate-100 text-slate-900 font-extrabold uppercase border-b border-slate-200 text-[10px] tracking-wider">
+          <!-- NO-SCROLL COMPACT TABLE CONTAINER -->
+          <div class="flex-1 overflow-y-auto rounded-lg border border-slate-200">
+            <table class="w-full text-left border-collapse table-fixed">
+              <thead class="bg-slate-100 text-slate-900 font-extrabold uppercase border-b border-slate-200 text-[9px] tracking-wider sticky top-0 z-10">
                 <tr>
-                  <th class="p-3.5 w-12 text-center">#</th>
-                  <th class="p-3.5">Student Details (Click to view Profile)</th>
-                  <th class="p-3.5">Contact Number</th>
-                  <th class="p-3.5 text-center">Courses Bought</th>
-                  <th class="p-3.5">Enrolled Course IDs & Titles</th>
-                  <th class="p-3.5">Joined Date</th>
+                  <th class="p-2 w-8 text-center">#</th>
+                  <th class="p-2 w-1/4">Student Details</th>
+                  <th class="p-2 w-28">Contact Number</th>
+                  <th class="p-2 w-20 text-center">Courses</th>
+                  <th class="p-2">Enrolled Course IDs & Titles</th>
+                  <th class="p-2 w-24">Joined Date</th>
+                  <th class="p-2 w-24 text-center">Student Profile</th>
                 </tr>
               </thead>
-              <tbody id="student-table-body" class="divide-y divide-slate-200 bg-white">
+              <tbody id="student-table-body" class="divide-y divide-slate-100 bg-white text-[11px]">
                 <tr>
-                  <td colspan="6" class="p-8 text-center text-slate-400 font-medium">Fetching student database from Firebase...</td>
+                  <td colspan="7" class="p-6 text-center text-slate-400 font-medium">Fetching student database from Firebase...</td>
                 </tr>
               </tbody>
             </table>
@@ -190,23 +191,23 @@
       </div>
 
       <!-- ================= OTHER PLACEHOLDER TAB SECTIONS ================= -->
-      <div id="section-org" class="hidden bg-white border border-slate-200 rounded-2xl p-8 space-y-3 text-center shadow-sm">
-        <h3 class="text-xl font-bold text-slate-900">🏢 Manage Organizations</h3>
+      <div id="section-org" class="hidden bg-white border border-slate-200 rounded-xl p-6 space-y-2 text-center shadow-sm">
+        <h3 class="text-lg font-bold text-slate-900">🏢 Manage Organizations</h3>
         <p class="text-xs text-slate-500 max-w-md mx-auto">Institutional campus partnerships and bulk college onboarding settings.</p>
       </div>
 
-      <div id="section-courses" class="hidden bg-white border border-slate-200 rounded-2xl p-8 space-y-3 text-center shadow-sm">
-        <h3 class="text-xl font-bold text-slate-900">📚 Manage Courses</h3>
+      <div id="section-courses" class="hidden bg-white border border-slate-200 rounded-xl p-6 space-y-2 text-center shadow-sm">
+        <h3 class="text-lg font-bold text-slate-900">📚 Manage Courses</h3>
         <p class="text-xs text-slate-500 max-w-md mx-auto">Upload new course content, edit prices, and modify Google Drive stream links.</p>
       </div>
 
-      <div id="section-tests" class="hidden bg-white border border-slate-200 rounded-2xl p-8 space-y-3 text-center shadow-sm">
-        <h3 class="text-xl font-bold text-slate-900">📝 Manage Tests</h3>
+      <div id="section-tests" class="hidden bg-white border border-slate-200 rounded-xl p-6 space-y-2 text-center shadow-sm">
+        <h3 class="text-lg font-bold text-slate-900">📝 Manage Tests</h3>
         <p class="text-xs text-slate-500 max-w-md mx-auto">Create and assign placement practice mock examinations.</p>
       </div>
 
-      <div id="section-quizzes" class="hidden bg-white border border-slate-200 rounded-2xl p-8 space-y-3 text-center shadow-sm">
-        <h3 class="text-xl font-bold text-slate-900">❓ Manage Quizzes</h3>
+      <div id="section-quizzes" class="hidden bg-white border border-slate-200 rounded-xl p-6 space-y-2 text-center shadow-sm">
+        <h3 class="text-lg font-bold text-slate-900">❓ Manage Quizzes</h3>
         <p class="text-xs text-slate-500 max-w-md mx-auto">Manage module-wise quick quizzes and scoring keys.</p>
       </div>
 
@@ -214,55 +215,55 @@
 
   </div>
 
-  <!-- ================= INDIVIDUAL STUDENT PROFILE MODAL ================= -->
+  <!-- ================= INDIVIDUAL STUDENT QUICK INSPECT MODAL ================= -->
   <div id="student-profile-modal" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white border border-slate-200 rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+    <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-xl overflow-hidden shadow-2xl flex flex-col max-h-[85vh]">
       
       <!-- MODAL HEADER -->
-      <div class="p-6 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800 shrink-0">
-        <div class="flex items-center space-x-4">
-          <div id="modal-avatar" class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 border border-indigo-400 flex items-center justify-center text-xl font-black text-white shadow">
+      <div class="p-4 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800 shrink-0">
+        <div class="flex items-center space-x-3">
+          <div id="modal-avatar" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 border border-indigo-400 flex items-center justify-center text-lg font-black text-white shadow">
             S
           </div>
           <div>
-            <h3 id="modal-student-name" class="font-extrabold text-lg text-white leading-tight">Student Profile</h3>
+            <h3 id="modal-student-name" class="font-extrabold text-base text-white leading-tight">Student Profile</h3>
             <span id="modal-student-email" class="text-xs text-indigo-300">student@example.com</span>
           </div>
         </div>
-        <button onclick="closeStudentProfileModal()" class="text-slate-400 hover:text-white font-bold text-2xl px-2">&times;</button>
+        <button onclick="closeStudentProfileModal()" class="text-slate-400 hover:text-white font-bold text-xl px-2">&times;</button>
       </div>
 
       <!-- MODAL BODY CONTAINER -->
-      <div class="p-6 overflow-y-auto space-y-6">
+      <div class="p-5 overflow-y-auto space-y-5">
         
         <!-- CONTACT & ACCOUNT DETAILS -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200 text-xs">
+        <div class="grid grid-cols-3 gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs">
           <div>
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Phone Number</span>
+            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Phone Number</span>
             <span id="modal-student-phone" class="font-bold text-slate-900">--</span>
           </div>
           <div>
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Registration Date</span>
+            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Registration Date</span>
             <span id="modal-student-joined" class="font-bold text-slate-900">--</span>
           </div>
           <div>
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Completed Lessons</span>
+            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Completed Lessons</span>
             <span id="modal-completed-lessons" class="font-bold text-emerald-600">0 Lessons</span>
           </div>
         </div>
 
         <!-- ENROLLED COURSES BREAKDOWN -->
-        <div class="space-y-3">
-          <h4 class="text-xs font-black text-slate-400 uppercase tracking-wider">Unlocked Courses & Access Validity</h4>
-          <div id="modal-courses-list" class="space-y-2">
+        <div class="space-y-2">
+          <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-wider">Unlocked Courses & Access Status</h4>
+          <div id="modal-courses-list" class="space-y-1.5">
             <!-- Dynamically populated -->
           </div>
         </div>
 
         <!-- TRANSACTION & PAYMENT HISTORY -->
-        <div class="space-y-3 pt-4 border-t border-slate-100">
-          <h4 class="text-xs font-black text-slate-400 uppercase tracking-wider">Razorpay Payment Log</h4>
-          <div id="modal-transactions-list" class="space-y-2 text-xs">
+        <div class="space-y-2 pt-3 border-t border-slate-100">
+          <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-wider">Razorpay Payment Logs</h4>
+          <div id="modal-transactions-list" class="space-y-1.5 text-xs">
             <!-- Dynamically populated -->
           </div>
         </div>
@@ -270,10 +271,12 @@
       </div>
 
       <!-- MODAL FOOTER -->
-      <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-between items-center text-xs text-slate-500">
-        <span>Firebase Student Document ID: <strong id="modal-doc-id">--</strong></span>
-        <button onclick="closeStudentProfileModal()" class="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition">
-          Close Profile
+      <div class="p-3 bg-slate-50 border-t border-slate-200 flex justify-between items-center text-xs text-slate-500">
+        <button id="modal-launch-dashboard-btn" class="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg transition text-xs flex items-center shadow-sm">
+          Launch Live Student Portal ↗
+        </button>
+        <button onclick="closeStudentProfileModal()" class="px-4 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-lg transition text-xs">
+          Close
         </button>
       </div>
 
@@ -344,7 +347,7 @@
     /* 4. FETCH STUDENT DATABASE FROM FIRESTORE */
     async function loadStudentDatabase() {
       const tbody = document.getElementById('student-table-body');
-      tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400 font-medium">Loading database from Firebase...</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400 font-medium">Loading database from Firebase...</td></tr>`;
 
       try {
         const snapshot = await db.collection('students').get();
@@ -352,7 +355,7 @@
         tbody.innerHTML = "";
 
         if (snapshot.empty) {
-          tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400 font-medium">No student records found in database.</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400 font-medium">No student records found in database.</td></tr>`;
           updateMetrics(0, 0);
           return;
         }
@@ -395,62 +398,76 @@
 
       } catch (err) {
         console.error("Firestore Fetch Error:", err);
-        tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-red-500 font-bold">Failed to load database: ${err.message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-red-500 font-bold">Failed to load database: ${err.message}</td></tr>`;
       }
     }
 
-    /* 5. RENDER TABLE ROWS WITH CLICKABLE STUDENT DETAILS */
+    /* 5. RENDER HIGH-DENSITY TABLE ROWS WITH CLICKABLE "VIEW PROFILE" BUTTON */
     function renderTableRows(dataList) {
       const tbody = document.getElementById('student-table-body');
       tbody.innerHTML = "";
 
       if (dataList.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">No matching student records found.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="p-5 text-center text-slate-400">No matching student records found.</td></tr>`;
         return;
       }
 
       dataList.forEach(student => {
         let coursesBadgeHtml = student.courses.length > 0
           ? student.courses.map(c => `
-              <div class="inline-flex items-center space-x-1.5 bg-indigo-50 text-indigo-700 border border-indigo-200 px-2 py-0.5 rounded-lg text-[10px] font-semibold m-0.5">
-                <span class="bg-indigo-600 text-white font-bold text-[9px] px-1 rounded">ID: ${c.id}</span>
-                <span>${c.name}</span>
+              <div class="inline-flex items-center space-x-1 bg-indigo-50 text-indigo-700 border border-indigo-200 px-1.5 py-0.5 rounded text-[9px] font-semibold m-0.5 truncate max-w-[200px]">
+                <span class="bg-indigo-600 text-white font-bold text-[8px] px-1 rounded shrink-0">#${c.id}</span>
+                <span class="truncate">${c.name}</span>
               </div>
             `).join('')
-          : `<span class="text-slate-400 italic">No active courses</span>`;
+          : `<span class="text-slate-400 italic text-[10px]">No active courses</span>`;
 
         tbody.innerHTML += `
           <tr class="hover:bg-slate-50 transition border-b border-slate-100">
-            <td class="p-3.5 text-center font-black text-slate-400 text-xs">${student.index}</td>
+            <td class="p-2 text-center font-black text-slate-400 text-[10px]">${student.index}</td>
             
-            <!-- CLICKABLE STUDENT DETAILS CELL -->
-            <td class="p-3.5 cursor-pointer group" onclick="openStudentProfile('${student.email}')">
-              <div class="p-2 -m-2 rounded-xl group-hover:bg-indigo-50/70 border border-transparent group-hover:border-indigo-200 transition">
-                <span class="font-extrabold text-indigo-600 group-hover:text-indigo-800 text-xs flex items-center">
-                  <span>${student.name}</span>
-                  <svg class="w-3.5 h-3.5 ml-1.5 text-indigo-500 opacity-0 group-hover:opacity-100 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                </span>
-                <span class="text-[11px] text-slate-500 group-hover:text-indigo-600 block">${student.email}</span>
-                <span class="text-[9px] text-indigo-500 font-bold opacity-0 group-hover:opacity-100 transition mt-0.5 block">🔍 Click to inspect profile</span>
-              </div>
+            <!-- STUDENT DETAILS CELL -->
+            <td class="p-2 truncate cursor-pointer" onclick="openStudentProfile('${student.email}')">
+              <span class="font-bold text-slate-900 block truncate hover:text-indigo-600 transition" title="${student.name}">${student.name}</span>
+              <span class="text-[10px] text-slate-500 block truncate" title="${student.email}">${student.email}</span>
             </td>
 
-            <td class="p-3.5 font-medium text-slate-700">${student.phone}</td>
-            <td class="p-3.5 text-center">
-              <span class="inline-block px-2.5 py-0.5 bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-full font-extrabold text-[11px]">
+            <td class="p-2 font-medium text-slate-700 truncate">${student.phone}</td>
+            
+            <td class="p-2 text-center">
+              <span class="inline-block px-2 py-0.5 bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-full font-black text-[10px]">
                 ${student.courseCount} ${student.courseCount === 1 ? 'Course' : 'Courses'}
               </span>
             </td>
-            <td class="p-3.5">
+
+            <td class="p-2">
               <div class="flex flex-wrap items-center">${coursesBadgeHtml}</div>
             </td>
-            <td class="p-3.5 text-slate-500 text-[11px] font-medium">${student.joinedDate}</td>
+
+            <td class="p-2 text-slate-500 text-[10px] font-medium truncate">${student.joinedDate}</td>
+
+            <!-- CLICKABLE "VIEW PROFILE" BUTTON COLUMN -->
+            <td class="p-2 text-center">
+              <button onclick="viewActualStudentProfile('${student.email}', '${student.phone}')" class="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-md text-[10px] transition shadow-xs whitespace-nowrap">
+                View Profile ↗
+              </button>
+            </td>
           </tr>
         `;
       });
     }
 
-    /* 6. OPEN INDIVIDUAL STUDENT PROFILE MODAL */
+    /* 6. OPEN ACTUAL STUDENT PROFILE PAGE (POST-PAYMENT DASHBOARD) */
+    function viewActualStudentProfile(email, phone) {
+      localStorage.setItem('careergraspp_active_email', email);
+      localStorage.setItem('careergraspp_active_phone', phone);
+      localStorage.setItem('careergraspp_role', 'student');
+
+      const targetUrl = `course.html?email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
+      window.open(targetUrl, '_blank');
+    }
+
+    /* 7. OPEN QUICK INSPECT MODAL */
     function openStudentProfile(email) {
       const student = allStudentsData.find(s => s.email.toLowerCase() === email.toLowerCase());
       if (!student) return;
@@ -460,10 +477,13 @@
       document.getElementById('modal-student-phone').textContent = student.phone;
       document.getElementById('modal-student-joined').textContent = student.joinedDate;
       document.getElementById('modal-avatar').textContent = (student.name || 'S').charAt(0).toUpperCase();
-      document.getElementById('modal-doc-id').textContent = student.email;
       document.getElementById('modal-completed-lessons').textContent = `${student.completedLessons.length} Lessons Marked Done`;
 
-      // Render Courses List in Modal
+      const launchBtn = document.getElementById('modal-launch-dashboard-btn');
+      launchBtn.onclick = function() {
+        viewActualStudentProfile(student.email, student.phone);
+      };
+
       const coursesContainer = document.getElementById('modal-courses-list');
       coursesContainer.innerHTML = "";
       if (student.courses.length === 0) {
@@ -471,18 +491,17 @@
       } else {
         student.courses.forEach(c => {
           coursesContainer.innerHTML += `
-            <div class="p-3 bg-indigo-50/60 border border-indigo-200 rounded-xl flex items-center justify-between text-xs">
-              <div class="flex items-center space-x-2.5">
-                <span class="w-6 h-6 rounded-lg bg-indigo-600 text-white font-black text-[10px] flex items-center justify-center">#${c.id}</span>
+            <div class="p-2.5 bg-indigo-50/60 border border-indigo-200 rounded-lg flex items-center justify-between text-xs">
+              <div class="flex items-center space-x-2">
+                <span class="w-5 h-5 rounded bg-indigo-600 text-white font-black text-[9px] flex items-center justify-center">#${c.id}</span>
                 <span class="font-bold text-slate-900">${c.name}</span>
               </div>
-              <span class="bg-emerald-100 text-emerald-800 border border-emerald-300 font-extrabold text-[10px] px-2.5 py-0.5 rounded-full">Active Access</span>
+              <span class="bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold text-[9px] px-2 py-0.5 rounded-full">Active Access</span>
             </div>
           `;
         });
       }
 
-      // Render Razorpay Transactions
       const txContainer = document.getElementById('modal-transactions-list');
       txContainer.innerHTML = "";
       if (student.transactions.length === 0) {
@@ -490,14 +509,14 @@
       } else {
         student.transactions.forEach(tx => {
           txContainer.innerHTML += `
-            <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div class="p-2 bg-slate-50 border border-slate-200 rounded-lg flex justify-between items-center text-[11px]">
               <div>
                 <span class="font-bold text-slate-900 block">${tx.courseTitle || 'Course Purchase'}</span>
-                <span class="text-[10px] text-slate-500 font-mono">Payment ID: ${tx.paymentId || 'N/A'}</span>
+                <span class="text-[9px] text-slate-500 font-mono">Payment ID: ${tx.paymentId || 'N/A'}</span>
               </div>
-              <div class="sm:text-right">
-                <span class="text-xs font-black text-emerald-600 block">₹${tx.amount || 250}</span>
-                <span class="text-[10px] text-slate-400">${tx.date || ''}</span>
+              <div class="text-right">
+                <span class="font-black text-emerald-600 block">₹${tx.amount || 250}</span>
+                <span class="text-[9px] text-slate-400">${tx.date || ''}</span>
               </div>
             </div>
           `;
@@ -511,7 +530,7 @@
       document.getElementById('student-profile-modal').classList.add('hidden');
     }
 
-    /* 7. TAB SWITCHING LOGIC */
+    /* 8. TAB SWITCHING LOGIC */
     function switchAdminTab(tabKey) {
       const tabs = ['students', 'org', 'courses', 'tests', 'quizzes'];
       tabs.forEach(t => {
@@ -519,17 +538,17 @@
         const sec = document.getElementById(`section-${t}`);
         if (btn && sec) {
           if (t === tabKey) {
-            btn.className = "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition bg-indigo-600 text-white shadow-md";
+            btn.className = "w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-bold transition bg-indigo-600 text-white shadow-sm";
             sec.classList.remove('hidden');
           } else {
-            btn.className = "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition text-slate-300 hover:bg-slate-800 hover:text-white";
+            btn.className = "w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-bold transition text-slate-300 hover:bg-slate-800 hover:text-white";
             sec.classList.add('hidden');
           }
         }
       });
     }
 
-    /* 8. METRICS UPDATER */
+    /* 9. METRICS UPDATER */
     function updateMetrics(totalStudents, totalPurchases) {
       document.getElementById('stat-total-students').textContent = totalStudents;
       document.getElementById('stat-total-purchases').textContent = totalPurchases;
@@ -537,7 +556,7 @@
       document.getElementById('stat-avg-courses').textContent = avg;
     }
 
-    /* 9. SEARCH FILTER */
+    /* 10. SEARCH FILTER */
     function filterDatabaseTable() {
       const query = document.getElementById('search-input').value.toLowerCase().trim();
       const filtered = allStudentsData.filter(s => {
@@ -549,7 +568,7 @@
       renderTableRows(filtered);
     }
 
-    /* 10. EXPORT CSV */
+    /* 11. EXPORT CSV */
     function exportToCSV() {
       if (!allStudentsData || allStudentsData.length === 0) return alert("No student data available.");
       let csvContent = "data:text/csv;charset=utf-8,S.No,Student Name,Email Address,Phone Number,Total Courses Purchased,Enrolled Course IDs,Enrolled Course Titles,Joined Date\n";
