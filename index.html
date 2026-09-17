@@ -713,37 +713,69 @@
       rzp.open();
     }
 
-    async function onPaymentSuccess(paymentId, course, name, email, phone) {
+/* ================= FIRESTORE PROFILE HELPER ================= */
+    async function saveStudentProfileToFirestore(studentData) {
+      const email = studentData.email.toLowerCase();
       const userDocRef = db.collection('students').doc(email);
-      const nowTs = Date.now();
+
+      // Check if an org code was passed (e.g. from URL ?org=MGIT2026 or an input field)
+      const assignedOrgCode = studentData.orgCode ? studentData.orgCode.toUpperCase() : "INDIVIDUAL";
+      const isOrg = assignedOrgCode !== "INDIVIDUAL";
+
+      await userDocRef.set({
+        name: studentData.name,
+        email: email,
+        phone: studentData.phone,
+        role: "student",
+        
+        // ORGANIZATION MATCHING FIELDS
+        orgCode: assignedOrgCode,
+        studentType: isOrg ? "organization" : "individual",
+        orgName: isOrg ? (studentData.orgName || "Institutional Access") : "Self Enrolled",
+        rollNumber: studentData.rollNumber || "N/A",
+
+        enrolledCourses: firebase.firestore.FieldValue.arrayUnion(studentData.courseId),
+        courseEnrollmentDates: {
+          [studentData.courseId]: Date.now()
+        },
+        completedLessons: firebase.firestore.FieldValue.arrayUnion(),
+        transactions: firebase.firestore.FieldValue.arrayUnion({
+          paymentId: studentData.paymentId,
+          courseId: studentData.courseId,
+          courseTitle: studentData.courseTitle,
+          amount: studentData.amount,
+          date: new Date().toLocaleString(),
+          timestamp: Date.now()
+        }),
+        joinedDate: new Date().toLocaleDateString(),
+        joinedTimestamp: Date.now()
+      }, { merge: true });
+    }
+
+    /* ================= PAYMENT SUCCESS HANDLER ================= */
+    async function onPaymentSuccess(paymentId, course, name, email, phone) {
+      // Check if student belongs to an organization via URL parameter (e.g. index.html?org=MGIT2026)
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlOrgCode = urlParams.get('org') || localStorage.getItem('careergraspp_org_code');
 
       try {
-        await userDocRef.set({
+        await saveStudentProfileToFirestore({
+          paymentId: paymentId,
+          courseId: course.id,
+          courseTitle: course.title,
+          amount: course.price,
           name: name,
           email: email,
           phone: phone,
-          enrolledCourses: firebase.firestore.FieldValue.arrayUnion(course.id),
-          courseEnrollmentDates: {
-            [course.id]: nowTs
-          },
-          completedLessons: firebase.firestore.FieldValue.arrayUnion(),
-          transactions: firebase.firestore.FieldValue.arrayUnion({
-            paymentId: paymentId,
-            courseId: course.id,
-            courseTitle: course.title,
-            amount: course.price,
-            date: new Date().toLocaleString(),
-            timestamp: nowTs
-          }),
-          joinedDate: new Date().toLocaleDateString(),
-          joinedTimestamp: nowTs
-        }, { merge: true });
+          orgCode: urlOrgCode,
+          orgName: urlOrgCode ? "Mahatma Gandhi Institute of Technology" : null
+        });
 
         localStorage.setItem('careergraspp_active_email', email);
         localStorage.setItem('careergraspp_active_phone', phone);
         localStorage.setItem('careergraspp_role', 'student');
 
-        alert(`🎉 Payment Successful!\n\nWelcome ${name}!\nTransaction ID: ${paymentId}\nCourse Unlocked: ${course.title}\nValidity: 6 Months (180 Days)\n\nRedirecting to your Student Portal...`);
+        alert(`🎉 Payment Successful!\n\nWelcome ${name}!\nTransaction ID: ${paymentId}\nCourse Unlocked: ${course.title}\n\nRedirecting to your Student Portal...`);
         window.location.href = `course.html?unlocked=${course.id}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
       } catch (err) {
         console.error("Firestore Error:", err);
@@ -822,13 +854,34 @@
       }
     }
 
-    function executeOrgAuth(event) {
+ async function executeOrgAuth(event) {
       event.preventDefault();
-      const email = document.getElementById('login-org-email').value.trim();
-      localStorage.setItem('careergraspp_active_email', email);
-      localStorage.setItem('careergraspp_role', 'org');
-      closeUnifiedLoginModal();
-      window.location.href = "course.html";
+      const emailInput = document.getElementById('login-org-email').value.trim().toLowerCase();
+      const codeInput = document.getElementById('login-org-code').value.trim();
+
+      if (!emailInput || !codeInput) return alert("Please enter both Email and Institutional Passcode.");
+
+      try {
+        const orgQuery = await db.collection('organizations')
+          .where('contactEmail', '==', emailInput)
+          .where('passcode', '==', codeInput)
+          .get();
+
+        if (!orgQuery.empty) {
+          const orgData = orgQuery.docs[0].data();
+          localStorage.setItem('careergraspp_active_email', emailInput);
+          localStorage.setItem('careergraspp_org_code', orgData.orgCode);
+          localStorage.setItem('careergraspp_org_name', orgData.orgName);
+          localStorage.setItem('careergraspp_role', 'org');
+
+          closeUnifiedLoginModal();
+          window.location.href = "org-dashboard.html";
+        } else {
+          alert("❌ Invalid Organization Email or Institutional Passcode.");
+        }
+      } catch (err) {
+        alert("Organization Login Error: " + err.message);
+      }
     }
 
     /* 4. FIREBASE AUTHENTICATION FOR ADMIN LOGINS */
