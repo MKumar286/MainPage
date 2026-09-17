@@ -340,8 +340,8 @@
     }
     const db = firebase.firestore();
 
-    /* 2. RAZORPAY PRODUCTION & TEST KEY PLACEHOLDER */
-    const RAZORPAY_KEY_ID = "rzp_test_YOUR_KEY_HERE"; 
+    /* 2. RAZORPAY KEY ID CONFIGURATION */
+    const RAZORPAY_KEY_ID = "rzp_test_YOUR_KEY_HERE"; // Replace with your live or test key ID from Razorpay Dashboard
     let pendingCourseIdToEnroll = null;
 
     const samplePdfLinks = [
@@ -658,11 +658,15 @@
       const activeEmail = localStorage.getItem('careergraspp_active_email');
 
       if (activeEmail) {
-        const userDoc = await db.collection('students').doc(activeEmail).get();
-        if (userDoc.exists) {
-          const profile = userDoc.data();
-          initiateRazorpayPayment(courseId, profile.name, profile.email, profile.phone);
-          return;
+        try {
+          const userDoc = await db.collection('students').doc(activeEmail).get();
+          if (userDoc.exists) {
+            const profile = userDoc.data();
+            initiateRazorpayPayment(courseId, profile.name || "Student", profile.email, profile.phone || "");
+            return;
+          }
+        } catch (e) {
+          console.warn("Could not fetch cached student profile", e);
         }
       }
 
@@ -687,13 +691,14 @@
       document.getElementById('student-info-modal').classList.add('hidden');
     }
 
+    /* ================= RAZORPAY PAYMENT INITIATOR ================= */
     function initiateRazorpayPayment(courseId, studentName, studentEmail, studentPhone) {
       const course = softSkillsCourses.find(c => c.id === courseId);
       if (!course) return;
 
       const options = {
         "key": RAZORPAY_KEY_ID,
-        "amount": course.price * 100,
+        "amount": Math.round(course.price * 100),
         "currency": "INR",
         "name": "Careergraspp Soft Skills Academy",
         "description": `Enrollment for ${course.title}`,
@@ -709,16 +714,24 @@
         "theme": { "color": "#4F46E5" }
       };
 
-      const rzp = new Razorpay(options);
-      rzp.open();
+      try {
+        const rzp = new Razorpay(options);
+        rzp.on('payment.failed', function (response) {
+          alert("❌ Payment Failed or Cancelled: " + (response.error.description || "Transaction failed."));
+        });
+        rzp.open();
+      } catch (err) {
+        console.error("Razorpay Error:", err);
+        alert("Error initializing payment gateway: " + err.message);
+      }
     }
 
-/* ================= FIRESTORE PROFILE HELPER ================= */
+    /* ================= FIRESTORE PROFILE HELPER ================= */
     async function saveStudentProfileToFirestore(studentData) {
       const email = studentData.email.toLowerCase();
       const userDocRef = db.collection('students').doc(email);
 
-      // Check if an org code was passed (e.g. from URL ?org=MGIT2026 or an input field)
+      // Check if an org code was passed (e.g. from URL ?org=MGIT2026 or localStorage)
       const assignedOrgCode = studentData.orgCode ? studentData.orgCode.toUpperCase() : "INDIVIDUAL";
       const isOrg = assignedOrgCode !== "INDIVIDUAL";
 
@@ -754,7 +767,6 @@
 
     /* ================= PAYMENT SUCCESS HANDLER ================= */
     async function onPaymentSuccess(paymentId, course, name, email, phone) {
-      // Check if student belongs to an organization via URL parameter (e.g. index.html?org=MGIT2026)
       const urlParams = new URLSearchParams(window.location.search);
       const urlOrgCode = urlParams.get('org') || localStorage.getItem('careergraspp_org_code');
 
@@ -784,7 +796,9 @@
     }
 
     function openUnifiedLoginModal(defaultRole) {
-      toggleLoginDropdown();
+      if (!document.getElementById('login-dropdown-menu').classList.contains('hidden')) {
+        toggleLoginDropdown();
+      }
       switchLoginRoleTab(defaultRole || 'student');
       document.getElementById('unified-login-modal').classList.remove('hidden');
     }
@@ -854,7 +868,7 @@
       }
     }
 
- async function executeOrgAuth(event) {
+    async function executeOrgAuth(event) {
       event.preventDefault();
       const emailInput = document.getElementById('login-org-email').value.trim().toLowerCase();
       const codeInput = document.getElementById('login-org-code').value.trim();
@@ -895,20 +909,15 @@
       const password = keyInput ? keyInput.value.trim() : '';
 
       try {
-        // Authenticate via Firebase Auth
         const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
         const user = userCredential.user;
 
         localStorage.setItem('careergraspp_active_email', user.email);
         localStorage.setItem('careergraspp_role', 'admin');
 
-        if (typeof closeUnifiedLoginModal === 'function') {
-          closeUnifiedLoginModal();
-        }
-        
+        closeUnifiedLoginModal();
         window.location.href = "admin-database.html";
       } catch (error) {
-        // Fallback check if user hasn't set up Firebase Auth yet
         if ((email === "use-careergraspp@gmail.com" || email === "careergraspp@gmail.com") && password === "Kumar@2422") {
           localStorage.setItem('careergraspp_active_email', email);
           localStorage.setItem('careergraspp_role', 'admin');
@@ -934,7 +943,7 @@
       document.getElementById('video-modal-title').textContent = title;
       const containerBox = document.getElementById('video-container-box');
       let driveFileId = "";
-      if (rawVideoUrl.includes('drive.google.com')) {
+      if (rawVideoUrl && rawVideoUrl.includes('drive.google.com')) {
         const driveIdMatch = rawVideoUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
         if (driveIdMatch && driveIdMatch[1]) driveFileId = driveIdMatch[1];
       }
@@ -950,7 +959,7 @@
         containerBox.innerHTML = `<video class="w-full h-full object-contain rounded-xl" controls autoplay><source src="${rawVideoUrl}" type="video/mp4" /></video>`;
       }
 
-      document.getElementById('video-pdf-link').href = rawPdfUrl;
+      document.getElementById('video-pdf-link').href = rawPdfUrl || "#";
       document.getElementById('video-player-modal').classList.remove('hidden');
     }
 
