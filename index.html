@@ -727,73 +727,81 @@
     }
 
     /* ================= FIRESTORE PROFILE HELPER ================= */
-    async function saveStudentProfileToFirestore(studentData) {
-      const email = studentData.email.toLowerCase();
-      const userDocRef = db.collection('students').doc(email);
+  /* ================= FIRESTORE PROFILE HELPER ================= */
+async function saveStudentProfileToFirestore(studentData) {
+  const email = studentData.email.toLowerCase();
+  const userDocRef = db.collection('students').doc(email);
 
-      // Check if an org code was passed (e.g. from URL ?org=MGIT2026 or localStorage)
-      const assignedOrgCode = studentData.orgCode ? studentData.orgCode.toUpperCase() : "INDIVIDUAL";
-      const isOrg = assignedOrgCode !== "INDIVIDUAL";
+  // Read directly from URL or fallback to storage
+  const urlParams = new URLSearchParams(window.location.search);
+  const rawOrgCode = urlParams.get('org') || localStorage.getItem('careergraspp_org_code') || studentData.orgCode;
+  
+  const assignedOrgCode = rawOrgCode ? rawOrgCode.toUpperCase().trim() : "INDIVIDUAL";
+  const isOrg = assignedOrgCode !== "INDIVIDUAL";
 
-      await userDocRef.set({
-        name: studentData.name,
-        email: email,
-        phone: studentData.phone,
-        role: "student",
-        
-        // ORGANIZATION MATCHING FIELDS
-        orgCode: assignedOrgCode,
-        studentType: isOrg ? "organization" : "individual",
-        orgName: isOrg ? (studentData.orgName || "Institutional Access") : "Self Enrolled",
-        rollNumber: studentData.rollNumber || "N/A",
+  await userDocRef.set({
+    name: studentData.name,
+    email: email,
+    phone: studentData.phone,
+    role: "student",
+    
+    // ORGANIZATION MATCHING FIELDS
+    orgCode: assignedOrgCode,
+    studentType: isOrg ? "organization" : "individual",
+    orgName: isOrg ? "Mahatma Gandhi Institute of Technology" : "Self Enrolled",
+    rollNumber: studentData.rollNumber || "N/A",
 
-        enrolledCourses: firebase.firestore.FieldValue.arrayUnion(studentData.courseId),
-        courseEnrollmentDates: {
-          [studentData.courseId]: Date.now()
-        },
-        completedLessons: firebase.firestore.FieldValue.arrayUnion(),
-        transactions: firebase.firestore.FieldValue.arrayUnion({
-          paymentId: studentData.paymentId,
-          courseId: studentData.courseId,
-          courseTitle: studentData.courseTitle,
-          amount: studentData.amount,
-          date: new Date().toLocaleString(),
-          timestamp: Date.now()
-        }),
-        joinedDate: new Date().toLocaleDateString(),
-        joinedTimestamp: Date.now()
-      }, { merge: true });
-    }
+    enrolledCourses: firebase.firestore.FieldValue.arrayUnion(studentData.courseId),
+    courseEnrollmentDates: {
+      [studentData.courseId]: Date.now()
+    },
+    completedLessons: firebase.firestore.FieldValue.arrayUnion(),
+    transactions: firebase.firestore.FieldValue.arrayUnion({
+      paymentId: studentData.paymentId,
+      courseId: studentData.courseId,
+      courseTitle: studentData.courseTitle,
+      amount: studentData.amount,
+      date: new Date().toLocaleString(),
+      timestamp: Date.now()
+    }),
+    joinedDate: new Date().toLocaleDateString(),
+    joinedTimestamp: Date.now()
+  }, { merge: true });
 
-    /* ================= PAYMENT SUCCESS HANDLER ================= */
-    async function onPaymentSuccess(paymentId, course, name, email, phone) {
-      const urlParams = new URLSearchParams(window.location.search);
-      const urlOrgCode = urlParams.get('org') || localStorage.getItem('careergraspp_org_code');
+  // Save orgCode locally so student stays linked
+  if (isOrg) {
+    localStorage.setItem('careergraspp_org_code', assignedOrgCode);
+  }
+}
 
-      try {
-        await saveStudentProfileToFirestore({
-          paymentId: paymentId,
-          courseId: course.id,
-          courseTitle: course.title,
-          amount: course.price,
-          name: name,
-          email: email,
-          phone: phone,
-          orgCode: urlOrgCode,
-          orgName: urlOrgCode ? "Mahatma Gandhi Institute of Technology" : null
-        });
+/* ================= PAYMENT SUCCESS HANDLER ================= */
+async function onPaymentSuccess(paymentId, course, name, email, phone) {
+  const urlParams = new URLSearchParams(window.location.search);
+  const detectedOrg = urlParams.get('org') || localStorage.getItem('careergraspp_org_code');
 
-        localStorage.setItem('careergraspp_active_email', email);
-        localStorage.setItem('careergraspp_active_phone', phone);
-        localStorage.setItem('careergraspp_role', 'student');
+  try {
+    await saveStudentProfileToFirestore({
+      paymentId: paymentId,
+      courseId: course.id,
+      courseTitle: course.title,
+      amount: course.price,
+      name: name,
+      email: email,
+      phone: phone,
+      orgCode: detectedOrg
+    });
 
-        alert(`🎉 Payment Successful!\n\nWelcome ${name}!\nTransaction ID: ${paymentId}\nCourse Unlocked: ${course.title}\n\nRedirecting to your Student Portal...`);
-        window.location.href = `course.html?unlocked=${course.id}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
-      } catch (err) {
-        console.error("Firestore Error:", err);
-        alert(`Payment received, but error saving to Firebase: ${err.message}`);
-      }
-    }
+    localStorage.setItem('careergraspp_active_email', email);
+    localStorage.setItem('careergraspp_active_phone', phone);
+    localStorage.setItem('careergraspp_role', 'student');
+
+    alert(`🎉 Payment Successful!\n\nWelcome ${name}!\nTransaction ID: ${paymentId}\nCourse Unlocked: ${course.title}\n\nRedirecting to your Student Portal...`);
+    window.location.href = `course.html?unlocked=${course.id}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
+  } catch (err) {
+    console.error("Firestore Error:", err);
+    alert(`Payment received, but error saving to Firebase: ${err.message}`);
+  }
+}
 
     function openUnifiedLoginModal(defaultRole) {
       if (!document.getElementById('login-dropdown-menu').classList.contains('hidden')) {
