@@ -99,7 +99,7 @@
 
       <!-- 3 CARDS PER ROW GRID -->
       <div id="courses-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
-        <!-- Injected dynamically via JavaScript -->
+        <!-- Injected dynamically via Real-Time Firestore JavaScript -->
       </div>
     </div>
   </section>
@@ -474,20 +474,53 @@
       };
     });
 
-    /* GET ACTIVE COURSES FROM LOCALSTORAGE (SYNCED WITH ADMIN CONTROL PANEL) */
-    function getActiveCoursesList() {
-      const stored = localStorage.getItem('careergraspp_courses');
-      if (stored) {
+    /* GLOBAL STATE STORE FOR COURSES */
+    let softSkillsCourses = defaultCourses;
+
+    /* REAL-TIME FIRESTORE COURSE SYNCHRONIZATION */
+    function initFirestoreCoursesSync() {
+      const container = document.getElementById('courses-grid-container');
+      if (container) {
+        container.innerHTML = `<div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-12 text-slate-500 font-semibold text-sm">🔄 Syncing live catalog from Firebase Firestore...</div>`;
+      }
+
+      // Check local storage for instant initial display
+      const localCache = localStorage.getItem('careergraspp_courses');
+      if (localCache) {
         try {
-          const parsed = JSON.parse(stored);
+          const parsed = JSON.parse(localCache);
           if (Array.isArray(parsed) && parsed.length > 0) {
-            return parsed;
+            softSkillsCourses = parsed;
+            renderCoursesGrid();
           }
         } catch (e) {
-          console.error("Error parsing stored courses from localStorage:", e);
+          console.warn("Invalid local courses cache", e);
         }
       }
-      return defaultCourses;
+
+      // Live Firestore Listener for Instant Updates
+      try {
+        db.collection('courses').orderBy('id', 'asc').onSnapshot((snapshot) => {
+          if (!snapshot.empty) {
+            const fetched = [];
+            snapshot.forEach((doc) => {
+              fetched.push(doc.data());
+            });
+            softSkillsCourses = fetched;
+            localStorage.setItem('careergraspp_courses', JSON.stringify(fetched));
+          } else {
+            // Seed local default if firestore is empty
+            softSkillsCourses = defaultCourses;
+          }
+          renderCoursesGrid();
+        }, (error) => {
+          console.error("Firestore Listen Error, falling back to cached catalog:", error);
+          renderCoursesGrid();
+        });
+      } catch (err) {
+        console.error("Firebase init error:", err);
+        renderCoursesGrid();
+      }
     }
 
     function renderCoursesGrid() {
@@ -495,9 +528,8 @@
       if (!container) return;
       
       container.innerHTML = "";
-      const activeCourses = getActiveCoursesList();
 
-      activeCourses.forEach((course) => {
+      softSkillsCourses.forEach((course) => {
         const partsText = course.partsList ? `${course.partsList.length}-Part Series` : (course.parts || "4-Part Series");
         const bulletItems = course.bullets || [
           `Core Principles of ${course.title}`,
@@ -532,12 +564,11 @@
 
     // INITIAL RENDER ON PAGE LOAD
     document.addEventListener('DOMContentLoaded', function() {
-      renderCoursesGrid();
+      initFirestoreCoursesSync();
     });
 
     function openCourseModal(courseId) {
-      const activeCourses = getActiveCoursesList();
-      const course = activeCourses.find(c => c.id === courseId);
+      const course = softSkillsCourses.find(c => c.id === courseId);
       if (!course) return;
 
       document.getElementById('modal-course-img').src = course.image;
@@ -658,8 +689,7 @@
     }
 
     function initiateRazorpayPayment(courseId, studentName, studentEmail, studentPhone) {
-      const activeCourses = getActiveCoursesList();
-      const course = activeCourses.find(c => c.id === courseId);
+      const course = softSkillsCourses.find(c => c.id === courseId);
       if (!course) return;
 
       const options = {
