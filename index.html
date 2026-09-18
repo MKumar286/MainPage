@@ -272,8 +272,9 @@
   </div>
 
   <!-- ================= STUDENT REGISTRATION MODAL ================= -->
+<!-- ================= STUDENT REGISTRATION MODAL (DYNAMIC AUDIENCE) ================= -->
   <div id="student-info-modal" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-white border border-slate-200 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl p-6 md:p-8 space-y-6">
+    <div class="bg-white border border-slate-200 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center pb-2 border-b border-slate-100">
         <div>
           <h3 class="font-extrabold text-xl text-slate-900">Student Registration</h3>
@@ -283,18 +284,46 @@
       </div>
 
       <form id="student-registration-form" onsubmit="handleRegistrationSubmit(event)" class="space-y-4">
+        
+        <!-- AUDIENCE TYPE SELECTOR -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">I am currently studying in:</label>
+          <select id="reg-student-category" onchange="toggleFormFieldsByCategory()" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:border-indigo-600">
+            <option value="college">Engineering / Degree / Inter College</option>
+            <option value="school">School (K-10 / High School)</option>
+          </select>
+        </div>
+
+        <!-- COMMON FIELD: FULL NAME -->
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Full Name</label>
           <input type="text" id="reg-student-name" required placeholder="e.g. Rahul Sharma" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition" />
         </div>
+
+        <!-- COMMON FIELD: EMAIL -->
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Email Address</label>
           <input type="email" id="reg-student-email" required placeholder="student@example.com" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition" />
         </div>
+
+        <!-- COMMON FIELD: PHONE NUMBER -->
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Mobile Number</label>
           <input type="tel" id="reg-student-phone" required placeholder="+91 9876543210" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition" />
         </div>
+
+        <!-- COLLEGE ONLY FIELD: BRANCH -->
+        <div id="field-container-branch">
+          <label class="block text-xs font-bold text-slate-700 mb-1">Branch / Stream</label>
+          <input type="text" id="reg-student-branch" placeholder="e.g. CSE / ECE / B.Com" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition" />
+        </div>
+
+        <!-- COMMON FIELD: SEMESTER / CLASS -->
+        <div>
+          <label id="label-semester-class" class="block text-xs font-bold text-slate-700 mb-1">Semester / Year</label>
+          <input type="text" id="reg-student-semester" required placeholder="e.g. 3rd Sem / 2nd Year" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition" />
+        </div>
+
         <button type="submit" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl text-xs shadow-lg shadow-indigo-600/25 transition">
           Continue to Payment →
         </button>
