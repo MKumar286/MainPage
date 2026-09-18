@@ -271,8 +271,7 @@
     </div>
   </div>
 
-  <!-- ================= STUDENT REGISTRATION MODAL ================= -->
-<!-- ================= STUDENT REGISTRATION MODAL (DYNAMIC AUDIENCE) ================= -->
+  <!-- ================= STUDENT REGISTRATION MODAL (DYNAMIC AUDIENCE) ================= -->
   <div id="student-info-modal" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-md flex items-center justify-center p-4">
     <div class="bg-white border border-slate-200 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center pb-2 border-b border-slate-100">
@@ -370,7 +369,7 @@
     const db = firebase.firestore();
 
     /* 2. RAZORPAY KEY ID CONFIGURATION */
-    const RAZORPAY_KEY_ID = "rzp_test_TXFnqgy3pZvwzL"; // Replace with your live or test key ID from Razorpay Dashboard
+    const RAZORPAY_KEY_ID = "rzp_test_TXFnqgy3pZvwzL"; 
     let pendingCourseIdToEnroll = null;
 
     const samplePdfLinks = [
@@ -514,7 +513,6 @@
         container.innerHTML = `<div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-12 text-slate-500 font-semibold text-sm">🔄 Syncing live catalog from Firebase Firestore...</div>`;
       }
 
-      // Check local storage for immediate load
       const localCache = localStorage.getItem('careergraspp_courses');
       if (localCache) {
         try {
@@ -528,7 +526,6 @@
         }
       }
 
-      // Real-time Firestore Listener
       try {
         db.collection('courses').orderBy('id', 'asc').onSnapshot((snapshot) => {
           if (!snapshot.empty) {
@@ -593,6 +590,7 @@
 
     document.addEventListener('DOMContentLoaded', function() {
       initFirestoreCoursesSync();
+      toggleFormFieldsByCategory();
     });
 
     function openCourseModal(courseId) {
@@ -691,7 +689,11 @@
           const userDoc = await db.collection('students').doc(activeEmail).get();
           if (userDoc.exists) {
             const profile = userDoc.data();
-            initiateRazorpayPayment(courseId, profile.name || "Student", profile.email, profile.phone || "");
+            initiateRazorpayPayment(courseId, profile.name || "Student", profile.email, profile.phone || "", {
+              category: profile.category || "college",
+              branch: profile.branch || "N/A",
+              semester: profile.semesterOrClass || "N/A"
+            });
             return;
           }
         } catch (e) {
@@ -702,17 +704,53 @@
       document.getElementById('student-info-modal').classList.remove('hidden');
     }
 
+    /* TOGGLE FIELDS BASED ON AUDIENCE CATEGORY */
+    function toggleFormFieldsByCategory() {
+      const category = document.getElementById('reg-student-category').value;
+      const branchContainer = document.getElementById('field-container-branch');
+      const branchInput = document.getElementById('reg-student-branch');
+      const semLabel = document.getElementById('label-semester-class');
+      const semInput = document.getElementById('reg-student-semester');
+
+      if (category === 'school') {
+        branchContainer.classList.add('hidden');
+        branchInput.value = "N/A";
+        branchInput.removeAttribute('required');
+
+        semLabel.textContent = "Class / Standard";
+        semInput.placeholder = "e.g. Class 9 / Class 10";
+      } else {
+        branchContainer.classList.remove('hidden');
+        branchInput.setAttribute('required', 'true');
+
+        semLabel.textContent = "Semester / Year";
+        semInput.placeholder = "e.g. 3rd Sem / 2nd Year";
+      }
+    }
+
+    /* HANDLE FORM SUBMISSION */
     function handleRegistrationSubmit(event) {
       event.preventDefault();
+
+      const category = document.getElementById('reg-student-category').value;
       const name = document.getElementById('reg-student-name').value.trim();
       const email = document.getElementById('reg-student-email').value.trim().toLowerCase();
       const phone = document.getElementById('reg-student-phone').value.trim();
+      const branch = category === 'school' ? 'N/A' : document.getElementById('reg-student-branch').value.trim();
+      const semester = document.getElementById('reg-student-semester').value.trim();
 
-      if (!name || !email || !phone) return alert("Please fill in all fields!");
+      if (!name || !email || !phone || !semester || (category === 'college' && !branch)) {
+        return alert("Please fill in all required fields!");
+      }
 
       document.getElementById('student-info-modal').classList.add('hidden');
+
       if (pendingCourseIdToEnroll) {
-        initiateRazorpayPayment(pendingCourseIdToEnroll, name, email, phone);
+        initiateRazorpayPayment(pendingCourseIdToEnroll, name, email, phone, {
+          category: category,
+          branch: branch,
+          semester: semester
+        });
       }
     }
 
@@ -721,7 +759,7 @@
     }
 
     /* ================= RAZORPAY PAYMENT INITIATOR ================= */
-    function initiateRazorpayPayment(courseId, studentName, studentEmail, studentPhone) {
+    function initiateRazorpayPayment(courseId, studentName, studentEmail, studentPhone, extraDetails) {
       const course = softSkillsCourses.find(c => c.id === courseId);
       if (!course) return;
 
@@ -733,7 +771,14 @@
         "description": `Enrollment for ${course.title}`,
         "image": "careergraspplogo.jpg",
         "handler": function (response) {
-          onPaymentSuccess(response.razorpay_payment_id, course, studentName, studentEmail, studentPhone);
+          onPaymentSuccess(
+            response.razorpay_payment_id,
+            course,
+            studentName,
+            studentEmail,
+            studentPhone,
+            extraDetails
+          );
         },
         "prefill": {
           "name": studentName,
@@ -756,81 +801,86 @@
     }
 
     /* ================= FIRESTORE PROFILE HELPER ================= */
-  /* ================= FIRESTORE PROFILE HELPER ================= */
-async function saveStudentProfileToFirestore(studentData) {
-  const email = studentData.email.toLowerCase();
-  const userDocRef = db.collection('students').doc(email);
+    async function saveStudentProfileToFirestore(studentData) {
+      const email = studentData.email.toLowerCase();
+      const userDocRef = db.collection('students').doc(email);
 
-  // Read directly from URL or fallback to storage
-  const urlParams = new URLSearchParams(window.location.search);
-  const rawOrgCode = urlParams.get('org') || localStorage.getItem('careergraspp_org_code') || studentData.orgCode;
-  
-  const assignedOrgCode = rawOrgCode ? rawOrgCode.toUpperCase().trim() : "INDIVIDUAL";
-  const isOrg = assignedOrgCode !== "INDIVIDUAL";
+      const urlParams = new URLSearchParams(window.location.search);
+      const rawOrgCode = urlParams.get('org') || localStorage.getItem('careergraspp_org_code') || studentData.orgCode;
+      
+      const assignedOrgCode = rawOrgCode ? rawOrgCode.toUpperCase().trim() : "INDIVIDUAL";
+      const isOrg = assignedOrgCode !== "INDIVIDUAL";
 
-  await userDocRef.set({
-    name: studentData.name,
-    email: email,
-    phone: studentData.phone,
-    role: "student",
-    
-    // ORGANIZATION MATCHING FIELDS
-    orgCode: assignedOrgCode,
-    studentType: isOrg ? "organization" : "individual",
-    orgName: isOrg ? "Mahatma Gandhi Institute of Technology" : "Self Enrolled",
-    rollNumber: studentData.rollNumber || "N/A",
+      await userDocRef.set({
+        name: studentData.name,
+        email: email,
+        phone: studentData.phone,
+        role: "student",
+        
+        // DYNAMIC ACADEMIC DETAILS
+        category: studentData.category || "college",
+        branch: studentData.branch || "N/A",
+        semesterOrClass: studentData.semester || "N/A",
 
-    enrolledCourses: firebase.firestore.FieldValue.arrayUnion(studentData.courseId),
-    courseEnrollmentDates: {
-      [studentData.courseId]: Date.now()
-    },
-    completedLessons: firebase.firestore.FieldValue.arrayUnion(),
-    transactions: firebase.firestore.FieldValue.arrayUnion({
-      paymentId: studentData.paymentId,
-      courseId: studentData.courseId,
-      courseTitle: studentData.courseTitle,
-      amount: studentData.amount,
-      date: new Date().toLocaleString(),
-      timestamp: Date.now()
-    }),
-    joinedDate: new Date().toLocaleDateString(),
-    joinedTimestamp: Date.now()
-  }, { merge: true });
+        // ORGANIZATION MATCHING FIELDS
+        orgCode: assignedOrgCode,
+        studentType: isOrg ? "organization" : "individual",
+        orgName: isOrg ? "Institutional Access" : "Self Enrolled",
+        rollNumber: studentData.rollNumber || "N/A",
 
-  // Save orgCode locally so student stays linked
-  if (isOrg) {
-    localStorage.setItem('careergraspp_org_code', assignedOrgCode);
-  }
-}
+        enrolledCourses: firebase.firestore.FieldValue.arrayUnion(studentData.courseId),
+        courseEnrollmentDates: {
+          [studentData.courseId]: Date.now()
+        },
+        completedLessons: firebase.firestore.FieldValue.arrayUnion(),
+        transactions: firebase.firestore.FieldValue.arrayUnion({
+          paymentId: studentData.paymentId,
+          courseId: studentData.courseId,
+          courseTitle: studentData.courseTitle,
+          amount: studentData.amount,
+          date: new Date().toLocaleString(),
+          timestamp: Date.now()
+        }),
+        joinedDate: new Date().toLocaleDateString(),
+        joinedTimestamp: Date.now()
+      }, { merge: true });
 
-/* ================= PAYMENT SUCCESS HANDLER ================= */
-async function onPaymentSuccess(paymentId, course, name, email, phone) {
-  const urlParams = new URLSearchParams(window.location.search);
-  const detectedOrg = urlParams.get('org') || localStorage.getItem('careergraspp_org_code');
+      if (isOrg) {
+        localStorage.setItem('careergraspp_org_code', assignedOrgCode);
+      }
+    }
 
-  try {
-    await saveStudentProfileToFirestore({
-      paymentId: paymentId,
-      courseId: course.id,
-      courseTitle: course.title,
-      amount: course.price,
-      name: name,
-      email: email,
-      phone: phone,
-      orgCode: detectedOrg
-    });
+    /* ================= PAYMENT SUCCESS HANDLER ================= */
+    async function onPaymentSuccess(paymentId, course, name, email, phone, extraDetails) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const detectedOrg = urlParams.get('org') || localStorage.getItem('careergraspp_org_code');
 
-    localStorage.setItem('careergraspp_active_email', email);
-    localStorage.setItem('careergraspp_active_phone', phone);
-    localStorage.setItem('careergraspp_role', 'student');
+      try {
+        await saveStudentProfileToFirestore({
+          paymentId: paymentId,
+          courseId: course.id,
+          courseTitle: course.title,
+          amount: course.price,
+          name: name,
+          email: email,
+          phone: phone,
+          category: extraDetails ? extraDetails.category : "college",
+          branch: extraDetails ? extraDetails.branch : "N/A",
+          semester: extraDetails ? extraDetails.semester : "N/A",
+          orgCode: detectedOrg
+        });
 
-    alert(`🎉 Payment Successful!\n\nWelcome ${name}!\nTransaction ID: ${paymentId}\nCourse Unlocked: ${course.title}\n\nRedirecting to your Student Portal...`);
-    window.location.href = `course.html?unlocked=${course.id}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
-  } catch (err) {
-    console.error("Firestore Error:", err);
-    alert(`Payment received, but error saving to Firebase: ${err.message}`);
-  }
-}
+        localStorage.setItem('careergraspp_active_email', email);
+        localStorage.setItem('careergraspp_active_phone', phone);
+        localStorage.setItem('careergraspp_role', 'student');
+
+        alert(`🎉 Payment Successful!\n\nWelcome ${name}!\nTransaction ID: ${paymentId}\nCourse Unlocked: ${course.title}\n\nRedirecting to your Student Portal...`);
+        window.location.href = `course.html?unlocked=${course.id}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
+      } catch (err) {
+        console.error("Firestore Error:", err);
+        alert(`Payment received, but error saving to Firebase: ${err.message}`);
+      }
+    }
 
     function openUnifiedLoginModal(defaultRole) {
       if (!document.getElementById('login-dropdown-menu').classList.contains('hidden')) {
