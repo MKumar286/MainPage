@@ -94,8 +94,8 @@
   <section id="courses-section" class="py-16 bg-slate-50 border-t border-slate-200 w-full">
     <div class="w-full px-4 md:px-10 lg:px-12">
       <div class="text-center mb-16 space-y-3">
-        <h2 class="text-3xl font-extrabold text-slate-900">Featured Soft Skills Programs</h2>
-        <p class="text-sm text-slate-600 max-w-2xl mx-auto">Master essential corporate skills with our specialized programs. Click "View Course" to inspect syllabus & enrollment details.</p>
+        <h2 id="courses-grid-heading" class="text-3xl font-extrabold text-slate-900">Featured Soft Skills Programs</h2>
+        <p id="courses-grid-subheading" class="text-sm text-slate-600 max-w-2xl mx-auto">Master essential corporate skills with our specialized programs. Click "View Course" to inspect syllabus & enrollment details.</p>
       </div>
 
       <!-- 3 CARDS PER ROW GRID -->
@@ -344,6 +344,7 @@
     /* 2. RAZORPAY KEY ID CONFIGURATION */
     const RAZORPAY_KEY_ID = "rzp_test_TXFnqgy3pZvwzL"; 
     let pendingCourseIdToEnroll = null;
+    let autoModalTriggered = false;
 
     const samplePdfLinks = [
       "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
@@ -479,6 +480,53 @@
 
     let softSkillsCourses = defaultCourses;
 
+    /* ================= AUTOMATIC URL CAMPAIGN LINK HANDLER ================= */
+    function applyCampaignUrlParameters() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const rawCourses = urlParams.get('courses') || urlParams.get('course');
+      const customPrice = urlParams.get('price');
+      const orgCode = urlParams.get('org');
+
+      if (orgCode) {
+        localStorage.setItem('careergraspp_org_code', orgCode.toUpperCase().trim());
+      }
+
+      if (!rawCourses) return null;
+
+      const targetCourseIds = rawCourses.split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id));
+
+      if (targetCourseIds.length > 0) {
+        // 1. Override custom price if present
+        if (customPrice && !isNaN(customPrice) && Number(customPrice) > 0) {
+          const offerPrice = Number(customPrice);
+          softSkillsCourses.forEach(c => {
+            if (targetCourseIds.includes(c.id)) {
+              c.price = offerPrice;
+            }
+          });
+        }
+
+        // 2. Filter softSkillsCourses grid to show ONLY offered courses
+        const filtered = softSkillsCourses.filter(c => targetCourseIds.includes(c.id));
+        if (filtered.length > 0) {
+          softSkillsCourses = filtered;
+
+          // Update Section Headings to reflect campaign offer
+          const heading = document.getElementById('courses-grid-heading');
+          const subheading = document.getElementById('courses-grid-subheading');
+          if (heading && orgCode) {
+            heading.textContent = `Special Offer Program for ${orgCode}`;
+          }
+          if (subheading && customPrice) {
+            subheading.textContent = `Exclusive Institutional Pricing: Unlock your offered courses for only ₹${customPrice}!`;
+          }
+
+          return targetCourseIds;
+        }
+      }
+      return null;
+    }
+
     /* 3. REAL-TIME FIRESTORE SYNCHRONIZATION */
     function initFirestoreCoursesSync() {
       const container = document.getElementById('courses-grid-container');
@@ -492,7 +540,6 @@
           const parsed = JSON.parse(localCache);
           if (Array.isArray(parsed) && parsed.length > 0) {
             softSkillsCourses = parsed;
-            renderCoursesGrid();
           }
         } catch (e) {
           console.warn("Invalid local cache", e);
@@ -511,14 +558,34 @@
           } else {
             softSkillsCourses = defaultCourses;
           }
+
+          const campaignTargetIds = applyCampaignUrlParameters();
           renderCoursesGrid();
+
+          if (campaignTargetIds && campaignTargetIds.length === 1 && !autoModalTriggered) {
+            autoModalTriggered = true;
+            const singleCourseId = campaignTargetIds[0];
+            setTimeout(() => {
+              openCourseModal(singleCourseId);
+            }, 400);
+          }
         }, (error) => {
           console.error("Firestore Error:", error);
+          const campaignTargetIds = applyCampaignUrlParameters();
           renderCoursesGrid();
+          if (campaignTargetIds && campaignTargetIds.length === 1 && !autoModalTriggered) {
+            autoModalTriggered = true;
+            setTimeout(() => openCourseModal(campaignTargetIds[0]), 400);
+          }
         });
       } catch (err) {
         console.error("Firebase Connection Error:", err);
+        const campaignTargetIds = applyCampaignUrlParameters();
         renderCoursesGrid();
+        if (campaignTargetIds && campaignTargetIds.length === 1 && !autoModalTriggered) {
+          autoModalTriggered = true;
+          setTimeout(() => openCourseModal(campaignTargetIds[0]), 400);
+        }
       }
     }
 
