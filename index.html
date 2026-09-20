@@ -96,7 +96,7 @@
       </div>
 
       <div id="courses-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
-        <!-- Injected dynamically via Real-Time Firestore JavaScript -->
+        <!-- Injected dynamically via JavaScript -->
       </div>
     </div>
   </section>
@@ -140,7 +140,7 @@
                 <svg class="w-6 h-6 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 Course Video Parts & Sub-Lessons
               </h3>
-              <span class="text-xs text-indigo-600 font-semibold">Click any Part to expand lessons</span>
+              <span class="text-xs text-indigo-600 font-semibold">Click any Part to view syllabus</span>
             </div>
             <div id="modal-parts-accordion-list" class="space-y-4"></div>
           </div>
@@ -290,23 +290,6 @@
     </div>
   </div>
 
-  <!-- ================= INLINE VIDEO PLAYER MODAL ================= -->
-  <div id="video-player-modal" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-4xl max-h-[95vh] overflow-hidden shadow-2xl flex flex-col p-4 md:p-6 space-y-4">
-      <div class="flex justify-between items-center pb-3 border-b border-slate-200">
-        <h4 id="video-modal-title" class="font-extrabold text-sm md:text-base text-slate-900 truncate max-w-lg"></h4>
-        <button onclick="closeVideoPlayerModal()" class="text-slate-400 hover:text-slate-800 font-bold text-2xl px-2">&times;</button>
-      </div>
-      <div id="video-container-box" class="relative w-full aspect-video min-h-[380px] md:min-h-[460px] bg-black rounded-xl overflow-hidden flex items-center justify-center shadow-inner border border-slate-200"></div>
-      <div class="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-700 pt-2 gap-3 border-t border-slate-200">
-        <p class="text-[11px] text-slate-500">Careergraspp Streaming Player</p>
-        <a id="video-pdf-link" href="#" target="_blank" class="w-full sm:w-auto px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold transition flex items-center justify-center">
-          📄 View Session PDF
-        </a>
-      </div>
-    </div>
-  </div>
-
   <footer class="bg-slate-100 border-t border-slate-200 py-8 px-6 text-center text-xs text-slate-600 w-full">
     © 2026 Careergraspp LMS. Powered by Firebase Firestore.
   </footer>
@@ -331,20 +314,7 @@
     /* 2. RAZORPAY KEY ID CONFIGURATION */
     const RAZORPAY_KEY_ID = "rzp_test_TXFnqgy3pZvwzL"; 
     let pendingCourseIdToEnroll = null;
-    let autoModalTriggered = false;
     let currentUserEnrolledCourses = [];
-
-    const samplePdfLinks = [
-      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-      "https://www.orimi.com/pdf-test.pdf"
-    ];
-
-    const videoUrls = [
-      "https://drive.google.com/file/d/1SwWrTypvpt8lIwWJgDcMFo-ax7t0arQg/view?usp=sharing",
-      "https://drive.google.com/file/d/1uXC7EsUOUNzE3Mal6Z7pFpiqbTspbMZu/view?usp=sharing",
-      "https://drive.google.com/file/d/1XUjqs8ZXdS7czBPHvmRwckQ-_0aZctbw/view?usp=sharing",
-      "https://drive.google.com/file/d/1SwWrTypvpt8lIwWJgDcMFo-ax7t0arQg/view?usp=sharing"
-    ];
 
     const courseTitlesList = [
       "Corporate Communication & Etiquette", "GD & Personal Interview Mastery", "Quantitative Aptitude & Logic",
@@ -395,73 +365,25 @@
           {
             title: `MODULE 1: FOUNDATIONS OF ${title.toUpperCase()}`,
             points: [
-              `Understanding the core principles and psychological fundamentals of ${title}.`,
-              "Overcoming mental hesitation, building confidence, and setting baseline metrics.",
-              "Identifying common pitfalls faced by entry-level candidates."
+              `Understanding core principles and psychological fundamentals.`,
+              "Overcoming mental hesitation and building baseline confidence.",
+              "Common pitfalls faced by entry-level candidates."
             ]
           },
           {
             title: `MODULE 2: STRATEGIC EXECUTION & DRILLS`,
             points: [
-              `Step-by-step framework to master ${title} in fast-paced environments.`,
+              `Step-by-step framework to master skills in fast-paced setups.`,
               "Active listening, clear articulation, and situational adaptation.",
-              "Interactive drills for campus placement interviews and corporate environments."
-            ]
-          },
-          {
-            title: `MODULE 3: REAL-WORLD CASE STUDIES & SCENARIOS`,
-            points: [
-              "Detailed breakdown of actual MNC and campus recruitment scenarios.",
-              "Handling high-pressure situations, difficult managers, and tricky questions.",
-              "Constructive feedback loop and peer practice frameworks."
-            ]
-          },
-          {
-            title: `MODULE 4: MASTERY, INTEGRATION & CERTIFICATION`,
-            points: [
-              "Synthesizing all tools for long-term career growth.",
-              "Executive presence, email etiquette, and professional body language alignment.",
-              "Final comprehensive assessment and verified certificate unlocks."
+              "Interactive placement interview drills."
             ]
           }
         ],
         partsList: [
-          {
-            partTitle: `Part 1: Fundamentals & Core Principles of ${title}`,
-            lessons: [
-              { title: `Lesson 1.1: Introduction & Baseline Concepts`, duration: "10 mins", videoUrl: videoUrls[0], pdfUrl: samplePdfLinks[0] }
-            ]
-          },
-          {
-            partTitle: `Part 2: Step-by-Step Strategic Frameworks`,
-            lessons: [
-              { title: `Lesson 2.1: Practical Drills & Articulation Techniques`, duration: "12 mins", videoUrl: videoUrls[1], pdfUrl: samplePdfLinks[1] }
-            ]
-          },
-          {
-            partTitle: `Part 3: Corporate Scenarios & Case Analysis`,
-            lessons: [
-              { title: `Lesson 3.1: Handling High-Pressure Situations`, duration: "14 mins", videoUrl: videoUrls[2], pdfUrl: samplePdfLinks[0] }
-            ]
-          },
-          {
-            partTitle: `Part 4: Final Masterclass & Placement Readiness`,
-            lessons: [
-              { title: `Lesson 4.1: Executive Integration & Assessment`, duration: "15 mins", videoUrl: videoUrls[3], pdfUrl: samplePdfLinks[1] }
-            ]
-          }
-        ],
-        keyTakeaways: [
-          `Master the fundamental pillars of ${title} for campus placement success.`,
-          "Learn step-by-step techniques to eliminate hesitation and speak with authority.",
-          "Understand how hiring managers evaluate non-verbal cues and body language.",
-          "Gain practical frameworks to analyze complex workplace scenarios rapidly.",
-          "Structure professional responses using proven industry frameworks like STAR.",
-          "Develop strong interpersonal adaptability across cross-functional teams.",
-          "Learn to manage high-pressure situations and turn conflicts into solutions.",
-          "Build executive presence suitable for corporate client and leadership interactions.",
-          "Utilize downloadable session PDF guides to practice offline before interviews.",
-          "Receive a verified completion certificate to highlight on your resume and LinkedIn."
+          { partTitle: `Part 1: Fundamentals of ${title}`, lessons: [{ title: `Lesson 1.1: Core Concepts` }] },
+          { partTitle: `Part 2: Strategic Execution`, lessons: [{ title: `Lesson 2.1: Practical Drills` }] },
+          { partTitle: `Part 3: Corporate Scenarios`, lessons: [{ title: `Lesson 3.1: Handling Pressure` }] },
+          { partTitle: `Part 4: Final Masterclass`, lessons: [{ title: `Lesson 4.1: Placement Readiness` }] }
         ]
       };
     });
@@ -480,51 +402,7 @@
           currentUserEnrolledCourses = (doc.data().enrolledCourses || []).map(id => String(id).trim().toLowerCase());
         }
       } catch (err) {
-        console.warn("Could not fetch active student enrollment details:", err);
-      }
-    }
-
-    function initFirestoreCoursesSync() {
-      const container = document.getElementById('courses-grid-container');
-      if (container) {
-        container.innerHTML = `<div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-12 text-slate-500 font-semibold text-sm">🔄 Syncing live catalog from Firebase Firestore...</div>`;
-      }
-
-      const localCache = localStorage.getItem('careergraspp_courses');
-      if (localCache) {
-        try {
-          const parsed = JSON.parse(localCache);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            softSkillsCourses = parsed.map(c => ({ ...c, id: (c.id !== undefined && c.id !== null) ? c.id : c.docId }));
-          }
-        } catch (e) {
-          console.warn("Invalid local cache", e);
-        }
-      }
-
-      try {
-        db.collection('courses').onSnapshot((snapshot) => {
-          if (!snapshot.empty) {
-            const fetched = [];
-            snapshot.forEach((doc) => {
-              const cData = doc.data();
-              const cId = (cData.id !== undefined && cData.id !== null) ? cData.id : doc.id;
-              fetched.push({ ...cData, id: cId });
-            });
-            softSkillsCourses = fetched;
-            localStorage.setItem('careergraspp_courses', JSON.stringify(fetched));
-          } else {
-            softSkillsCourses = defaultCourses;
-          }
-
-          renderCoursesGrid();
-        }, (error) => {
-          console.error("Firestore Error:", error);
-          renderCoursesGrid();
-        });
-      } catch (err) {
-        console.error("Firebase Connection Error:", err);
-        renderCoursesGrid();
+        console.warn("Could not fetch active student details:", err);
       }
     }
 
@@ -535,26 +413,16 @@
       container.innerHTML = "";
 
       softSkillsCourses.forEach((course) => {
-        const partsText = course.partsList ? `${course.partsList.length}-Part Series` : (course.parts || "4-Part Series");
-        const bulletItems = course.bullets || [
-          `Core Principles of ${course.title}`,
-          "Real-World Corporate Exercises",
-          `Includes ${course.partsList ? course.partsList.length : 4} Video Parts & PDF Guides`
-        ];
-
         container.innerHTML += `
           <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden flex flex-col justify-between hover:border-indigo-400 hover:shadow-xl transition group">
             <div>
               <div class="h-52 w-full bg-slate-100 overflow-hidden relative">
                 <img src="${course.image}" alt="${course.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
                 <span class="absolute top-3 left-3 bg-emerald-600 text-white text-[11px] px-2.5 py-1 rounded-full font-extrabold shadow">₹${course.price}</span>
-                <span class="absolute top-3 right-3 bg-indigo-600 text-white text-[10px] px-2.5 py-1 rounded-full font-bold shadow">${partsText}</span>
               </div>
               <div class="p-6 space-y-3">
                 <h3 class="text-xl font-extrabold text-slate-900">${course.title}</h3>
-                <ul class="space-y-2 text-xs text-slate-600">
-                  ${bulletItems.map(b => `<li class="flex items-center"><span class="w-1.5 h-1.5 bg-indigo-600 rounded-full mr-2 flex-shrink-0"></span>${b}</li>`).join('')}
-                </ul>
+                <p class="text-xs text-slate-500">Comprehensive placement preparation course with video modules & PDFs.</p>
               </div>
             </div>
             <div class="p-6 pt-0">
@@ -569,12 +437,11 @@
 
     document.addEventListener('DOMContentLoaded', function() {
       refreshCurrentStudentEnrollments();
-      initFirestoreCoursesSync();
+      renderCoursesGrid();
     });
 
-    function handleLockedVideoClick(courseId, courseTitle) {
-      alert(`🔒 Video Locked!\n\nPlease make a payment for "${courseTitle}" to watch this video lesson and access session PDFs.`);
-      startEnrollmentFlow(courseId);
+    function handleLockedNotice(courseTitle) {
+      alert(`🔒 Content Locked!\n\nPlease make a payment for "${courseTitle}" to unlock videos and PDFs.`);
     }
 
     async function openCourseModal(courseId) {
@@ -587,17 +454,17 @@
       const cIdStr = String(course.id).trim().toLowerCase();
       const cTitleStr = String(course.title).trim().toLowerCase();
 
-      // STRICT DATABASE PAID CHECK
+      // STRICT FIRESTORE CHECK FOR UNLOCK
       const isEnrolled = (activeRole === 'admin') || (activeRole === 'org') || currentUserEnrolledCourses.some(e => e === cIdStr || e === cTitleStr);
 
       document.getElementById('modal-course-img').src = course.image;
       document.getElementById('modal-course-title').textContent = course.title;
       document.getElementById('modal-course-price').textContent = `₹${course.price}`;
-      document.getElementById('modal-course-original-price').textContent = `₹${course.originalPrice || Math.round(course.price * 1.5)}`;
+      document.getElementById('modal-course-original-price').textContent = `₹${course.originalPrice || 2999}`;
       
       const enrollBtn = document.getElementById('modal-enroll-btn');
       if (isEnrolled) {
-        enrollBtn.textContent = `✓ Enrolled & Unlocked - Go to Portal`;
+        enrollBtn.textContent = `✓ Enrolled - Go to Dashboard`;
         enrollBtn.className = "w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-2xl text-center block shadow-lg shadow-emerald-600/30 transition text-sm";
         enrollBtn.onclick = function() { 
           const activeEmail = localStorage.getItem('careergraspp_active_email') || '';
@@ -612,92 +479,28 @@
 
       const descContainer = document.getElementById('modal-course-desc');
       descContainer.innerHTML = "";
-      const modules = course.modulesOverview || [];
-      modules.forEach((mod) => {
+      (course.modulesOverview || []).forEach((mod) => {
         descContainer.innerHTML += `
           <div class="border-l-4 border-indigo-600 bg-indigo-50/50 p-4 rounded-r-xl space-y-2">
-            <h4 class="font-extrabold text-slate-900 text-sm tracking-tight uppercase">${mod.title}</h4>
-            <ul class="space-y-1.5 pl-2">
-              ${(mod.points || []).map(pt => `<li class="flex items-start text-xs text-slate-700"><span class="text-indigo-600 font-bold mr-2">•</span><span>${pt}</span></li>`).join('')}
+            <h4 class="font-extrabold text-slate-900 text-sm uppercase">${mod.title}</h4>
+            <ul class="space-y-1 pl-2">
+              ${(mod.points || []).map(pt => `<li class="text-xs text-slate-700">• ${pt}</li>`).join('')}
             </ul>
           </div>
         `;
       });
 
+      // ACCORDION LIST SHOWING LOCKED / UNLOCKED STATUS
       const accordionContainer = document.getElementById('modal-parts-accordion-list');
       accordionContainer.innerHTML = "";
-      const parts = course.partsList || [];
-      parts.forEach((part, pIdx) => {
-        const partId = `part_accordion_${pIdx}`;
-        let lessonsHtml = (part.lessons || []).map((les, lIdx) => {
-          if (isEnrolled) {
-            return `
-              <div class="p-3.5 bg-white border border-slate-200 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-3 text-slate-800 shadow-sm">
-                <div class="flex items-center space-x-3">
-                  <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 text-[11px] font-bold flex items-center justify-center flex-shrink-0">✓</span>
-                  <span class="text-xs font-semibold text-slate-800">${les.title} <span class="text-[10px] text-slate-500 font-normal">(${les.duration || '10 mins'})</span></span>
-                </div>
-                <div class="flex items-center space-x-2 flex-shrink-0">
-                  <button onclick="playLessonByIndices('${course.id}', ${pIdx}, ${lIdx})" class="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition flex items-center shadow-sm">
-                    ▶ Play Video
-                  </button>
-                  <button onclick="openPdfByIndices('${course.id}', ${pIdx}, ${lIdx})" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-lg text-xs font-semibold transition flex items-center">
-                    📄 View PDF
-                  </button>
-                </div>
-              </div>
-            `;
-          } else {
-            return `
-              <div class="p-3.5 bg-slate-100/80 border border-slate-200 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-3 text-slate-800 shadow-sm opacity-90">
-                <div class="flex items-center space-x-3">
-                  <span class="w-6 h-6 rounded-full bg-amber-100 text-amber-800 text-[11px] font-bold flex items-center justify-center flex-shrink-0">🔒</span>
-                  <span class="text-xs font-semibold text-slate-700">${les.title} <span class="text-[10px] text-slate-500 font-normal">(${les.duration || '10 mins'})</span></span>
-                </div>
-                <div class="flex items-center space-x-2 flex-shrink-0">
-                  <button onclick="handleLockedVideoClick('${course.id}', '${course.title.replace(/'/g, "\\'")}')" class="px-3.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm">
-                    <span>🔒</span>
-                    <span>Locked (Pay to Access)</span>
-                  </button>
-                  <button onclick="handleLockedVideoClick('${course.id}', '${course.title.replace(/'/g, "\\'")}')" class="px-3 py-1.5 bg-slate-200 text-slate-400 rounded-lg text-xs font-semibold cursor-not-allowed">
-                    📄 PDF Locked
-                  </button>
-                </div>
-              </div>
-            `;
-          }
-        }).join('');
-
+      (course.partsList || []).forEach((part, pIdx) => {
         accordionContainer.innerHTML += `
-          <div class="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm">
-            <button onclick="togglePartAccordion('${partId}')" class="w-full p-4 bg-slate-100 text-slate-900 font-bold text-sm flex items-center justify-between hover:bg-slate-200 transition border-b border-slate-200">
-              <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full ${isEnrolled ? 'bg-emerald-600' : 'bg-amber-600'} mr-3"></span>${part.partTitle}</span>
-              <span class="text-xs ${isEnrolled ? 'text-emerald-600' : 'text-amber-600'} font-semibold">${isEnrolled ? 'Expand Video & PDF Access ▼' : '🔒 Content Locked (Click to View)'}</span>
-            </button>
-            <div id="${partId}" class="p-4 bg-slate-50 space-y-3 hidden">${lessonsHtml}</div>
-          </div>
-        `;
-      });
-
-      const takeawaysContainer = document.getElementById('modal-course-takeaways');
-      takeawaysContainer.innerHTML = "";
-      const takeaways = course.keyTakeaways || [
-        `Master the fundamental pillars of ${course.title} for campus placement success.`,
-        "Learn step-by-step techniques to eliminate hesitation and speak with authority.",
-        "Understand how hiring managers evaluate non-verbal cues and body language.",
-        "Gain practical frameworks to analyze complex workplace scenarios rapidly.",
-        "Structure professional responses using proven industry frameworks like STAR.",
-        "Develop strong interpersonal adaptability across cross-functional teams.",
-        "Learn to manage high-pressure situations and turn conflicts into solutions.",
-        "Build executive presence suitable for corporate client and leadership interactions.",
-        "Utilize downloadable session PDF guides to practice offline before interviews.",
-        "Receive a verified completion certificate to highlight on your resume and LinkedIn."
-      ];
-      takeaways.forEach((pt, kIdx) => {
-        takeawaysContainer.innerHTML += `
-          <div class="p-3 bg-white border border-slate-200 rounded-xl flex items-start space-x-2 shadow-sm">
-            <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 text-[11px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">${kIdx + 1}</span>
-            <span class="text-slate-700 font-medium">${pt}</span>
+          <div class="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm p-4 flex justify-between items-center">
+            <span class="font-bold text-sm text-slate-800">${part.partTitle}</span>
+            ${isEnrolled 
+              ? `<span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-full">✓ Unlocked</span>`
+              : `<button onclick="handleLockedNotice('${course.title.replace(/'/g, "\\'")}')" class="text-xs bg-amber-100 text-amber-800 font-bold px-3 py-1 rounded-full">🔒 Locked (Pay to View)</button>`
+            }
           </div>
         `;
       });
@@ -788,7 +591,7 @@
       }
     }
 
-    /* SAVE PAYMENT LOGS AND STUDENT PROFILE TO FIRESTORE IMMEDIATELY UPON PAYMENT */
+    /* SAVE PAYMENT LOGS & STUDENT PROFILE TO FIRESTORE IMMEDIATELY */
     async function saveStudentProfileAndPaymentLog(studentData) {
       const email = studentData.email.toLowerCase();
       const userDocRef = db.collection('students').doc(email);
@@ -807,14 +610,13 @@
         timestamp: timestampNow
       };
 
-      // 1. UPDATE STUDENT PROFILE WITH UNLOCKED COURSE
+      // 1. UPDATE STUDENT PROFILE IN 'students' COLLECTION
       await userDocRef.set({
         name: studentData.name,
         email: email,
         phone: studentData.phone,
         role: "student",
         studentType: "individual",
-        orgName: "Self Enrolled",
 
         enrolledCourses: firebase.firestore.FieldValue.arrayUnion(courseIdStr, studentData.courseTitle),
         [`courseEnrollmentDates.${courseIdStr}`]: timestampNow,
@@ -824,7 +626,7 @@
         joinedTimestamp: timestampNow
       }, { merge: true });
 
-      // 2. SAVE INSTANT DEDICATED PAYMENT LOG TO 'payment_logs' COLLECTION
+      // 2. SAVE DEDICATED LOG IN 'payment_logs' COLLECTION
       await paymentLogRef.set({
         paymentId: studentData.paymentId,
         studentEmail: email,
@@ -998,89 +800,9 @@
       }
     }
 
-    function togglePartAccordion(partId) {
-      const el = document.getElementById(partId);
-      if (el) el.classList.toggle('hidden');
-    }
-
     function closeCourseModal() {
       document.getElementById('course-detail-modal').classList.add('hidden');
       document.body.style.overflow = 'auto';
-    }
-
-    function playLessonByIndices(courseId, partIdx, lessonIdx) {
-      const course = softSkillsCourses.find(c => String(c.id).trim().toLowerCase() === String(courseId).trim().toLowerCase());
-      if (!course) return;
-
-      const part = course.partsList ? course.partsList[partIdx] : null;
-      if (!part) return;
-
-      const lesson = part.lessons ? part.lessons[lessonIdx] : null;
-      if (!lesson) return;
-
-      playLessonVideo(lesson.title, lesson.videoUrl, lesson.pdfUrl);
-    }
-
-    function openPdfByIndices(courseId, partIdx, lessonIdx) {
-      const course = softSkillsCourses.find(c => String(c.id).trim().toLowerCase() === String(courseId).trim().toLowerCase());
-      if (!course) return;
-
-      const part = course.partsList ? course.partsList[partIdx] : null;
-      if (!part) return;
-
-      const lesson = part.lessons ? part.lessons[lessonIdx] : null;
-      if (!lesson || !lesson.pdfUrl) return;
-
-      window.open(lesson.pdfUrl, '_blank');
-    }
-
-    function playLessonVideo(title, rawVideoUrl, rawPdfUrl) {
-      document.getElementById('video-modal-title').textContent = title;
-      const containerBox = document.getElementById('video-container-box');
-      
-      let driveFileId = "";
-      let youtubeFileId = "";
-
-      if (rawVideoUrl) {
-        if (rawVideoUrl.includes('drive.google.com')) {
-          const driveIdMatch = rawVideoUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
-          if (driveIdMatch && driveIdMatch[1]) driveFileId = driveIdMatch[1];
-        } else if (rawVideoUrl.includes('youtube.com') || rawVideoUrl.includes('youtu.be')) {
-          const ytMatch = rawVideoUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
-          if (ytMatch && ytMatch[1]) youtubeFileId = ytMatch[1];
-        }
-      }
-
-      if (driveFileId) {
-        const embedUrl = `https://drive.google.com/file/d/${driveFileId}/preview`;
-        containerBox.innerHTML = `
-          <div class="relative w-full h-full">
-            <iframe src="${embedUrl}" class="w-full h-full min-h-[380px] md:min-h-[450px] rounded-xl border-0" allow="autoplay; fullscreen" allowfullscreen></iframe>
-          </div>`;
-      } else if (youtubeFileId) {
-        containerBox.innerHTML = `
-          <iframe src="https://www.youtube.com/embed/${youtubeFileId}?autoplay=1" class="w-full h-full min-h-[380px] md:min-h-[450px] rounded-xl border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-      } else {
-        const sampleFallbackVideo = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
-        const srcToUse = (rawVideoUrl && rawVideoUrl.startsWith('http')) ? rawVideoUrl : sampleFallbackVideo;
-        containerBox.innerHTML = `
-          <video class="w-full h-full object-contain rounded-xl" controls autoplay>
-            <source src="${srcToUse}" type="video/mp4" />
-            Your browser does not support HTML5 video.
-          </video>`;
-      }
-
-      const pdfLinkEl = document.getElementById('video-pdf-link');
-      if (pdfLinkEl) {
-        pdfLinkEl.href = rawPdfUrl || samplePdfLinks[0];
-      }
-
-      document.getElementById('video-player-modal').classList.remove('hidden');
-    }
-
-    function closeVideoPlayerModal() {
-      document.getElementById('video-container-box').innerHTML = "";
-      document.getElementById('video-player-modal').classList.add('hidden');
     }
 
     function toggleLoginDropdown() {
