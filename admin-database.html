@@ -514,14 +514,16 @@
           latestTx = s.transactions[s.transactions.length - 1];
         }
 
-        // Collect ALL enrolled course IDs for this student into a comma-separated string
-        let enrolledCoursesList = [];
-        if (s.enrolledCourses && Array.isArray(s.enrolledCourses) && s.enrolledCourses.length > 0) {
-          enrolledCoursesList = s.enrolledCourses;
-        } else if (latestTx.courseId) {
-          enrolledCoursesList = [latestTx.courseId];
+        // Collect ALL enrolled course IDs for this student into a deduplicated comma-separated string
+        let enrolledCoursesSet = new Set();
+        if (s.enrolledCourses && Array.isArray(s.enrolledCourses)) {
+          s.enrolledCourses.forEach(id => enrolledCoursesSet.add(String(id)));
         }
-        const enrolledParam = enrolledCoursesList.join(',');
+        if (s.transactions && Array.isArray(s.transactions)) {
+          s.transactions.forEach(tx => { if (tx.courseId) enrolledCoursesSet.add(String(tx.courseId)); });
+        }
+
+        const enrolledParam = Array.from(enrolledCoursesSet).join(',');
 
         tbody.innerHTML += `
           <tr onclick="inspectStudent('${s.email}')" class="hover:bg-indigo-50/50 cursor-pointer transition whitespace-nowrap group">
@@ -574,8 +576,8 @@
       
       const coursesParam = enrolledCoursesStr || '';
       
-      // Passes 'courses' and 'unlocked' parameters so course.html displays ONLY the student's enrolled courses
-      const realProfileUrl = `course.html?courses=${encodeURIComponent(coursesParam)}&unlocked=${encodeURIComponent(coursesParam)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
+      // Passes 'courses', 'unlocked', and 'enrolledOnly=true' parameters to course.html
+      const realProfileUrl = `course.html?email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&courses=${encodeURIComponent(coursesParam)}&unlocked=${encodeURIComponent(coursesParam)}&enrolledOnly=true`;
       
       window.open(realProfileUrl, '_blank');
     }
