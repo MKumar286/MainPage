@@ -324,7 +324,6 @@
     let softSkillsCourses = defaultCourses;
 
     function initCourseCatalogSync() {
-      // 1. Instantly check local storage cache
       const localCache = localStorage.getItem('careergraspp_courses');
       if (localCache) {
         try {
@@ -337,7 +336,6 @@
         }
       }
 
-      // 2. Real-time Firestore sync listener
       try {
         db.collection('courses').orderBy('id', 'asc').onSnapshot((snapshot) => {
           if (!snapshot.empty) {
@@ -372,12 +370,20 @@
       let email = urlParams.get('email') || localStorage.getItem('careergraspp_active_email');
       let phone = urlParams.get('phone') || localStorage.getItem('careergraspp_active_phone');
       let role = localStorage.getItem('careergraspp_role') || 'student';
-      const unlockedId = parseInt(urlParams.get('unlocked'));
 
-      if (role === 'admin' || role === 'org') {
+      const hasUrlParams = urlParams.has('email') || urlParams.has('courses') || urlParams.has('unlocked');
+
+      if (hasUrlParams && urlParams.get('email')) {
+        // Direct link / Admin Eye button view -> Priority load student target
+        if (role === 'admin' || role === 'org') {
+          loadAdminOrOrgUI(role, urlParams.get('email'));
+        } else {
+          await verifyAndFetchStudent(urlParams.get('email'), phone || '', null);
+        }
+      } else if (role === 'admin' || role === 'org') {
         loadAdminOrOrgUI(role, email);
       } else if (email && phone) {
-        await verifyAndFetchStudent(email, phone, unlockedId);
+        await verifyAndFetchStudent(email, phone, null);
       } else {
         document.getElementById('unified-login-modal').classList.remove('hidden');
       }
@@ -387,13 +393,20 @@
       try {
         const docRef = db.collection('students').doc(email.toLowerCase());
 
-        if (unlockedId) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const rawTargetCourses = urlParams.get('courses') || urlParams.get('unlocked');
+
+        if (rawTargetCourses) {
+          const unlockedIds = rawTargetCourses.split(',').map(id => id.trim()).filter(Boolean);
           const nowTs = Date.now();
+          const enrollmentDatesUpdate = {};
+          unlockedIds.forEach(id => {
+            enrollmentDatesUpdate[`courseEnrollmentDates.${id}`] = nowTs;
+          });
+
           await docRef.set({
-            enrolledCourses: firebase.firestore.FieldValue.arrayUnion(unlockedId),
-            courseEnrollmentDates: {
-              [unlockedId]: nowTs
-            }
+            enrolledCourses: firebase.firestore.FieldValue.arrayUnion(...unlockedIds),
+            ...enrollmentDatesUpdate
           }, { merge: true });
         }
 
@@ -403,7 +416,8 @@
           const dbPhone = (profile.phone || "").replace(/[^0-9]/g, '');
           const inputPhone = phone.replace(/[^0-9]/g, '');
 
-          if (dbPhone && inputPhone && !dbPhone.includes(inputPhone) && !inputPhone.includes(dbPhone)) {
+          const userRole = localStorage.getItem('careergraspp_role');
+          if (userRole !== 'admin' && dbPhone && inputPhone && !dbPhone.includes(inputPhone) && !inputPhone.includes(dbPhone)) {
             alert("⚠️ Mobile number mismatch. Please enter the phone number used during enrollment.");
             document.getElementById('unified-login-modal').classList.remove('hidden');
             return;
@@ -411,14 +425,30 @@
 
           localStorage.setItem('careergraspp_active_email', email);
           localStorage.setItem('careergraspp_active_phone', phone);
-          localStorage.setItem('careergraspp_role', 'student');
+          if (userRole !== 'admin') {
+            localStorage.setItem('careergraspp_role', 'student');
+          }
           activeStudentProfile = profile;
 
           document.getElementById('unified-login-modal').classList.add('hidden');
           loadDashboardUI(profile);
         } else {
-          alert(`No registered student account found for ${email}. Please enroll in a course first.`);
-          document.getElementById('unified-login-modal').classList.remove('hidden');
+          if (rawTargetCourses) {
+            const unlockedIds = rawTargetCourses.split(',').map(id => id.trim()).filter(Boolean);
+            activeStudentProfile = {
+              name: email.split('@')[0],
+              email: email,
+              phone: phone,
+              enrolledCourses: unlockedIds,
+              completedLessons: [],
+              joinedDate: "Recent"
+            };
+            document.getElementById('unified-login-modal').classList.add('hidden');
+            loadDashboardUI(activeStudentProfile);
+          } else {
+            alert(`No registered student account found for ${email}. Please enroll in a course first.`);
+            document.getElementById('unified-login-modal').classList.remove('hidden');
+          }
         }
       } catch (err) {
         console.error("Firebase Verification Error:", err);
@@ -427,28 +457,50 @@
     }
 
     function loadAdminOrOrgUI(role, email) {
-      const allCourseIds = softSkillsCourses.map(c => c.id);
+      const urlParams = new URLSearchParams(window.location.search);
+      const targetEmail = urlParams.get('email') || email || `${role}@careergraspp.com`;
+      const targetPhone = urlParams.get('phone') || "Authorized Portal Access";
+      
+      const rawTargetCourses = urlParams.get('courses') || urlParams.get('unlocked');
+      let enrolledIds = [];
+
+      if (rawTargetCourses) {
+        enrolledIds = rawTargetCourses.split(',').map(id => String(id).trim()).filter(Boolean);
+      } else {
+        enrolledIds = softSkillsCourses.map(c => String(c.id));
+      }
+
       activeStudentProfile = {
-        name: role === 'admin' ? "System Administrator" : "Institutional Partner",
-        email: email || `${role}@careergraspp.com`,
-        phone: "Authorized Portal Access",
-        enrolledCourses: allCourseIds,
+        name: urlParams.get('email') ? `Student (${urlParams.get('email')})` : (role === 'admin' ? "System Administrator" : "Institutional Partner"),
+        email: targetEmail,
+        phone: targetPhone,
+        enrolledCourses: enrolledIds,
         completedLessons: [],
         joinedDate: "Active Session"
       };
 
-      document.getElementById('profile-role-badge').textContent = role.toUpperCase() + " ACTIVE";
+      document.getElementById('profile-role-badge').textContent = rawTargetCourses ? "STUDENT VIEW" : (role.toUpperCase() + " ACTIVE");
       document.getElementById('profile-role-badge').className = "inline-block bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider";
       document.getElementById('unified-login-modal').classList.add('hidden');
       loadDashboardUI(activeStudentProfile);
     }
 
     function loadDashboardUI(profile) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const rawTargetCourses = urlParams.get('courses') || urlParams.get('unlocked');
+
+      let displayCount = 0;
+      if (rawTargetCourses) {
+        displayCount = rawTargetCourses.split(',').map(id => id.trim()).filter(Boolean).length;
+      } else if (profile.enrolledCourses) {
+        displayCount = profile.enrolledCourses.length;
+      }
+
       document.getElementById('profile-student-name').textContent = profile.name || "Student Profile";
       document.getElementById('profile-student-email').textContent = profile.email || "";
       document.getElementById('profile-student-phone').textContent = profile.phone || "";
       document.getElementById('profile-avatar-initial').textContent = (profile.name || "S").charAt(0).toUpperCase();
-      document.getElementById('profile-enrolled-count').textContent = profile.enrolledCourses ? profile.enrolledCourses.length : 0;
+      document.getElementById('profile-enrolled-count').textContent = displayCount;
       document.getElementById('profile-joined-date').textContent = profile.joinedDate || "Recent";
 
       renderDashboardGrid(profile);
@@ -459,9 +511,22 @@
       const container = document.getElementById('student-courses-grid');
       container.innerHTML = "";
 
-      const enrolledList = profile.enrolledCourses || [];
+      const urlParams = new URLSearchParams(window.location.search);
+      const rawTargetCourses = urlParams.get('courses') || urlParams.get('unlocked');
+      
+      let allowedIds = [];
+      if (rawTargetCourses) {
+        allowedIds = rawTargetCourses.split(',').map(id => String(id).trim()).filter(Boolean);
+      } else if (profile && profile.enrolledCourses) {
+        allowedIds = profile.enrolledCourses.map(id => String(id).trim());
+      }
+
       const completedSet = new Set(profile.completedLessons || []);
-      const paidCourses = softSkillsCourses.filter(course => enrolledList.includes(course.id));
+      
+      // STRICT FILTER: Match softSkillsCourses by ID against allowedIds (converted to String)
+      const paidCourses = softSkillsCourses.filter(course => 
+        allowedIds.includes(String(course.id))
+      );
 
       if (paidCourses.length === 0) {
         renderEmptyState("You haven't enrolled in any courses yet.");
@@ -518,7 +583,6 @@
           </div>
         `).join('');
 
-        // 2-COLUMN SIDE-BY-SIDE ROW CARD
         container.innerHTML += `
           <div class="bg-white border ${isExpired ? 'border-red-300' : 'border-slate-200'} rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition w-full flex flex-col space-y-4 p-5 md:p-6">
             
@@ -543,7 +607,7 @@
               ` : ''}
             </div>
 
-            <!-- 2-COLUMN SIDE-BY-SIDE CONTENT (COURSE MODULES & VIDEO LESSONS + PDF) -->
+            <!-- 2-COLUMN SIDE-BY-SIDE CONTENT -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
               
               <!-- LEFT COLUMN: COURSE MODULES -->
