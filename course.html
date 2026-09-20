@@ -320,7 +320,6 @@
       };
     });
 
-    /* REAL-TIME FIRESTORE COURSE CATALOG SYNC */
     let softSkillsCourses = defaultCourses;
 
     function initCourseCatalogSync() {
@@ -329,7 +328,7 @@
         try {
           const parsed = JSON.parse(localCache);
           if (Array.isArray(parsed) && parsed.length > 0) {
-            softSkillsCourses = parsed;
+            softSkillsCourses = parsed.map(c => ({ ...c, id: (c.id !== undefined && c.id !== null) ? c.id : c.docId }));
           }
         } catch (e) {
           console.warn("Invalid cached courses", e);
@@ -341,7 +340,9 @@
           if (!snapshot.empty) {
             const fetched = [];
             snapshot.forEach((doc) => {
-              fetched.push(doc.data());
+              const cData = doc.data();
+              const cId = (cData.id !== undefined && cData.id !== null) ? cData.id : doc.id;
+              fetched.push({ ...cData, id: cId });
             });
             softSkillsCourses = fetched;
             localStorage.setItem('careergraspp_courses', JSON.stringify(fetched));
@@ -396,7 +397,7 @@
         const rawTargetCourses = urlParams.get('courses') || urlParams.get('unlocked');
 
         if (rawTargetCourses) {
-          const unlockedIds = rawTargetCourses.split(',').map(id => id.trim()).filter(Boolean);
+          const unlockedIds = rawTargetCourses.split(',').map(id => String(id).trim()).filter(Boolean);
           const nowTs = Date.now();
           const enrollmentDatesUpdate = {};
           unlockedIds.forEach(id => {
@@ -410,8 +411,10 @@
         }
 
         const doc = await docRef.get();
+        let profile = {};
+
         if (doc.exists) {
-          const profile = doc.data();
+          profile = doc.data();
           const dbPhone = (profile.phone || "").replace(/[^0-9]/g, '');
           const inputPhone = phone.replace(/[^0-9]/g, '');
 
@@ -421,34 +424,43 @@
             document.getElementById('unified-login-modal').classList.remove('hidden');
             return;
           }
-
-          localStorage.setItem('careergraspp_active_email', email);
-          localStorage.setItem('careergraspp_active_phone', phone);
-          if (userRole !== 'admin') {
-            localStorage.setItem('careergraspp_role', 'student');
-          }
-          activeStudentProfile = profile;
-
-          document.getElementById('unified-login-modal').classList.add('hidden');
-          loadDashboardUI(profile);
+        } else if (rawTargetCourses) {
+          const unlockedIds = rawTargetCourses.split(',').map(id => String(id).trim()).filter(Boolean);
+          profile = {
+            name: email.split('@')[0],
+            email: email,
+            phone: phone,
+            enrolledCourses: unlockedIds,
+            completedLessons: [],
+            joinedDate: "Recent"
+          };
         } else {
-          if (rawTargetCourses) {
-            const unlockedIds = rawTargetCourses.split(',').map(id => id.trim()).filter(Boolean);
-            activeStudentProfile = {
-              name: email.split('@')[0],
-              email: email,
-              phone: phone,
-              enrolledCourses: unlockedIds,
-              completedLessons: [],
-              joinedDate: "Recent"
-            };
-            document.getElementById('unified-login-modal').classList.add('hidden');
-            loadDashboardUI(activeStudentProfile);
-          } else {
-            alert(`No registered student account found for ${email}. Please enroll in a course first.`);
-            document.getElementById('unified-login-modal').classList.remove('hidden');
-          }
+          alert(`No registered student account found for ${email}. Please enroll in a course first.`);
+          document.getElementById('unified-login-modal').classList.remove('hidden');
+          return;
         }
+
+        // Merge rawTargetCourses from URL into profile in memory instantly
+        if (rawTargetCourses) {
+          const unlockedIds = rawTargetCourses.split(',').map(id => String(id).trim()).filter(Boolean);
+          if (!profile.enrolledCourses) profile.enrolledCourses = [];
+          const existingStr = profile.enrolledCourses.map(x => String(x).trim());
+          unlockedIds.forEach(uId => {
+            if (!existingStr.includes(uId)) {
+              profile.enrolledCourses.push(uId);
+            }
+          });
+        }
+
+        localStorage.setItem('careergraspp_active_email', email);
+        localStorage.setItem('careergraspp_active_phone', phone);
+        if (localStorage.getItem('careergraspp_role') !== 'admin') {
+          localStorage.setItem('careergraspp_role', 'student');
+        }
+        activeStudentProfile = profile;
+
+        document.getElementById('unified-login-modal').classList.add('hidden');
+        loadDashboardUI(profile);
       } catch (err) {
         console.error("Firebase Verification Error:", err);
         alert("Database connection error: " + err.message);
@@ -466,7 +478,7 @@
       if (rawTargetCourses) {
         enrolledIds = rawTargetCourses.split(',').map(id => String(id).trim()).filter(Boolean);
       } else {
-        enrolledIds = softSkillsCourses.map(c => String(c.id));
+        enrolledIds = softSkillsCourses.map(c => String(c.id).trim());
       }
 
       activeStudentProfile = {
@@ -491,7 +503,7 @@
       let displayCount = 0;
       if (rawTargetCourses) {
         displayCount = rawTargetCourses.split(',').map(id => id.trim()).filter(Boolean).length;
-      } else if (profile.enrolledCourses) {
+      } else if (profile && profile.enrolledCourses) {
         displayCount = profile.enrolledCourses.length;
       }
 
@@ -518,22 +530,20 @@
       
       if (rawTargetCourses) {
         rawTargetCourses.split(',').forEach(id => {
-          if (id.trim()) enrolledIdsSet.add(String(id.trim()));
+          if (id && id.trim()) enrolledIdsSet.add(String(id).trim());
         });
       }
       if (profile && profile.enrolledCourses && Array.isArray(profile.enrolledCourses)) {
         profile.enrolledCourses.forEach(id => {
-          if (id !== null && id !== undefined) enrolledIdsSet.add(String(id));
+          if (id !== null && id !== undefined) enrolledIdsSet.add(String(id).trim());
         });
       }
 
       const completedSet = new Set((profile && profile.completedLessons) || []);
 
-      // If opened via Admin Eye View (?enrolledOnly=true), show ONLY enrolled courses.
-      // Otherwise (Student View), render all courses with Locked/Unlocked state.
       let coursesToRender = softSkillsCourses;
       if (isEnrolledOnlyView) {
-        coursesToRender = softSkillsCourses.filter(course => enrolledIdsSet.has(String(course.id)));
+        coursesToRender = softSkillsCourses.filter(course => enrolledIdsSet.has(String(course.id).trim()));
       }
 
       if (coursesToRender.length === 0) {
@@ -542,7 +552,8 @@
       }
 
       coursesToRender.forEach(course => {
-        const isEnrolled = enrolledIdsSet.has(String(course.id));
+        const courseIdStr = String(course.id).trim();
+        const isEnrolled = enrolledIdsSet.has(courseIdStr);
 
         let statusBadgeHtml = "";
         let isExpired = false;
