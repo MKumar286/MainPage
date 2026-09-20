@@ -649,6 +649,7 @@
       const cIdStr = String(course.id).trim().toLowerCase();
       const cTitleStr = String(course.title).trim().toLowerCase();
 
+      // STRICT EXACT MATCH
       const isEnrolled = (activeRole === 'admin') || (activeRole === 'org') || currentUserEnrolledCourses.some(e => e === cIdStr || e === cTitleStr);
 
       document.getElementById('modal-course-img').src = course.image;
@@ -663,7 +664,7 @@
         enrollBtn.onclick = function() { 
           const activeEmail = localStorage.getItem('careergraspp_active_email') || '';
           const activePhone = localStorage.getItem('careergraspp_active_phone') || '';
-          window.location.href = `course.html?email=${encodeURIComponent(activeEmail)}&phone=${encodeURIComponent(activePhone)}&unlocked=${course.id}&courses=${course.id}`;
+          window.location.href = `course.html?email=${encodeURIComponent(activeEmail)}&phone=${encodeURIComponent(activePhone)}`;
         };
       } else {
         enrollBtn.textContent = `Pay ₹${course.price} & Enroll Now`;
@@ -914,7 +915,7 @@
         localStorage.setItem('careergraspp_role', 'student');
 
         alert(`🎉 Payment Successful!\n\nWelcome ${name}!\nTransaction ID: ${paymentId}\nCourse Unlocked: ${course.title}\n\nRedirecting to your Student Portal...`);
-        window.location.href = `course.html?unlocked=${encodeURIComponent(courseIdStr)}&courses=${encodeURIComponent(courseIdStr)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
+        window.location.href = `course.html?email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
       } catch (err) {
         console.error("Firestore Error:", err);
         alert(`Payment received, but error saving to Firebase: ${err.message}`);
@@ -1074,7 +1075,6 @@
       const lesson = part.lessons ? part.lessons[lessonIdx] : null;
       if (!lesson) return;
 
-      const key = lesson.key || `${course.id}_${partIdx}_${lessonIdx}`;
       playLessonVideo(lesson.title, lesson.videoUrl, lesson.pdfUrl);
     }
 
