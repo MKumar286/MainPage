@@ -620,7 +620,6 @@
 
         enrolledCourses: firebase.firestore.FieldValue.arrayUnion(courseIdStr, studentData.courseTitle),
         [`courseEnrollmentDates.${courseIdStr}`]: timestampNow,
-        completedLessons: firebase.firestore.FieldValue.arrayUnion(),
         transactions: firebase.firestore.FieldValue.arrayUnion(transactionPayload),
         joinedDate: new Date().toLocaleDateString(),
         joinedTimestamp: timestampNow
