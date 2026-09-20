@@ -374,7 +374,6 @@
       const hasUrlParams = urlParams.has('email') || urlParams.has('courses') || urlParams.has('unlocked');
 
       if (hasUrlParams && urlParams.get('email')) {
-        // Direct link / Admin Eye button view -> Priority load student target
         if (role === 'admin' || role === 'org') {
           loadAdminOrOrgUI(role, urlParams.get('email'));
         } else {
@@ -506,46 +505,65 @@
       renderDashboardGrid(profile);
     }
 
-    /* RENDER 2-COLUMN SIDE-BY-SIDE SIDEBAR CARDS */
+    /* RENDER COURSES (UNLOCKED VS LOCKED BEFORE PAYMENT) */
     function renderDashboardGrid(profile) {
       const container = document.getElementById('student-courses-grid');
       container.innerHTML = "";
 
       const urlParams = new URLSearchParams(window.location.search);
+      const isEnrolledOnlyView = urlParams.get('enrolledOnly') === 'true';
       const rawTargetCourses = urlParams.get('courses') || urlParams.get('unlocked');
       
-      let allowedIds = [];
+      let enrolledIdsSet = new Set();
+      
       if (rawTargetCourses) {
-        allowedIds = rawTargetCourses.split(',').map(id => String(id).trim()).filter(Boolean);
-      } else if (profile && profile.enrolledCourses) {
-        allowedIds = profile.enrolledCourses.map(id => String(id).trim());
+        rawTargetCourses.split(',').forEach(id => {
+          if (id.trim()) enrolledIdsSet.add(String(id.trim()));
+        });
+      }
+      if (profile && profile.enrolledCourses && Array.isArray(profile.enrolledCourses)) {
+        profile.enrolledCourses.forEach(id => {
+          if (id !== null && id !== undefined) enrolledIdsSet.add(String(id));
+        });
       }
 
-      const completedSet = new Set(profile.completedLessons || []);
-      
-      // STRICT FILTER: Match softSkillsCourses by ID against allowedIds (converted to String)
-      const paidCourses = softSkillsCourses.filter(course => 
-        allowedIds.includes(String(course.id))
-      );
+      const completedSet = new Set((profile && profile.completedLessons) || []);
 
-      if (paidCourses.length === 0) {
-        renderEmptyState("You haven't enrolled in any courses yet.");
+      // If opened via Admin Eye View (?enrolledOnly=true), show ONLY enrolled courses.
+      // Otherwise (Student View), render all courses with Locked/Unlocked state.
+      let coursesToRender = softSkillsCourses;
+      if (isEnrolledOnlyView) {
+        coursesToRender = softSkillsCourses.filter(course => enrolledIdsSet.has(String(course.id)));
+      }
+
+      if (coursesToRender.length === 0) {
+        renderEmptyState("No courses found to display.");
         return;
       }
 
-      paidCourses.forEach(course => {
-        const enrollmentTime = (profile.courseEnrollmentDates && profile.courseEnrollmentDates[course.id])
-          ? profile.courseEnrollmentDates[course.id]
-          : (profile.joinedTimestamp || Date.now());
+      coursesToRender.forEach(course => {
+        const isEnrolled = enrolledIdsSet.has(String(course.id));
 
-        const expiryTime = enrollmentTime + SIX_MONTHS_MS;
-        const diffTime = expiryTime - Date.now();
-        const daysLeft = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        const isExpired = daysLeft <= 0;
+        let statusBadgeHtml = "";
+        let isExpired = false;
 
-        let validityBadgeHtml = isExpired 
-          ? `<span class="bg-red-100 text-red-700 border border-red-300 px-2.5 py-0.5 rounded-full text-[10px] font-black">⚠️ Access Expired</span>`
-          : `<span class="bg-amber-100 text-amber-800 border border-amber-300 px-2.5 py-0.5 rounded-full text-[10px] font-black">⏳ ${daysLeft} Days Left</span>`;
+        if (isEnrolled) {
+          const enrollmentTime = (profile.courseEnrollmentDates && profile.courseEnrollmentDates[course.id])
+            ? profile.courseEnrollmentDates[course.id]
+            : (profile.joinedTimestamp || Date.now());
+
+          const expiryTime = enrollmentTime + SIX_MONTHS_MS;
+          const diffTime = expiryTime - Date.now();
+          const daysLeft = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          isExpired = daysLeft <= 0;
+
+          statusBadgeHtml = isExpired 
+            ? `<span class="bg-red-100 text-red-700 border border-red-300 px-2.5 py-0.5 rounded-full text-[10px] font-black">⚠️ Access Expired</span>`
+            : `<span class="bg-emerald-600 text-white text-[9px] px-2 py-0.5 rounded-full font-extrabold">✓ UNLOCKED</span>
+               <span class="bg-amber-100 text-amber-800 border border-amber-300 px-2.5 py-0.5 rounded-full text-[10px] font-black">⏳ ${daysLeft} Days Left</span>`;
+        } else {
+          statusBadgeHtml = `<span class="bg-slate-200 text-slate-700 border border-slate-300 px-2.5 py-0.5 rounded-full text-[10px] font-black">🔒 LOCKED (Not Enrolled)</span>`;
+        }
 
         let modulesHtml = (course.modulesOverview || []).map(mod => `
           <div class="bg-indigo-50/70 border-l-2 border-indigo-600 p-2.5 rounded-r-lg space-y-1">
@@ -563,28 +581,47 @@
               ${(part.lessons || []).map(les => {
                 const lessonKey = les.key || `${course.id}_${les.title.replace(/\s+/g, '_')}`;
                 const isCompleted = completedSet.has(lessonKey);
-                return `
-                  <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between gap-2 text-xs">
-                    <div class="flex items-center space-x-2 truncate">
-                      ${isCompleted 
-                        ? `<span class="bg-emerald-100 text-emerald-700 border border-emerald-300 font-extrabold text-[9px] px-2 py-0.5 rounded flex-shrink-0">✓ Completed</span>` 
-                        : `<span class="bg-slate-200 text-slate-600 font-bold text-[9px] px-2 py-0.5 rounded flex-shrink-0">Pending</span>`
-                      }
-                      <span class="font-semibold text-slate-800 truncate">${les.title}</span>
+                
+                if (isEnrolled) {
+                  return `
+                    <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between gap-2 text-xs">
+                      <div class="flex items-center space-x-2 truncate">
+                        ${isCompleted 
+                          ? `<span class="bg-emerald-100 text-emerald-700 border border-emerald-300 font-extrabold text-[9px] px-2 py-0.5 rounded flex-shrink-0">✓ Completed</span>` 
+                          : `<span class="bg-slate-200 text-slate-600 font-bold text-[9px] px-2 py-0.5 rounded flex-shrink-0">Pending</span>`
+                        }
+                        <span class="font-semibold text-slate-800 truncate">${les.title}</span>
+                      </div>
+                      <div class="flex items-center space-x-1.5 flex-shrink-0">
+                        <button onclick="handleLessonAccess(true, ${isExpired}, '${lessonKey}', '${les.title.replace(/'/g, "\\'")}', '${les.videoUrl}', '${les.pdfUrl}')" class="px-3 py-1.5 ${isExpired ? 'bg-slate-400 hover:bg-slate-500' : 'bg-indigo-600 hover:bg-indigo-700'} text-white font-bold rounded-lg transition text-xs shadow-sm">▶ Play</button>
+                        <a href="${isExpired ? '#' : les.pdfUrl}" onclick="${isExpired ? `handleExpiredNotice(); return false;` : ''}" target="${isExpired ? '_self' : '_blank'}" class="px-2.5 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-lg transition text-xs">📄 PDF</a>
+                      </div>
                     </div>
-                    <div class="flex items-center space-x-1.5 flex-shrink-0">
-                      <button onclick="handleLessonAccess(${isExpired}, '${lessonKey}', '${les.title.replace(/'/g, "\\'")}', '${les.videoUrl}', '${les.pdfUrl}')" class="px-3 py-1.5 ${isExpired ? 'bg-slate-400 hover:bg-slate-500' : 'bg-indigo-600 hover:bg-indigo-700'} text-white font-bold rounded-lg transition text-xs shadow-sm">▶ Play</button>
-                      <a href="${isExpired ? '#' : les.pdfUrl}" onclick="${isExpired ? `handleExpiredNotice(); return false;` : ''}" target="${isExpired ? '_self' : '_blank'}" class="px-2.5 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-lg transition text-xs">📄 PDF</a>
+                  `;
+                } else {
+                  return `
+                    <div class="p-2.5 bg-slate-100/80 border border-slate-200 rounded-xl flex items-center justify-between gap-2 text-xs opacity-85">
+                      <div class="flex items-center space-x-2 truncate">
+                        <span class="bg-amber-100 text-amber-800 border border-amber-300 font-extrabold text-[9px] px-2 py-0.5 rounded flex-shrink-0">🔒 Locked</span>
+                        <span class="font-semibold text-slate-600 truncate">${les.title}</span>
+                      </div>
+                      <div class="flex items-center space-x-1.5 flex-shrink-0">
+                        <button onclick="handleLockedLessonAccess('${course.title.replace(/'/g, "\\'")}')" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-lg transition text-xs shadow-sm flex items-center gap-1">
+                          <span>🔒</span>
+                          <span>Play</span>
+                        </button>
+                        <button onclick="handleLockedLessonAccess('${course.title.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 bg-slate-200 text-slate-400 font-semibold rounded-lg text-xs cursor-not-allowed">📄 PDF</button>
+                      </div>
                     </div>
-                  </div>
-                `;
+                  `;
+                }
               }).join('')}
             </div>
           </div>
         `).join('');
 
         container.innerHTML += `
-          <div class="bg-white border ${isExpired ? 'border-red-300' : 'border-slate-200'} rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition w-full flex flex-col space-y-4 p-5 md:p-6">
+          <div class="bg-white border ${isEnrolled ? (isExpired ? 'border-red-300' : 'border-slate-200') : 'border-amber-200/80 bg-amber-50/10'} rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition w-full flex flex-col space-y-4 p-5 md:p-6">
             
             <!-- CARD TOP HEADER -->
             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
@@ -592,19 +629,22 @@
                 <img src="${course.image}" alt="${course.title}" class="w-32 h-20 object-cover rounded-xl border border-slate-200 shadow-sm shrink-0" />
                 <div class="space-y-1">
                   <div class="flex flex-wrap items-center gap-1.5">
-                    <span class="bg-emerald-600 text-white text-[9px] px-2 py-0.5 rounded-full font-extrabold">✓ UNLOCKED</span>
-                    ${validityBadgeHtml}
+                    ${statusBadgeHtml}
                   </div>
                   <h3 class="text-xl font-black text-slate-900">${course.title}</h3>
                   <p class="text-xs text-slate-500">6 Months Access • ${course.partsList ? course.partsList.length : 4} HD Video Modules • PDF Guides</p>
                 </div>
               </div>
 
-              ${isExpired ? `
+              ${!isEnrolled ? `
+                <a href="index.html#courses-section" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-1.5">
+                  <span>💳 Enroll Now (₹${course.price})</span>
+                </a>
+              ` : (isExpired ? `
                 <button onclick="handleExpiredNotice()" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg transition shadow-sm">
                   Renew Access Now
                 </button>
-              ` : ''}
+              ` : '')}
             </div>
 
             <!-- 2-COLUMN SIDE-BY-SIDE CONTENT -->
@@ -622,7 +662,7 @@
               <!-- RIGHT COLUMN: VIDEO LESSONS & PDF GUIDES -->
               <div class="space-y-2.5">
                 <div class="flex items-center space-x-2 pb-1 border-b border-slate-100">
-                  <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                  <span class="w-2 h-2 rounded-full ${isEnrolled ? 'bg-emerald-600' : 'bg-amber-600'}"></span>
                   <h4 class="text-xs font-black text-slate-500 uppercase tracking-wider">Video Lessons & Session PDFs</h4>
                 </div>
                 <div class="space-y-2.5">${partsHtml}</div>
@@ -647,12 +687,22 @@
       `;
     }
 
-    function handleLessonAccess(isExpired, key, title, videoUrl, pdfUrl) {
+    /* HANDLE LOCKED COURSE ACCESS CLICK */
+    function handleLockedLessonAccess(courseTitle) {
+      alert(`🔒 Course Locked!\n\nPlease enroll in "${courseTitle}" to unlock and watch all video lessons and session PDFs.`);
+      window.location.href = "index.html#courses-section";
+    }
+
+    function handleLessonAccess(isEnrolled, isExpired, key, title, videoUrl, pdfUrl) {
+      if (!isEnrolled) {
+        handleLockedLessonAccess(title);
+        return;
+      }
       if (isExpired) {
         handleExpiredNotice();
-      } else {
-        playLessonVideo(key, title, videoUrl, pdfUrl);
+        return;
       }
+      playLessonVideo(key, title, videoUrl, pdfUrl);
     }
 
     function handleExpiredNotice() {
