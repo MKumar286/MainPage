@@ -14,7 +14,6 @@
 
   <style>
     body { font-family: 'Inter', sans-serif; }
-    /* Custom scrollbar for dense tables */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #f1f5f9; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
@@ -150,7 +149,7 @@
       <div class="flex justify-between items-center pb-2 border-b border-slate-100">
         <div>
           <h2 class="text-base font-extrabold text-slate-900">Registered Student Profiles</h2>
-          <p class="text-[11px] text-slate-500">Click row for admin inspector, or click 👁️ to view their real video portal.</p>
+          <p class="text-[11px] text-slate-500">Click row for admin inspector, or click 👁️ to open their enrolled courses portal.</p>
         </div>
         <span id="student-count-badge" class="text-xs bg-indigo-50 text-indigo-700 font-extrabold px-3 py-1 rounded-full border border-indigo-200">Showing 0 Records</span>
       </div>
@@ -167,7 +166,7 @@
               <th class="p-2.5">Amount</th>
               <th class="p-2.5">Payment ID</th>
               <th class="p-2.5">Date</th>
-              <th class="p-2.5 text-center">Real Profile</th>
+              <th class="p-2.5 text-center">Enrolled Profile</th>
               <th class="p-2.5 text-center">Delete</th>
             </tr>
           </thead>
@@ -515,8 +514,14 @@
           latestTx = s.transactions[s.transactions.length - 1];
         }
 
-        // Determine primary unlocked course ID to pass to real profile
-        let primaryCourseId = latestTx.courseId || (s.enrolledCourses && s.enrolledCourses.length > 0 ? s.enrolledCourses[0] : '1');
+        // Collect ALL enrolled course IDs for this student into a comma-separated string
+        let enrolledCoursesList = [];
+        if (s.enrolledCourses && Array.isArray(s.enrolledCourses) && s.enrolledCourses.length > 0) {
+          enrolledCoursesList = s.enrolledCourses;
+        } else if (latestTx.courseId) {
+          enrolledCoursesList = [latestTx.courseId];
+        }
+        const enrolledParam = enrolledCoursesList.join(',');
 
         tbody.innerHTML += `
           <tr onclick="inspectStudent('${s.email}')" class="hover:bg-indigo-50/50 cursor-pointer transition whitespace-nowrap group">
@@ -547,8 +552,8 @@
             <td class="p-2.5 text-slate-400 font-medium text-[10px]">
               ${s.joinedDate || 'Recent'}
             </td>
-            <td class="p-2.5 text-center" onclick="openStudentRealProfile(event, '${s.email}', '${s.phone || ''}', '${primaryCourseId}');">
-              <button class="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-600 text-indigo-600 hover:text-white border border-indigo-200 font-bold rounded-lg text-xs transition shadow-sm flex items-center justify-center gap-1 mx-auto" title="Open Real Student Video Portal">
+            <td class="p-2.5 text-center" onclick="openStudentRealProfile(event, '${s.email}', '${s.phone || ''}', '${enrolledParam}');">
+              <button class="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-600 text-indigo-600 hover:text-white border border-indigo-200 font-bold rounded-lg text-xs transition shadow-sm flex items-center justify-center gap-1 mx-auto" title="View Only Enrolled Courses">
                 <span>👁️</span>
                 <span class="text-[10px]">View</span>
               </button>
@@ -564,12 +569,13 @@
     }
 
     /* ================= OPEN STUDENT REAL VIDEO & PROFILE PORTAL ================= */
-    function openStudentRealProfile(event, email, phone, courseId) {
+    function openStudentRealProfile(event, email, phone, enrolledCoursesStr) {
       if (event) event.stopPropagation();
       
-      // Opens exact page student lands on after payment
-      const targetCourse = courseId || '1';
-      const realProfileUrl = `course.html?unlocked=${encodeURIComponent(targetCourse)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
+      const coursesParam = enrolledCoursesStr || '';
+      
+      // Passes 'courses' and 'unlocked' parameters so course.html displays ONLY the student's enrolled courses
+      const realProfileUrl = `course.html?courses=${encodeURIComponent(coursesParam)}&unlocked=${encodeURIComponent(coursesParam)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
       
       window.open(realProfileUrl, '_blank');
     }
