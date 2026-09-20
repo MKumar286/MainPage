@@ -132,7 +132,7 @@
 
           <div class="bg-white border border-slate-200 p-6 md:p-8 rounded-2xl space-y-4 shadow-sm">
             <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-3 flex items-center">
-              <svg class="w-5 h-5 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              <svg class="w-5 h-5 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 01-2 2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
               Complete Course Syllabus & Module Breakdown
             </h3>
             <div id="modal-course-desc" class="space-y-6 text-sm text-slate-700"></div>
@@ -491,7 +491,7 @@
       try {
         const doc = await db.collection('students').doc(activeEmail.toLowerCase()).get();
         if (doc.exists) {
-          currentUserEnrolledCourses = doc.data().enrolledCourses || [];
+          currentUserEnrolledCourses = (doc.data().enrolledCourses || []).map(id => String(id).trim());
         }
       } catch (err) {
         console.warn("Could not fetch active student enrollment details:", err);
@@ -554,7 +554,7 @@
         try {
           const parsed = JSON.parse(localCache);
           if (Array.isArray(parsed) && parsed.length > 0) {
-            softSkillsCourses = parsed;
+            softSkillsCourses = parsed.map(c => ({ ...c, id: (c.id !== undefined && c.id !== null) ? c.id : c.docId }));
           }
         } catch (e) {
           console.warn("Invalid local cache", e);
@@ -566,7 +566,9 @@
           if (!snapshot.empty) {
             const fetched = [];
             snapshot.forEach((doc) => {
-              fetched.push(doc.data());
+              const cData = doc.data();
+              const cId = (cData.id !== undefined && cData.id !== null) ? cData.id : doc.id;
+              fetched.push({ ...cData, id: cId });
             });
             softSkillsCourses = fetched;
             localStorage.setItem('careergraspp_courses', JSON.stringify(fetched));
@@ -634,7 +636,7 @@
               </div>
             </div>
             <div class="p-6 pt-0">
-              <button onclick="openCourseModal(${course.id})" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl text-xs transition flex items-center justify-center shadow-md shadow-indigo-600/20">
+              <button onclick="openCourseModal('${course.id}')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl text-xs transition flex items-center justify-center shadow-md shadow-indigo-600/20">
                 <span>View Course (₹${course.price})</span>
               </button>
             </div>
@@ -655,13 +657,13 @@
     }
 
     async function openCourseModal(courseId) {
-      const course = softSkillsCourses.find(c => c.id === courseId);
+      const course = softSkillsCourses.find(c => String(c.id).trim() === String(courseId).trim());
       if (!course) return;
 
       await refreshCurrentStudentEnrollments();
 
       const activeRole = localStorage.getItem('careergraspp_role');
-      const isEnrolled = (activeRole === 'admin') || (activeRole === 'org') || currentUserEnrolledCourses.map(id => String(id)).includes(String(courseId));
+      const isEnrolled = (activeRole === 'admin') || (activeRole === 'org') || currentUserEnrolledCourses.includes(String(course.id).trim());
 
       document.getElementById('modal-course-img').src = course.image;
       document.getElementById('modal-course-title').textContent = course.title;
@@ -675,7 +677,7 @@
         enrollBtn.onclick = function() { 
           const activeEmail = localStorage.getItem('careergraspp_active_email') || '';
           const activePhone = localStorage.getItem('careergraspp_active_phone') || '';
-          window.location.href = `course.html?email=${encodeURIComponent(activeEmail)}&phone=${encodeURIComponent(activePhone)}&unlocked=${course.id}`;
+          window.location.href = `course.html?email=${encodeURIComponent(activeEmail)}&phone=${encodeURIComponent(activePhone)}&unlocked=${course.id}&courses=${course.id}`;
         };
       } else {
         enrollBtn.textContent = `Pay ₹${course.price} & Enroll Now`;
@@ -728,11 +730,11 @@
                   <span class="text-xs font-semibold text-slate-700">${les.title} <span class="text-[10px] text-slate-500 font-normal">(${les.duration || '10 mins'})</span></span>
                 </div>
                 <div class="flex items-center space-x-2 flex-shrink-0">
-                  <button onclick="handleLockedVideoClick(${course.id}, '${course.title.replace(/'/g, "\\'")}')" class="px-3.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm">
+                  <button onclick="handleLockedVideoClick('${course.id}', '${course.title.replace(/'/g, "\\'")}')" class="px-3.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm">
                     <span>🔒</span>
                     <span>Locked (Pay to Access)</span>
                   </button>
-                  <button onclick="handleLockedVideoClick(${course.id}, '${course.title.replace(/'/g, "\\'")}')" class="px-3 py-1.5 bg-slate-200 text-slate-400 rounded-lg text-xs font-semibold cursor-not-allowed">
+                  <button onclick="handleLockedVideoClick('${course.id}', '${course.title.replace(/'/g, "\\'")}')" class="px-3 py-1.5 bg-slate-200 text-slate-400 rounded-lg text-xs font-semibold cursor-not-allowed">
                     📄 PDF Locked
                   </button>
                 </div>
@@ -785,7 +787,7 @@
 
       if (activeEmail) {
         try {
-          const userDoc = await db.collection('students').doc(activeEmail).get();
+          const userDoc = await db.collection('students').doc(activeEmail.toLowerCase()).get();
           if (userDoc.exists) {
             const profile = userDoc.data();
             initiateRazorpayPayment(courseId, profile.name || "Student", profile.email, profile.phone || "");
@@ -824,7 +826,7 @@
 
     /* ================= RAZORPAY PAYMENT INITIATOR ================= */
     function initiateRazorpayPayment(courseId, studentName, studentEmail, studentPhone) {
-      const course = softSkillsCourses.find(c => c.id === courseId);
+      const course = softSkillsCourses.find(c => String(c.id).trim() === String(courseId).trim());
       if (!course) return;
 
       const options = {
@@ -874,6 +876,8 @@
       const assignedOrgCode = rawOrgCode ? rawOrgCode.toUpperCase().trim() : "INDIVIDUAL";
       const isOrg = assignedOrgCode !== "INDIVIDUAL";
 
+      const courseIdStr = String(studentData.courseId).trim();
+
       await userDocRef.set({
         name: studentData.name,
         email: email,
@@ -885,14 +889,14 @@
         orgName: isOrg ? "Institutional Access" : "Self Enrolled",
         rollNumber: studentData.rollNumber || "N/A",
 
-        enrolledCourses: firebase.firestore.FieldValue.arrayUnion(studentData.courseId),
+        enrolledCourses: firebase.firestore.FieldValue.arrayUnion(courseIdStr),
         courseEnrollmentDates: {
-          [studentData.courseId]: Date.now()
+          [courseIdStr]: Date.now()
         },
         completedLessons: firebase.firestore.FieldValue.arrayUnion(),
         transactions: firebase.firestore.FieldValue.arrayUnion({
           paymentId: studentData.paymentId,
-          courseId: studentData.courseId,
+          courseId: courseIdStr,
           courseTitle: studentData.courseTitle,
           amount: studentData.amount,
           date: new Date().toLocaleString(),
@@ -911,11 +915,12 @@
     async function onPaymentSuccess(paymentId, course, name, email, phone) {
       const urlParams = new URLSearchParams(window.location.search);
       const detectedOrg = urlParams.get('org') || localStorage.getItem('careergraspp_org_code');
+      const courseIdStr = String(course.id).trim();
 
       try {
         await saveStudentProfileToFirestore({
           paymentId: paymentId,
-          courseId: course.id,
+          courseId: courseIdStr,
           courseTitle: course.title,
           amount: course.price,
           name: name,
@@ -924,12 +929,12 @@
           orgCode: detectedOrg
         });
 
-        localStorage.setItem('careergraspp_active_email', email);
+        localStorage.setItem('careergraspp_active_email', email.toLowerCase());
         localStorage.setItem('careergraspp_active_phone', phone);
         localStorage.setItem('careergraspp_role', 'student');
 
         alert(`🎉 Payment Successful!\n\nWelcome ${name}!\nTransaction ID: ${paymentId}\nCourse Unlocked: ${course.title}\n\nRedirecting to your Student Portal...`);
-        window.location.href = `course.html?unlocked=${course.id}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
+        window.location.href = `course.html?unlocked=${courseIdStr}&courses=${courseIdStr}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
       } catch (err) {
         console.error("Firestore Error:", err);
         alert(`Payment received, but error saving to Firebase: ${err.message}`);
