@@ -124,12 +124,12 @@
             <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
           </div>
           
-          <!-- Category Filter (Dynamic) -->
+          <!-- Category Filter (Strictly Dynamic from Active Student Data) -->
           <select id="filter-category" onchange="onCategoryChange()" class="w-full sm:w-auto px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-indigo-600">
             <option value="ALL">All Categories</option>
           </select>
 
-          <!-- College/Org Code Dropdown (Cascading Dynamic) -->
+          <!-- College/Org Code Dropdown (Cascading Dynamic from Active Student Data) -->
           <select id="filter-org-code" onchange="onOrgChange()" class="w-full sm:w-auto px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-indigo-600">
             <option value="ALL">All Colleges / Orgs</option>
           </select>
@@ -322,7 +322,7 @@
     let orgsMap = {};
     let activeViewTab = 'students';
 
-    // Standard Category Mapping Lookup
+    // Category Display Mapping Lookup
     const categoryLabelsLookup = {
       'engineering': 'Engineering College',
       'school': 'School',
@@ -391,7 +391,7 @@
       });
     }
 
-    /* Helper: Extract normalized student category */
+    /* Helper: Extract category strictly for a student record */
     function getStudentCategory(s) {
       const orgDoc = orgsMap[(s.orgCode || "").toUpperCase().trim()] || {};
       const cat = (s.targetType || s.category || orgDoc.targetType || (s.orgCode && s.orgCode.toUpperCase().trim() !== 'INDIVIDUAL' ? 'engineering' : 'individual')).toLowerCase().trim();
@@ -403,19 +403,12 @@
       const catSelect = document.getElementById('filter-category');
       const currentSelected = catSelect.value.toLowerCase();
 
-      // Gather categories present in student roster + organizations map
+      // Gather categories PRESENT ONLY IN ACTIVE STUDENTS TABLE
       const catCounts = {};
 
       allStudentsData.forEach(s => {
         const cat = getStudentCategory(s);
         catCounts[cat] = (catCounts[cat] || 0) + 1;
-      });
-
-      Object.values(orgsMap).forEach(org => {
-        if (org.targetType) {
-          const cat = org.targetType.toLowerCase().trim();
-          if (!catCounts[cat]) catCounts[cat] = 0;
-        }
       });
 
       let optionsHtml = `<option value="ALL">All Categories (${allStudentsData.length})</option>`;
@@ -428,6 +421,11 @@
       });
 
       catSelect.innerHTML = optionsHtml;
+
+      // Reset to ALL if selected category no longer exists in current student dataset
+      if (currentSelected !== 'all' && !catCounts[currentSelected]) {
+        catSelect.value = 'ALL';
+      }
     }
 
     /* ================= CASCADING DYNAMIC ORG CODE DROPDOWN ================= */
@@ -439,26 +437,19 @@
       const currentOrgSelected = orgSelect.value.toUpperCase().trim();
 
       const orgCounts = {};
+      let totalMatchingCatStudents = 0;
 
-      // Calculate student counts matching selected category
+      // Calculate student counts matching selected category strictly from ACTIVE STUDENTS TABLE
       allStudentsData.forEach(s => {
         const sCat = getStudentCategory(s);
         if (selectedCat === 'all' || sCat === selectedCat) {
           const code = (s.orgCode || "INDIVIDUAL").toUpperCase().trim();
           orgCounts[code] = (orgCounts[code] || 0) + 1;
+          totalMatchingCatStudents++;
         }
       });
 
-      // Include additional org codes registered in organizations database matching category
-      Object.keys(orgsMap).forEach(code => {
-        const org = orgsMap[code];
-        const orgCat = (org.targetType || "").toLowerCase().trim();
-        if (selectedCat === 'all' || orgCat === selectedCat) {
-          if (!orgCounts[code]) orgCounts[code] = 0;
-        }
-      });
-
-      let optionsHtml = `<option value="ALL">All Colleges / Orgs</option>`;
+      let optionsHtml = `<option value="ALL">All Colleges / Orgs (${totalMatchingCatStudents})</option>`;
       let sortedOrgCodes = Object.keys(orgCounts).sort();
 
       sortedOrgCodes.forEach(code => {
@@ -469,7 +460,7 @@
 
       orgSelect.innerHTML = optionsHtml;
 
-      // Reset to ALL if currently selected org is no longer available in filtered list
+      // Reset to ALL if currently selected org is not available under current category
       if (currentOrgSelected !== 'ALL' && !orgCounts[currentOrgSelected]) {
         orgSelect.value = 'ALL';
       }
@@ -651,7 +642,6 @@
       
       const coursesParam = enrolledCoursesStr || '';
       
-      // Passes 'courses', 'unlocked', and 'enrolledOnly=true' parameters to course.html
       const realProfileUrl = `course.html?email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&courses=${encodeURIComponent(coursesParam)}&unlocked=${encodeURIComponent(coursesParam)}&enrolledOnly=true`;
       
       window.open(realProfileUrl, '_blank');
@@ -857,6 +847,7 @@
       }
     }
 
+    /* ================= POPULATE SELL COURSE CHECKBOXES ================= */
     function populateSellCourseCheckboxes() {
       const container = document.getElementById('sell-course-checkbox-list');
       if (!container) return;
@@ -881,6 +872,7 @@
       });
     }
 
+    /* ================= GENERATE CAMPAIGN LINK HANDLER ================= */
     async function generateCampaignLink(event) {
       event.preventDefault();
 
@@ -921,6 +913,7 @@
       document.getElementById('sell-link-output-box').classList.remove('hidden');
     }
 
+    /* ================= COPY LINK TO CLIPBOARD ================= */
     function copyGeneratedCampaignLink() {
       const urlInput = document.getElementById('sell-generated-url');
       urlInput.select();
