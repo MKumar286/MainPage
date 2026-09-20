@@ -484,49 +484,6 @@
       }
     }
 
-    function applyCampaignUrlParameters() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const rawCourses = urlParams.get('courses') || urlParams.get('course');
-      const customPrice = urlParams.get('price');
-      const orgCode = urlParams.get('org');
-
-      if (orgCode) {
-        localStorage.setItem('careergraspp_org_code', orgCode.toUpperCase().trim());
-      }
-
-      if (!rawCourses) return null;
-
-      const targetCourseIds = rawCourses.split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id));
-
-      if (targetCourseIds.length > 0) {
-        if (customPrice && !isNaN(customPrice) && Number(customPrice) > 0) {
-          const offerPrice = Number(customPrice);
-          softSkillsCourses.forEach(c => {
-            if (targetCourseIds.includes(c.id)) {
-              c.price = offerPrice;
-            }
-          });
-        }
-
-        const filtered = softSkillsCourses.filter(c => targetCourseIds.includes(c.id));
-        if (filtered.length > 0) {
-          softSkillsCourses = filtered;
-
-          const heading = document.getElementById('courses-grid-heading');
-          const subheading = document.getElementById('courses-grid-subheading');
-          if (heading && orgCode) {
-            heading.textContent = `Special Offer Program for ${orgCode}`;
-          }
-          if (subheading && customPrice) {
-            subheading.textContent = `Exclusive Institutional Pricing: Unlock your offered courses for only ₹${customPrice}!`;
-          }
-
-          return targetCourseIds;
-        }
-      }
-      return null;
-    }
-
     function initFirestoreCoursesSync() {
       const container = document.getElementById('courses-grid-container');
       if (container) {
@@ -560,33 +517,14 @@
             softSkillsCourses = defaultCourses;
           }
 
-          const campaignTargetIds = applyCampaignUrlParameters();
           renderCoursesGrid();
-
-          if (campaignTargetIds && campaignTargetIds.length === 1 && !autoModalTriggered) {
-            autoModalTriggered = true;
-            const singleCourseId = campaignTargetIds[0];
-            setTimeout(() => {
-              openCourseModal(singleCourseId);
-            }, 400);
-          }
         }, (error) => {
           console.error("Firestore Error:", error);
-          const campaignTargetIds = applyCampaignUrlParameters();
           renderCoursesGrid();
-          if (campaignTargetIds && campaignTargetIds.length === 1 && !autoModalTriggered) {
-            autoModalTriggered = true;
-            setTimeout(() => openCourseModal(campaignTargetIds[0]), 400);
-          }
         });
       } catch (err) {
         console.error("Firebase Connection Error:", err);
-        const campaignTargetIds = applyCampaignUrlParameters();
         renderCoursesGrid();
-        if (campaignTargetIds && campaignTargetIds.length === 1 && !autoModalTriggered) {
-          autoModalTriggered = true;
-          setTimeout(() => openCourseModal(campaignTargetIds[0]), 400);
-        }
       }
     }
 
@@ -635,7 +573,7 @@
     });
 
     function handleLockedVideoClick(courseId, courseTitle) {
-      alert(`🔒 Video Locked!\n\nPlease enroll in "${courseTitle}" to watch this video lesson and access session PDFs.`);
+      alert(`🔒 Video Locked!\n\nPlease make a payment for "${courseTitle}" to watch this video lesson and access session PDFs.`);
       startEnrollmentFlow(courseId);
     }
 
@@ -649,7 +587,7 @@
       const cIdStr = String(course.id).trim().toLowerCase();
       const cTitleStr = String(course.title).trim().toLowerCase();
 
-      // STRICT EXACT MATCH
+      // STRICT DATABASE PAID CHECK
       const isEnrolled = (activeRole === 'admin') || (activeRole === 'org') || currentUserEnrolledCourses.some(e => e === cIdStr || e === cTitleStr);
 
       document.getElementById('modal-course-img').src = course.image;
@@ -850,64 +788,69 @@
       }
     }
 
-    async function saveStudentProfileToFirestore(studentData) {
+    /* SAVE PAYMENT LOGS AND STUDENT PROFILE TO FIRESTORE IMMEDIATELY UPON PAYMENT */
+    async function saveStudentProfileAndPaymentLog(studentData) {
       const email = studentData.email.toLowerCase();
       const userDocRef = db.collection('students').doc(email);
-
-      const urlParams = new URLSearchParams(window.location.search);
-      const rawOrgCode = urlParams.get('org') || localStorage.getItem('careergraspp_org_code') || studentData.orgCode;
-      
-      const assignedOrgCode = rawOrgCode ? rawOrgCode.toUpperCase().trim() : "INDIVIDUAL";
-      const isOrg = assignedOrgCode !== "INDIVIDUAL";
+      const paymentLogRef = db.collection('payment_logs').doc(studentData.paymentId);
 
       const courseIdStr = String(studentData.courseId).trim();
+      const timestampNow = Date.now();
+      const dateFormatted = new Date().toLocaleString();
 
+      const transactionPayload = {
+        paymentId: studentData.paymentId,
+        courseId: courseIdStr,
+        courseTitle: studentData.courseTitle,
+        amount: studentData.amount,
+        date: dateFormatted,
+        timestamp: timestampNow
+      };
+
+      // 1. UPDATE STUDENT PROFILE WITH UNLOCKED COURSE
       await userDocRef.set({
         name: studentData.name,
         email: email,
         phone: studentData.phone,
         role: "student",
-
-        orgCode: assignedOrgCode,
-        studentType: isOrg ? "organization" : "individual",
-        orgName: isOrg ? "Institutional Access" : "Self Enrolled",
-        rollNumber: studentData.rollNumber || "N/A",
+        studentType: "individual",
+        orgName: "Self Enrolled",
 
         enrolledCourses: firebase.firestore.FieldValue.arrayUnion(courseIdStr, studentData.courseTitle),
-        [`courseEnrollmentDates.${courseIdStr}`]: Date.now(),
+        [`courseEnrollmentDates.${courseIdStr}`]: timestampNow,
         completedLessons: firebase.firestore.FieldValue.arrayUnion(),
-        transactions: firebase.firestore.FieldValue.arrayUnion({
-          paymentId: studentData.paymentId,
-          courseId: courseIdStr,
-          courseTitle: studentData.courseTitle,
-          amount: studentData.amount,
-          date: new Date().toLocaleString(),
-          timestamp: Date.now()
-        }),
+        transactions: firebase.firestore.FieldValue.arrayUnion(transactionPayload),
         joinedDate: new Date().toLocaleDateString(),
-        joinedTimestamp: Date.now()
+        joinedTimestamp: timestampNow
       }, { merge: true });
 
-      if (isOrg) {
-        localStorage.setItem('careergraspp_org_code', assignedOrgCode);
-      }
+      // 2. SAVE INSTANT DEDICATED PAYMENT LOG TO 'payment_logs' COLLECTION
+      await paymentLogRef.set({
+        paymentId: studentData.paymentId,
+        studentEmail: email,
+        studentName: studentData.name,
+        studentPhone: studentData.phone,
+        courseId: courseIdStr,
+        courseTitle: studentData.courseTitle,
+        amountPaid: studentData.amount,
+        paymentStatus: "SUCCESS",
+        paymentDate: dateFormatted,
+        timestamp: timestampNow
+      }, { merge: true });
     }
 
     async function onPaymentSuccess(paymentId, course, name, email, phone) {
-      const urlParams = new URLSearchParams(window.location.search);
-      const detectedOrg = urlParams.get('org') || localStorage.getItem('careergraspp_org_code');
       const courseIdStr = String(course.id).trim();
 
       try {
-        await saveStudentProfileToFirestore({
+        await saveStudentProfileAndPaymentLog({
           paymentId: paymentId,
           courseId: courseIdStr,
           courseTitle: course.title,
           amount: course.price,
           name: name,
           email: email,
-          phone: phone,
-          orgCode: detectedOrg
+          phone: phone
         });
 
         localStorage.setItem('careergraspp_active_email', email.toLowerCase());
@@ -918,7 +861,7 @@
         window.location.href = `course.html?email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
       } catch (err) {
         console.error("Firestore Error:", err);
-        alert(`Payment received, but error saving to Firebase: ${err.message}`);
+        alert(`Payment received, but error saving logs to Database: ${err.message}`);
       }
     }
 
