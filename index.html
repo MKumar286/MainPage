@@ -115,7 +115,7 @@
           Back to Courses List
         </button>
         <div class="flex items-center space-x-3">
-          <span class="text-xs bg-emerald-100 text-emerald-800 border border-emerald-300 px-3 py-1 rounded-full font-bold">Special Offer</span>
+          <span id="modal-status-badge" class="text-xs bg-emerald-100 text-emerald-800 border border-emerald-300 px-3 py-1 rounded-full font-bold">Special Offer</span>
           <button onclick="closeCourseModal()" class="text-slate-400 hover:text-slate-700 text-2xl font-bold px-2">&times;</button>
         </div>
       </div>
@@ -496,7 +496,6 @@
       const targetCourseIds = rawCourses.split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id));
 
       if (targetCourseIds.length > 0) {
-        // 1. Override custom price if present
         if (customPrice && !isNaN(customPrice) && Number(customPrice) > 0) {
           const offerPrice = Number(customPrice);
           softSkillsCourses.forEach(c => {
@@ -506,12 +505,10 @@
           });
         }
 
-        // 2. Filter softSkillsCourses grid to show ONLY offered courses
         const filtered = softSkillsCourses.filter(c => targetCourseIds.includes(c.id));
         if (filtered.length > 0) {
           softSkillsCourses = filtered;
 
-          // Update Section Headings to reflect campaign offer
           const heading = document.getElementById('courses-grid-heading');
           const subheading = document.getElementById('courses-grid-subheading');
           if (heading && orgCode) {
@@ -634,6 +631,17 @@
 
     /* ================= ENROLLED / UNLOCKED CHECK LOGIC ================= */
     async function checkUserEnrollmentStatus(courseId) {
+      // 1. Check local storage first for instant unlock responsiveness
+      try {
+        const localEnrolled = JSON.parse(localStorage.getItem('careergraspp_enrolled_courses') || '[]');
+        if (localEnrolled.includes(courseId) || localEnrolled.includes(Number(courseId)) || localEnrolled.includes(String(courseId))) {
+          return true;
+        }
+      } catch (e) {
+        console.warn("Local storage parse error:", e);
+      }
+
+      // 2. Check Firestore DB if logged in
       const activeEmail = localStorage.getItem('careergraspp_active_email');
       if (!activeEmail) return false;
 
@@ -643,7 +651,16 @@
         if (doc.exists) {
           const profile = doc.data();
           const enrolled = profile.enrolledCourses || [];
-          return enrolled.includes(courseId) || enrolled.includes(Number(courseId)) || enrolled.includes(String(courseId));
+          const isEnrolled = enrolled.includes(courseId) || enrolled.includes(Number(courseId)) || enrolled.includes(String(courseId));
+          if (isEnrolled) {
+            // Sync to local storage for quick access
+            const localEnrolled = JSON.parse(localStorage.getItem('careergraspp_enrolled_courses') || '[]');
+            if (!localEnrolled.includes(courseId)) {
+              localEnrolled.push(courseId);
+              localStorage.setItem('careergraspp_enrolled_courses', JSON.stringify(localEnrolled));
+            }
+          }
+          return isEnrolled;
         }
       } catch (err) {
         console.warn("Could not verify enrollment in Firestore:", err);
@@ -660,7 +677,7 @@
       const course = softSkillsCourses.find(c => c.id === courseId);
       if (!course) return;
 
-      // 1. Check if the current user has paid and unlocked this course
+      // Check if the current user has paid and unlocked this course
       const isEnrolled = await checkUserEnrollmentStatus(courseId);
 
       document.getElementById('modal-course-img').src = course.image;
@@ -668,15 +685,20 @@
       document.getElementById('modal-course-price').textContent = `₹${course.price}`;
       document.getElementById('modal-course-original-price').textContent = `₹${course.originalPrice || Math.round(course.price * 1.5)}`;
       
+      const badge = document.getElementById('modal-status-badge');
       const enrollBtn = document.getElementById('modal-enroll-btn');
+
       if (isEnrolled) {
-        enrollBtn.textContent = `✅ Unlocked & Enrolled - Go to Dashboard`;
-        enrollBtn.className = "w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-2xl text-center block shadow-lg shadow-emerald-600/30 transition text-sm";
+        badge.textContent = "🔓 Course Unlocked & Enrolled";
+        badge.className = "text-xs bg-emerald-100 text-emerald-800 border border-emerald-300 px-3 py-1 rounded-full font-bold";
+        enrollBtn.textContent = `✅ Unlocked & Enrolled`;
+        enrollBtn.className = "w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-2xl text-center block shadow-lg shadow-emerald-600/30 transition text-sm cursor-default";
         enrollBtn.onclick = function() {
-          const activeEmail = localStorage.getItem('careergraspp_active_email') || '';
-          window.location.href = `course.html?email=${encodeURIComponent(activeEmail)}`;
+          alert("🎉 You are already enrolled in this course! Click any Play Video button below to watch.");
         };
       } else {
+        badge.textContent = "Special Offer";
+        badge.className = "text-xs bg-indigo-100 text-indigo-800 border border-indigo-300 px-3 py-1 rounded-full font-bold";
         enrollBtn.textContent = `Pay ₹${course.price} & Enroll Now`;
         enrollBtn.className = "w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-2xl text-center block shadow-lg shadow-indigo-600/30 transition text-sm";
         enrollBtn.onclick = function() { startEnrollmentFlow(course.id); };
@@ -696,7 +718,7 @@
         `;
       });
 
-      // 2. Render Accordion with Lock / Unlock Logic based on payment status
+      // Render Accordion with Lock / Unlock Logic based on payment status
       const accordionContainer = document.getElementById('modal-parts-accordion-list');
       accordionContainer.innerHTML = "";
       const parts = course.partsList || [];
@@ -712,7 +734,7 @@
                   <span class="text-xs font-semibold text-slate-800">${les.title} <span class="text-[10px] text-slate-500 font-normal">(${les.duration || '10 mins'})</span></span>
                 </div>
                 <div class="flex items-center space-x-2 flex-shrink-0">
-                  <button onclick="playLessonVideo('${les.title.replace(/'/g, "\\'")}', '${les.videoUrl}', '${les.pdfUrl}')" class="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition flex items-center shadow-sm">
+                  <button onclick="playLessonVideo('${les.title.replace(/'/g, "\\'")}', '${les.videoUrl}', '${les.pdfUrl}')" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition flex items-center shadow-sm">
                     ▶ Play Video
                   </button>
                   <a href="${les.pdfUrl}" target="_blank" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-lg text-xs font-semibold transition flex items-center">
@@ -746,7 +768,7 @@
           <div class="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm">
             <button onclick="togglePartAccordion('${partId}')" class="w-full p-4 bg-slate-100 text-slate-900 font-bold text-sm flex items-center justify-between hover:bg-slate-200 transition border-b border-slate-200">
               <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full ${isEnrolled ? 'bg-emerald-600' : 'bg-indigo-600'} mr-3"></span>${part.partTitle}</span>
-              <span class="text-xs text-indigo-600 font-semibold">${isEnrolled ? 'View Video & PDF ▼' : '🔒 Content Locked ▼'}</span>
+              <span class="text-xs ${isEnrolled ? 'text-emerald-600' : 'text-indigo-600'} font-semibold">${isEnrolled ? '🔓 Click to Watch & View PDF ▼' : '🔒 Content Locked ▼'}</span>
             </button>
             <div id="${partId}" class="p-4 bg-slate-50 space-y-3 hidden">${lessonsHtml}</div>
           </div>
@@ -881,7 +903,6 @@
         phone: studentData.phone,
         role: "student",
 
-        // ORGANIZATION MATCHING FIELDS
         orgCode: assignedOrgCode,
         studentType: isOrg ? "organization" : "individual",
         orgName: isOrg ? "Institutional Access" : "Self Enrolled",
@@ -911,6 +932,22 @@
 
     /* ================= PAYMENT SUCCESS HANDLER ================= */
     async function onPaymentSuccess(paymentId, course, name, email, phone) {
+      // 1. Immediately store enrollment locally for instant unlocking
+      try {
+        let localEnrolled = JSON.parse(localStorage.getItem('careergraspp_enrolled_courses') || '[]');
+        if (!localEnrolled.includes(course.id)) {
+          localEnrolled.push(course.id);
+          localStorage.setItem('careergraspp_enrolled_courses', JSON.stringify(localEnrolled));
+        }
+      } catch (e) {
+        console.warn("Error updating local enrolled list:", e);
+      }
+
+      localStorage.setItem('careergraspp_active_email', email);
+      localStorage.setItem('careergraspp_active_phone', phone);
+      localStorage.setItem('careergraspp_role', 'student');
+
+      // 2. Save to Firestore Cloud Database
       const urlParams = new URLSearchParams(window.location.search);
       const detectedOrg = urlParams.get('org') || localStorage.getItem('careergraspp_org_code');
 
@@ -925,17 +962,14 @@
           phone: phone,
           orgCode: detectedOrg
         });
-
-        localStorage.setItem('careergraspp_active_email', email);
-        localStorage.setItem('careergraspp_active_phone', phone);
-        localStorage.setItem('careergraspp_role', 'student');
-
-        alert(`🎉 Payment Successful!\n\nWelcome ${name}!\nTransaction ID: ${paymentId}\nCourse Unlocked: ${course.title}\n\nRedirecting to your Student Portal...`);
-        window.location.href = `course.html?unlocked=${course.id}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
       } catch (err) {
-        console.error("Firestore Error:", err);
-        alert(`Payment received, but error saving to Firebase: ${err.message}`);
+        console.error("Firestore Save Warning:", err);
       }
+
+      // 3. Immediately re-render course modal view with unlocked videos
+      alert(`🎉 Payment Successful!\n\nWelcome ${name}!\nTransaction ID: ${paymentId}\n\nAll Video Sessions & PDF Materials for "${course.title}" are now unlocked!`);
+      
+      openCourseModal(course.id);
     }
 
     function openUnifiedLoginModal(defaultRole) {
