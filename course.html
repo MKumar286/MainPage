@@ -79,12 +79,16 @@
             <!-- Right Column: Player & Resources -->
             <div class="lg:col-span-8 space-y-6">
 
-                <!-- Video Player Container (Dynamic Lock/Unlock) -->
+                <!-- Video Player Container (LOCKED BY DEFAULT IN HTML) -->
                 <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-                    <h3 id="current-lesson-title" class="text-lg font-bold text-gray-900 mb-3">Lesson Preview</h3>
+                    <h3 id="current-lesson-title" class="text-lg font-bold text-gray-900 mb-3">Lesson Content</h3>
                     
-                    <div id="video-player-container" class="w-full min-h-[360px] bg-gray-900 rounded-xl overflow-hidden flex items-center justify-center">
-                        <p class="text-gray-400 text-sm">Select a lesson to view content</p>
+                    <div id="video-player-container" class="w-full min-h-[360px] bg-gray-900 rounded-xl overflow-hidden flex flex-col items-center justify-center p-8 text-center border border-gray-800">
+                        <div class="w-16 h-16 mb-4 bg-red-500/20 text-red-400 rounded-full flex items-center justify-center">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Course Locked</h3>
+                        <p class="text-gray-400 text-sm max-w-md">Verifying your enrollment status...</p>
                     </div>
 
                     <div id="lesson-actions" class="mt-4 flex items-center justify-between border-t border-gray-100 pt-4 hidden">
@@ -95,11 +99,14 @@
                     </div>
                 </div>
 
-                <!-- PDF Resources Container (Dynamic Lock/Unlock) -->
+                <!-- PDF Resources Container (LOCKED BY DEFAULT IN HTML) -->
                 <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
                     <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-3">Downloadable PDF Guides & Resources</h3>
                     <div id="pdf-resources-container">
-                        <p class="text-xs text-gray-400 italic">Select a course to view available resources.</p>
+                        <div class="p-4 bg-amber-50 rounded-lg border border-amber-200 text-amber-800 flex items-center gap-3">
+                            <svg class="w-5 h-5 flex-shrink-0 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                            <span class="text-sm font-medium">PDF Guides and resources are locked until successful payment verification.</span>
+                        </div>
                     </div>
                 </div>
 
@@ -107,7 +114,7 @@
                 <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
                     <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-3">Key Takeaways</h3>
                     <ul id="key-takeaways-list" class="list-disc list-inside text-xs text-gray-600 space-y-1.5">
-                        <li class="italic text-gray-400">No takeaways available for this selection.</li>
+                        <li class="italic text-gray-400">Verifying access...</li>
                     </ul>
                 </div>
 
@@ -117,7 +124,7 @@
 
     <!-- Firebase Script & App Logic -->
     <script>
-        // Replace with your Firebase Project Configuration
+        // Firebase Configuration (Replace with your SDK Config)
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
             authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
@@ -132,7 +139,7 @@
         }
         const db = firebase.firestore();
 
-        // Application State Variables
+        // Application State
         let currentStudent = null;
         let currentCourse = null;
         let activeLessonIndex = 0;
@@ -151,7 +158,7 @@
             }
 
             try {
-                // 1. Fetch Student Profile from Firestore
+                // Fetch Student Profile from Firestore
                 const studentDoc = await db.collection('students').doc(studentEmail.toLowerCase()).get();
                 if (studentDoc.exists) {
                     currentStudent = studentDoc.data();
@@ -170,7 +177,7 @@
                 document.getElementById('student-name-display').innerText = currentStudent.name || 'Student';
                 document.getElementById('student-email-display').innerText = currentStudent.email;
 
-                // 2. Fetch Course Details
+                // Fetch Course Details
                 if (courseId) {
                     const courseDoc = await db.collection('courses').doc(courseId).get();
                     if (courseDoc.exists) {
@@ -178,7 +185,7 @@
                     }
                 }
 
-                // Fallback to first purchased course if no courseId specified in URL
+                // Fallback to first purchased course if no specific courseId in URL
                 if (!currentCourse && currentStudent.enrolledCourses && currentStudent.enrolledCourses.length > 0) {
                     const firstCourseId = currentStudent.enrolledCourses[0];
                     const courseDoc = await db.collection('courses').doc(firstCourseId).get();
@@ -194,7 +201,7 @@
                     return;
                 }
 
-                // Render Dashboard
+                // Render Dashboard components
                 renderCourseHeaderAndSyllabus();
                 renderCourseContent(currentCourse, currentStudent);
                 check6MonthValidity();
@@ -204,7 +211,7 @@
             }
         }
 
-        // Render Left Side Syllabus Accordion
+        // Render Syllabus List
         function renderCourseHeaderAndSyllabus() {
             document.getElementById('course-title').innerText = currentCourse.title || 'Course Details';
             document.getElementById('course-description').innerText = currentCourse.modulesOverview || 'Master essential practical skills.';
@@ -237,51 +244,51 @@
             updateProgressBar();
         }
 
-        // REQUIREMENT 2: Dynamic Content Security Lock Function
+        // REINFORCED SECURITY FUNCTION: Locked by default, unlocks ONLY after verified payment
         function renderCourseContent(courseData, studentProfile) {
             const videoContainer = document.getElementById('video-player-container');
             const pdfContainer = document.getElementById('pdf-resources-container');
             const takeawaysContainer = document.getElementById('key-takeaways-list');
 
             if (!courseData) {
-                videoContainer.innerHTML = `<p class="text-gray-400 text-sm">No active course selected.</p>`;
-                pdfContainer.innerHTML = `<p class="text-xs text-gray-400 italic">No resources available.</p>`;
+                document.getElementById('lesson-actions').classList.add('hidden');
                 return;
             }
 
-            const courseId = courseData.id;
+            const courseId = String(courseData.id).trim();
             
-            // STRICT SECURITY VERIFICATION: Has student purchased this specific course?
+            // VERIFY PURCHASE: Check if student has paid and unlocked this specific course ID
             const isEnrolled = studentProfile && 
                                Array.isArray(studentProfile.enrolledCourses) && 
-                               studentProfile.enrolledCourses.includes(courseId);
+                               studentProfile.enrolledCourses.some(id => String(id).trim() === courseId);
 
             if (!isEnrolled) {
-                // LOCK STATE 1: Lock Video Player
+                // RENDER LOCKED UI
                 videoContainer.innerHTML = `
-                    <div class="bg-gray-900 rounded-xl p-10 text-center text-white my-2 shadow-inner w-full">
+                    <div class="bg-gray-900 rounded-xl p-10 text-center text-white my-2 shadow-inner w-full border border-gray-800">
                         <div class="w-16 h-16 mx-auto mb-4 bg-red-500/20 text-red-400 rounded-full flex items-center justify-center">
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                         </div>
                         <h3 class="text-xl font-bold mb-2">Content Locked</h3>
                         <p class="text-gray-400 mb-6 max-w-md mx-auto text-xs sm:text-sm">You have not purchased this course yet. Complete successful payment to unlock videos and downloadable guides.</p>
-                        <a href="index.html?selectCourse=${courseId}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold px-6 py-2.5 rounded-lg transition">
-                            Unlock & Purchase Course
+                        <a href="index.html?selectCourse=${courseId}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-6 py-2.5 rounded-lg transition shadow-md">
+                            Purchase Course to Unlock
                         </a>
                     </div>`;
 
-                // LOCK STATE 2: Lock PDF Resources
                 pdfContainer.innerHTML = `
                     <div class="p-4 bg-amber-50 rounded-lg border border-amber-200 text-amber-800 flex items-center gap-3">
                         <svg class="w-5 h-5 flex-shrink-0 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                        <span class="text-xs font-medium">PDF Guides and downloadable resources are locked until successful payment enrollment.</span>
+                        <span class="text-sm font-medium">PDF Guides and downloadable resources are locked until successful payment.</span>
                     </div>`;
 
+                takeawaysContainer.innerHTML = `<li class="italic text-gray-400 text-xs">Key takeaways are locked until course enrollment.</li>`;
+
                 document.getElementById('lesson-actions').classList.add('hidden');
-                return;
+                return; // STOP EXECUTION HERE FOR NON-PURCHASED USERS
             }
 
-            // UNLOCKED STATE: Load Video & Resources after verified payment
+            // UNLOCKED STATE: Executes ONLY after verified payment
             document.getElementById('lesson-actions').classList.remove('hidden');
             const parts = courseData.partsList || [];
             const activePart = parts[activeLessonIndex] || parts[0];
@@ -295,9 +302,9 @@
                 }
 
                 if (videoUrl) {
-                    videoContainer.innerHTML = `<iframe src="${videoUrl}" class="w-full h-[400px] rounded-xl border-0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+                    videoContainer.innerHTML = `<iframe src="${videoUrl}" class="w-full h-[400px] rounded-xl border-0 bg-black" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
                 } else {
-                    videoContainer.innerHTML = `<div class="p-8 text-center text-gray-400 text-xs">Video streaming source unavailable for this lesson.</div>`;
+                    videoContainer.innerHTML = `<div class="p-8 text-center text-gray-400 text-xs bg-gray-900 rounded-xl h-[400px] flex items-center justify-center">Video streaming source unavailable for this lesson.</div>`;
                 }
             }
 
@@ -310,21 +317,21 @@
                             <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V7l-5-5H7a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                             <span class="text-xs font-medium text-gray-800">${pdf.title || 'Course Resource PDF'}</span>
                         </div>
-                        <a href="${pdf.url || '#'}" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs px-3 py-1.5 rounded font-medium transition">
+                        <a href="${pdf.url || '#'}" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs px-3 py-1.5 rounded font-medium transition shadow-sm">
                             Download PDF
                         </a>
                     </div>
                 `).join('');
             } else {
-                pdfContainer.innerHTML = `<p class="text-xs text-gray-500 italic">No downloadable PDFs attached to this lesson.</p>`;
+                pdfContainer.innerHTML = `<p class="text-xs text-gray-500 italic p-3 bg-gray-50 rounded-lg border border-gray-100">No downloadable PDFs attached to this lesson.</p>`;
             }
 
             // Key Takeaways List
             const takeaways = courseData.keyTakeaways || [];
             if (takeaways.length > 0) {
-                takeawaysContainer.innerHTML = takeaways.map(t => `<li>${t}</li>`).join('');
+                takeawaysContainer.innerHTML = takeaways.map(t => `<li class="text-xs text-gray-700">${t}</li>`).join('');
             } else {
-                takeawaysContainer.innerHTML = `<li class="italic text-gray-400">Complete all parts to master this course.</li>`;
+                takeawaysContainer.innerHTML = `<li class="italic text-gray-400 text-xs">Complete all parts to master this course.</li>`;
             }
         }
 
