@@ -40,39 +40,9 @@
           Courses
         </a>
 
-        <!-- MULTI-ROLE LOGIN DROPDOWN -->
-        <div class="relative inline-block text-left">
-          <button id="login-dropdown-btn" onclick="toggleLoginDropdown()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs transition shadow-md shadow-indigo-600/20 flex items-center">
-            <span>Login</span>
-            <svg class="w-4 h-4 ml-2 transition-transform duration-200" id="dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-          </button>
-
-          <div id="login-dropdown-menu" class="hidden absolute right-0 mt-2 w-64 rounded-xl bg-white border border-slate-200 shadow-2xl z-50 overflow-hidden py-1 divide-y divide-slate-100">
-            <!-- 1. Student Login -->
-            <button onclick="openUnifiedLoginModal('student')" class="w-full text-left flex items-center px-4 py-3 text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition">
-              <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center mr-3 font-bold text-sm">🎓</div>
-              <div>
-                <span class="block text-slate-900 font-bold">Student Login</span>
-                <span class="text-[10px] text-slate-500 font-normal">Enrolled student dashboard</span>
-              </div>
-            </button>
-            <!-- 2. Organization Login -->
-            <button onclick="openUnifiedLoginModal('org')" class="w-full text-left flex items-center px-4 py-3 text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition">
-              <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center mr-3 font-bold text-sm">🏢</div>
-              <div>
-                <span class="block text-slate-900 font-bold">Organization Login</span>
-                <span class="text-[10px] text-slate-500 font-normal">Institutional & Corporate Portal</span>
-              </div>
-            </button>
-            <!-- 3. Admin Login -->
-            <button onclick="openUnifiedLoginModal('admin')" class="w-full text-left flex items-center px-4 py-3 text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition">
-              <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center mr-3 font-bold text-sm">⚙️</div>
-              <div>
-                <span class="block text-slate-900 font-bold">Admin Login</span>
-                <span class="text-[10px] text-slate-500 font-normal">System & Content Control</span>
-              </div>
-            </button>
-          </div>
+        <!-- DYNAMIC AUTH / LOGIN CONTAINER -->
+        <div id="auth-nav-box" class="flex items-center space-x-3">
+          <!-- Populated dynamically by updateSessionUI() -->
         </div>
       </div>
     </div>
@@ -480,7 +450,96 @@
 
     let softSkillsCourses = defaultCourses;
 
-    /* ================= AUTOMATIC URL CAMPAIGN LINK HANDLER ================= */
+    /* ================= AUTHENTICATION & SESSION UI ================= */
+    async function updateSessionUI() {
+      const navBox = document.getElementById('auth-nav-box');
+      if (!navBox) return;
+
+      const activeEmail = localStorage.getItem('careergraspp_active_email');
+      const activeRole = localStorage.getItem('careergraspp_role');
+
+      if (activeEmail && activeRole === 'student') {
+        let studentName = localStorage.getItem('careergraspp_active_name') || activeEmail;
+        
+        // Fetch fresh profile data to get enrolled courses from Firestore
+        try {
+          const doc = await db.collection('students').doc(activeEmail.toLowerCase()).get();
+          if (doc.exists) {
+            const data = doc.data();
+            if (data.name) {
+              studentName = data.name;
+              localStorage.setItem('careergraspp_active_name', data.name);
+            }
+            if (data.enrolledCourses && Array.isArray(data.enrolledCourses)) {
+              const enrolledIds = data.enrolledCourses.map(id => Number(id));
+              localStorage.setItem('careergraspp_enrolled_courses', JSON.stringify(enrolledIds));
+            }
+          }
+        } catch(e) {
+          console.warn("Could not fetch user session profile from Firestore", e);
+        }
+
+        navBox.innerHTML = `
+          <div class="flex items-center space-x-3">
+            <div class="bg-indigo-50 border border-indigo-200 px-3 py-1.5 rounded-xl flex items-center space-x-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span class="text-xs font-bold text-indigo-950 truncate max-w-[150px]">🎓 ${studentName}</span>
+            </div>
+            <button onclick="logoutUser()" class="px-4 py-2 bg-slate-100 hover:bg-red-50 hover:text-red-600 border border-slate-200 text-slate-700 font-bold rounded-xl text-xs transition flex items-center shadow-sm">
+              Logout
+            </button>
+          </div>
+        `;
+      } else {
+        // Logged out header
+        navBox.innerHTML = `
+          <div class="relative inline-block text-left">
+            <button id="login-dropdown-btn" onclick="toggleLoginDropdown()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs transition shadow-md shadow-indigo-600/20 flex items-center">
+              <span>Login</span>
+              <svg class="w-4 h-4 ml-2 transition-transform duration-200" id="dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+
+            <div id="login-dropdown-menu" class="hidden absolute right-0 mt-2 w-64 rounded-xl bg-white border border-slate-200 shadow-2xl z-50 overflow-hidden py-1 divide-y divide-slate-100">
+              <button onclick="openUnifiedLoginModal('student')" class="w-full text-left flex items-center px-4 py-3 text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition">
+                <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center mr-3 font-bold text-sm">🎓</div>
+                <div>
+                  <span class="block text-slate-900 font-bold">Student Login</span>
+                  <span class="text-[10px] text-slate-500 font-normal">Enrolled student dashboard</span>
+                </div>
+              </button>
+              <button onclick="openUnifiedLoginModal('org')" class="w-full text-left flex items-center px-4 py-3 text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition">
+                <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center mr-3 font-bold text-sm">🏢</div>
+                <div>
+                  <span class="block text-slate-900 font-bold">Organization Login</span>
+                  <span class="text-[10px] text-slate-500 font-normal">Institutional & Corporate Portal</span>
+                </div>
+              </button>
+              <button onclick="openUnifiedLoginModal('admin')" class="w-full text-left flex items-center px-4 py-3 text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition">
+                <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center mr-3 font-bold text-sm">⚙️</div>
+                <div>
+                  <span class="block text-slate-900 font-bold">Admin Login</span>
+                  <span class="text-[10px] text-slate-500 font-normal">System & Content Control</span>
+                </div>
+              </button>
+            </div>
+          </div>
+        `;
+      }
+      renderCoursesGrid();
+    }
+
+    function logoutUser() {
+      localStorage.removeItem('careergraspp_active_email');
+      localStorage.removeItem('careergraspp_active_phone');
+      localStorage.removeItem('careergraspp_active_name');
+      localStorage.removeItem('careergraspp_role');
+      localStorage.removeItem('careergraspp_enrolled_courses');
+
+      updateSessionUI();
+      alert("🔒 Logged Out Successfully!\n\nYour courses have been locked until you log back in.");
+    }
+
+    /* AUTOMATIC URL CAMPAIGN LINK HANDLER */
     function applyCampaignUrlParameters() {
       const urlParams = new URLSearchParams(window.location.search);
       const rawCourses = urlParams.get('courses') || urlParams.get('course');
@@ -557,7 +616,7 @@
           }
 
           const campaignTargetIds = applyCampaignUrlParameters();
-          renderCoursesGrid();
+          updateSessionUI();
 
           if (campaignTargetIds && campaignTargetIds.length === 1 && !autoModalTriggered) {
             autoModalTriggered = true;
@@ -568,21 +627,13 @@
           }
         }, (error) => {
           console.error("Firestore Error:", error);
-          const campaignTargetIds = applyCampaignUrlParameters();
-          renderCoursesGrid();
-          if (campaignTargetIds && campaignTargetIds.length === 1 && !autoModalTriggered) {
-            autoModalTriggered = true;
-            setTimeout(() => openCourseModal(campaignTargetIds[0]), 400);
-          }
+          applyCampaignUrlParameters();
+          updateSessionUI();
         });
       } catch (err) {
         console.error("Firebase Connection Error:", err);
-        const campaignTargetIds = applyCampaignUrlParameters();
-        renderCoursesGrid();
-        if (campaignTargetIds && campaignTargetIds.length === 1 && !autoModalTriggered) {
-          autoModalTriggered = true;
-          setTimeout(() => openCourseModal(campaignTargetIds[0]), 400);
-        }
+        applyCampaignUrlParameters();
+        updateSessionUI();
       }
     }
 
@@ -592,7 +643,13 @@
       
       container.innerHTML = "";
 
+      let localEnrolled = [];
+      try {
+        localEnrolled = JSON.parse(localStorage.getItem('careergraspp_enrolled_courses') || '[]').map(id => Number(id));
+      } catch(e) {}
+
       softSkillsCourses.forEach((course) => {
+        const isEnrolled = localEnrolled.includes(Number(course.id));
         const partsText = course.partsList ? `${course.partsList.length}-Part Series` : (course.parts || "4-Part Series");
         const bulletItems = course.bullets || [
           `Core Principles of ${course.title}`,
@@ -601,12 +658,15 @@
         ];
 
         container.innerHTML += `
-          <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden flex flex-col justify-between hover:border-indigo-400 hover:shadow-xl transition group">
+          <div class="bg-white border ${isEnrolled ? 'border-emerald-300 ring-2 ring-emerald-500/20' : 'border-slate-200'} rounded-2xl overflow-hidden flex flex-col justify-between hover:border-indigo-400 hover:shadow-xl transition group">
             <div>
               <div class="h-52 w-full bg-slate-100 overflow-hidden relative">
                 <img src="${course.image}" alt="${course.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
                 <span class="absolute top-3 left-3 bg-emerald-600 text-white text-[11px] px-2.5 py-1 rounded-full font-extrabold shadow">₹${course.price}</span>
-                <span class="absolute top-3 right-3 bg-indigo-600 text-white text-[10px] px-2.5 py-1 rounded-full font-bold shadow">${partsText}</span>
+                ${isEnrolled 
+                  ? '<span class="absolute top-3 right-3 bg-emerald-600 text-white text-[10px] px-2.5 py-1 rounded-full font-bold shadow flex items-center">✓ Unlocked</span>'
+                  : `<span class="absolute top-3 right-3 bg-indigo-600 text-white text-[10px] px-2.5 py-1 rounded-full font-bold shadow">${partsText}</span>`
+                }
               </div>
               <div class="p-6 space-y-3">
                 <h3 class="text-xl font-extrabold text-slate-900">${course.title}</h3>
@@ -616,8 +676,8 @@
               </div>
             </div>
             <div class="p-6 pt-0">
-              <button onclick="openCourseModal(${course.id})" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl text-xs transition flex items-center justify-center shadow-md shadow-indigo-600/20">
-                <span>View Course (₹${course.price})</span>
+              <button onclick="openCourseModal(${course.id})" class="w-full ${isEnrolled ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-indigo-600 hover:bg-indigo-700'} text-white font-bold py-3 px-4 rounded-xl text-xs transition flex items-center justify-center shadow-md">
+                <span>${isEnrolled ? '▶ Access Unlocked Course' : `View Course (₹${course.price})`}</span>
               </button>
             </div>
           </div>
@@ -631,10 +691,12 @@
 
     /* ================= ENROLLED / UNLOCKED CHECK LOGIC ================= */
     async function checkUserEnrollmentStatus(courseId) {
-      // 1. Check local storage first for instant unlock responsiveness
+      const numId = Number(courseId);
+      
+      // 1. Check local storage first
       try {
-        const localEnrolled = JSON.parse(localStorage.getItem('careergraspp_enrolled_courses') || '[]');
-        if (localEnrolled.includes(courseId) || localEnrolled.includes(Number(courseId)) || localEnrolled.includes(String(courseId))) {
+        const localEnrolled = JSON.parse(localStorage.getItem('careergraspp_enrolled_courses') || '[]').map(id => Number(id));
+        if (localEnrolled.includes(numId)) {
           return true;
         }
       } catch (e) {
@@ -650,13 +712,12 @@
         const doc = await docRef.get();
         if (doc.exists) {
           const profile = doc.data();
-          const enrolled = profile.enrolledCourses || [];
-          const isEnrolled = enrolled.includes(courseId) || enrolled.includes(Number(courseId)) || enrolled.includes(String(courseId));
+          const enrolled = (profile.enrolledCourses || []).map(id => Number(id));
+          const isEnrolled = enrolled.includes(numId);
           if (isEnrolled) {
-            // Sync to local storage for quick access
-            const localEnrolled = JSON.parse(localStorage.getItem('careergraspp_enrolled_courses') || '[]');
-            if (!localEnrolled.includes(courseId)) {
-              localEnrolled.push(courseId);
+            let localEnrolled = JSON.parse(localStorage.getItem('careergraspp_enrolled_courses') || '[]').map(id => Number(id));
+            if (!localEnrolled.includes(numId)) {
+              localEnrolled.push(numId);
               localStorage.setItem('careergraspp_enrolled_courses', JSON.stringify(localEnrolled));
             }
           }
@@ -669,7 +730,7 @@
     }
 
     function triggerLockedPrompt(courseId) {
-      alert("🔒 Content Locked!\n\nPlease complete enrollment payment to unlock full HD video sessions and PDF guides.");
+      alert("🔒 Content Locked!\n\nPlease complete enrollment payment or sign in with your registered student profile to unlock HD videos and PDF guides.");
       startEnrollmentFlow(courseId);
     }
 
@@ -677,7 +738,6 @@
       const course = softSkillsCourses.find(c => c.id === courseId);
       if (!course) return;
 
-      // Check if the current user has paid and unlocked this course
       const isEnrolled = await checkUserEnrollmentStatus(courseId);
 
       document.getElementById('modal-course-img').src = course.image;
@@ -694,7 +754,7 @@
         enrollBtn.textContent = `✅ Unlocked & Enrolled`;
         enrollBtn.className = "w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-2xl text-center block shadow-lg shadow-emerald-600/30 transition text-sm cursor-default";
         enrollBtn.onclick = function() {
-          alert("🎉 You are already enrolled in this course! Click any Play Video button below to watch.");
+          alert("🎉 You own this course! Click any Play Video or View PDF button below to watch and learn.");
         };
       } else {
         badge.textContent = "Special Offer";
@@ -718,7 +778,7 @@
         `;
       });
 
-      // Render Accordion with Lock / Unlock Logic based on payment status
+      // Render Accordion with Lock / Unlock Logic
       const accordionContainer = document.getElementById('modal-parts-accordion-list');
       accordionContainer.innerHTML = "";
       const parts = course.partsList || [];
@@ -726,7 +786,7 @@
         const partId = `part_accordion_${pIdx}`;
         let lessonsHtml = (part.lessons || []).map((les) => {
           if (isEnrolled) {
-            // UNLOCKED STATE (PAID)
+            // UNLOCKED STATE (PAID / ENROLLED)
             return `
               <div class="p-3.5 bg-white border border-slate-200 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-3 text-slate-800 shadow-sm">
                 <div class="flex items-center space-x-3">
@@ -822,7 +882,6 @@
       document.getElementById('student-info-modal').classList.remove('hidden');
     }
 
-    /* HANDLE FORM SUBMISSION */
     function handleRegistrationSubmit(event) {
       event.preventDefault();
 
@@ -908,7 +967,7 @@
         orgName: isOrg ? "Institutional Access" : "Self Enrolled",
         rollNumber: studentData.rollNumber || "N/A",
 
-        enrolledCourses: firebase.firestore.FieldValue.arrayUnion(studentData.courseId),
+        enrolledCourses: firebase.firestore.FieldValue.arrayUnion(Number(studentData.courseId)),
         courseEnrollmentDates: {
           [studentData.courseId]: Date.now()
         },
@@ -932,11 +991,13 @@
 
     /* ================= PAYMENT SUCCESS HANDLER ================= */
     async function onPaymentSuccess(paymentId, course, name, email, phone) {
-      // 1. Immediately store enrollment locally for instant unlocking
+      const courseIdNum = Number(course.id);
+      
+      // 1. Store local session & enrollment list
       try {
-        let localEnrolled = JSON.parse(localStorage.getItem('careergraspp_enrolled_courses') || '[]');
-        if (!localEnrolled.includes(course.id)) {
-          localEnrolled.push(course.id);
+        let localEnrolled = JSON.parse(localStorage.getItem('careergraspp_enrolled_courses') || '[]').map(id => Number(id));
+        if (!localEnrolled.includes(courseIdNum)) {
+          localEnrolled.push(courseIdNum);
           localStorage.setItem('careergraspp_enrolled_courses', JSON.stringify(localEnrolled));
         }
       } catch (e) {
@@ -945,16 +1006,17 @@
 
       localStorage.setItem('careergraspp_active_email', email);
       localStorage.setItem('careergraspp_active_phone', phone);
+      localStorage.setItem('careergraspp_active_name', name);
       localStorage.setItem('careergraspp_role', 'student');
 
-      // 2. Save to Firestore Cloud Database
+      // 2. Save Profile & Course in Firestore Cloud Database
       const urlParams = new URLSearchParams(window.location.search);
       const detectedOrg = urlParams.get('org') || localStorage.getItem('careergraspp_org_code');
 
       try {
         await saveStudentProfileToFirestore({
           paymentId: paymentId,
-          courseId: course.id,
+          courseId: courseIdNum,
           courseTitle: course.title,
           amount: course.price,
           name: name,
@@ -966,14 +1028,16 @@
         console.error("Firestore Save Warning:", err);
       }
 
-      // 3. Immediately re-render course modal view with unlocked videos
-      alert(`🎉 Payment Successful!\n\nWelcome ${name}!\nTransaction ID: ${paymentId}\n\nAll Video Sessions & PDF Materials for "${course.title}" are now unlocked!`);
+      // 3. Update session header and re-render modal with unlocked videos
+      await updateSessionUI();
+      alert(`🎉 Payment Successful!\n\nWelcome ${name}!\nTransaction ID: ${paymentId}\n\nYour profile has been created and all Video Sessions & PDF Materials for "${course.title}" are now unlocked!`);
       
       openCourseModal(course.id);
     }
 
     function openUnifiedLoginModal(defaultRole) {
-      if (!document.getElementById('login-dropdown-menu').classList.contains('hidden')) {
+      const dropdown = document.getElementById('login-dropdown-menu');
+      if (dropdown && !dropdown.classList.contains('hidden')) {
         toggleLoginDropdown();
       }
       switchLoginRoleTab(defaultRole || 'student');
@@ -1010,6 +1074,7 @@
       }
     }
 
+    /* ================= STUDENT LOGIN & FIRESTORE SYNC ================= */
     async function executeStudentAuth(event) {
       event.preventDefault();
       const email = document.getElementById('login-student-email').value.trim().toLowerCase();
@@ -1027,16 +1092,22 @@
           const inputPhone = phone.replace(/[^0-9]/g, '');
 
           if (dbPhone && inputPhone && !dbPhone.includes(inputPhone) && !inputPhone.includes(dbPhone)) {
-            alert("⚠️ Mobile number mismatch. Please enter the phone number used during enrollment.");
+            alert("⚠️ Mobile number mismatch. Please enter the exact phone number used during enrollment.");
             return;
           }
 
+          const enrolledList = (profile.enrolledCourses || []).map(id => Number(id));
+
           localStorage.setItem('careergraspp_active_email', email);
           localStorage.setItem('careergraspp_active_phone', phone);
+          localStorage.setItem('careergraspp_active_name', profile.name || email);
           localStorage.setItem('careergraspp_role', 'student');
+          localStorage.setItem('careergraspp_enrolled_courses', JSON.stringify(enrolledList));
 
           closeUnifiedLoginModal();
-          window.location.href = `course.html?email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
+          await updateSessionUI();
+
+          alert(`🎉 Welcome back, ${profile.name || email}!\n\nYour profile has been loaded. ${enrolledList.length} purchased course(s) have been unlocked.`);
         } else {
           alert(`No registered student account found for ${email}. Please enroll in a course first.`);
         }
@@ -1146,8 +1217,10 @@
     }
 
     function toggleLoginDropdown() {
-      document.getElementById('login-dropdown-menu').classList.toggle('hidden');
-      document.getElementById('dropdown-arrow').classList.toggle('rotate-180');
+      const menu = document.getElementById('login-dropdown-menu');
+      const arrow = document.getElementById('dropdown-arrow');
+      if (menu) menu.classList.toggle('hidden');
+      if (arrow) arrow.classList.toggle('rotate-180');
     }
   </script>
 </body>
