@@ -35,15 +35,24 @@
         </div>
       </a>
 
-      <div class="flex items-center space-x-4">
-        <a href="#courses-section" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-xl text-xs font-semibold transition flex items-center shadow-sm">
+      <!-- MIDDLE NAVIGATION BUTTONS -->
+      <div class="hidden md:flex items-center space-x-3">
+        <a href="#courses-section" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-xl text-xs font-semibold transition flex items-center shadow-sm">
           Courses
         </a>
+        <a href="#trainer-section" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-xl text-xs font-semibold transition flex items-center shadow-sm">
+          About the Trainer
+        </a>
+        <a href="#org-section" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-xl text-xs font-semibold transition flex items-center shadow-sm">
+          For Organizations
+        </a>
+      </div>
 
-        <!-- MULTI-ROLE LOGIN DROPDOWN -->
+      <div class="flex items-center space-x-4">
+        <!-- MULTI-ROLE LOGIN DROPDOWN (ONLY "LOGIN" TEXT) -->
         <div class="relative inline-block text-left">
           <button id="login-dropdown-btn" onclick="toggleLoginDropdown()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs transition shadow-md shadow-indigo-600/20 flex items-center">
-            <span>Login Options</span>
+            <span>Login</span>
             <svg class="w-4 h-4 ml-2 transition-transform duration-200" id="dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
           </button>
 
@@ -480,7 +489,6 @@
 
     let softSkillsCourses = defaultCourses;
 
-    /* HELPER TO CHECK IF STUDENT ENROLLED IN A COURSE */
     async function checkStudentCourseAccess(courseId) {
       const activeEmail = localStorage.getItem('careergraspp_active_email');
       const userRole = localStorage.getItem('careergraspp_role');
@@ -501,7 +509,6 @@
       return false;
     }
 
-    /* ================= AUTOMATIC URL CAMPAIGN LINK HANDLER ================= */
     function applyCampaignUrlParameters() {
       const urlParams = new URLSearchParams(window.location.search);
       const rawCourses = urlParams.get('courses') || urlParams.get('course');
@@ -543,7 +550,6 @@
       return null;
     }
 
-    /* 3. REAL-TIME FIRESTORE SYNCHRONIZATION */
     function initFirestoreCoursesSync() {
       const container = document.getElementById('courses-grid-container');
       if (container) {
