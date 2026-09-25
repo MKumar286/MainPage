@@ -97,8 +97,21 @@
     </div>
   </header>
 
+  <!-- ================= HERO TOP INTRO SECTION (FROM IMAGE 1) ================= -->
+  <section class="w-full py-10 px-4 md:px-10 lg:px-12 text-center space-y-3">
+    <div class="inline-block px-4 py-1.5 bg-indigo-50 border border-indigo-200 rounded-full text-indigo-700 text-xs font-bold uppercase tracking-wider shadow-sm">
+      Transforming Careers & Lives
+    </div>
+    <h1 class="text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-tight">
+      Master Soft Skills. <span class="text-indigo-600 block sm:inline">Unlock Unlimited Potential.</span>
+    </h1>
+    <p class="text-xs md:text-sm text-slate-600 max-w-3xl mx-auto font-medium">
+      Tailored Soft Skills & Personality Development training programs for Schools, Colleges, and Individual Students.
+    </p>
+  </section>
+
   <!-- ================= HERO BANNER ================= -->
-  <section class="w-full bg-white flex items-center justify-center my-4 px-4 md:px-10 lg:px-12">
+  <section class="w-full bg-white flex items-center justify-center mb-6 px-4 md:px-10 lg:px-12">
     <div class="w-full mx-auto flex items-center justify-center">
       <img 
         src="careergraspplogo.jpg" 
@@ -142,7 +155,22 @@
     </div>
   </section>
 
-  <!-- ================= ABOUT THE CREATOR SECTION (WITH ARYA.JPG & SOCIALS) ================= -->
+  <!-- ================= COURSES LIST SECTION ================= -->
+  <section id="courses-section" class="py-16 bg-slate-50 border-t border-slate-200 w-full">
+    <div class="w-full px-4 md:px-10 lg:px-12">
+      <div class="text-center mb-16 space-y-3">
+        <h2 id="courses-grid-heading" class="text-3xl font-extrabold text-slate-900">Featured Soft Skills Programs</h2>
+        <p id="courses-grid-subheading" class="text-sm text-slate-600 max-w-2xl mx-auto">Master essential corporate skills with our specialized programs. Click "View Course" to inspect syllabus & enrollment details.</p>
+      </div>
+
+      <!-- 3 CARDS PER ROW GRID -->
+      <div id="courses-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+        <!-- Injected dynamically via Real-Time Firestore JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ABOUT THE CREATOR SECTION (DYNAMICALLY BELOW COURSES) ================= -->
   <section id="trainer-section" class="py-16 bg-indigo-50/30 border-t border-indigo-100/60 w-full">
     <div class="max-w-5xl mx-auto px-4 md:px-10">
       <div class="bg-white border border-indigo-100 rounded-3xl p-6 md:p-10 shadow-lg grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
@@ -175,17 +203,21 @@
     </div>
   </section>
 
-  <!-- ================= COURSES LIST SECTION ================= -->
-  <section id="courses-section" class="py-16 bg-slate-50 border-t border-slate-200 w-full">
-    <div class="w-full px-4 md:px-10 lg:px-12">
-      <div class="text-center mb-16 space-y-3">
-        <h2 id="courses-grid-heading" class="text-3xl font-extrabold text-slate-900">Featured Soft Skills Programs</h2>
-        <p id="courses-grid-subheading" class="text-sm text-slate-600 max-w-2xl mx-auto">Master essential corporate skills with our specialized programs. Click "View Course" to inspect syllabus & enrollment details.</p>
+  <!-- ================= BOTTOM BRANDING SECTION (FROM IMAGE 4) ================= -->
+  <section class="py-16 bg-white border-t border-slate-200 w-full text-center">
+    <div class="max-w-4xl mx-auto px-4 space-y-6">
+      <div class="inline-block bg-slate-900 text-white px-8 py-6 rounded-2xl shadow-xl border border-slate-800 space-y-1">
+        <div class="text-xl md:text-2xl font-black tracking-wider">
+          <span class="text-amber-400">CAREER</span> <span class="text-indigo-400">GRASPP</span>
+        </div>
+        <p class="text-[10px] md:text-xs text-slate-400 uppercase tracking-widest font-bold">Learn | Lead | Level Up</p>
       </div>
-
-      <!-- 3 CARDS PER ROW GRID -->
-      <div id="courses-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
-        <!-- Injected dynamically via Real-Time Firestore JavaScript -->
+      <div class="space-y-3">
+        <h2 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">Career Graspp</h2>
+        <div class="w-16 h-1 bg-indigo-600 mx-auto rounded-full"></div>
+        <p class="text-xs md:text-sm text-slate-600 max-w-2xl mx-auto font-medium">
+          Career Growth, Mind Performance, English Communication, & Test Preparation Systems for Students, Professionals and Organizations
+        </p>
       </div>
     </div>
   </section>
