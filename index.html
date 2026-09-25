@@ -17,7 +17,6 @@
 
   <style>
     body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-    /* Smooth custom scrollbars */
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: #f1f5f9; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
@@ -32,7 +31,7 @@
     <p class="mt-4 text-xs font-bold text-indigo-900 tracking-wider uppercase animate-pulse">Loading Careergraspp Portal...</p>
   </div>
 
-  <!-- ================= NAVIGATION BAR WITH VIBRANT BG ================= -->
+  <!-- ================= NAVIGATION BAR ================= -->
   <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-indigo-100 shadow-sm w-full">
     <div class="w-full px-4 md:px-10 lg:px-12 py-4 flex items-center justify-between">
       
@@ -68,7 +67,6 @@
           </button>
 
           <div id="login-dropdown-menu" class="hidden absolute right-0 mt-2 w-64 rounded-xl bg-white border border-slate-200 shadow-2xl z-50 overflow-hidden py-1 divide-y divide-slate-100">
-            <!-- 1. Student Login -->
             <button onclick="openUnifiedLoginModal('student')" class="w-full text-left flex items-center px-4 py-3 text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition">
               <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center mr-3 font-bold text-sm">🎓</div>
               <div>
@@ -76,7 +74,6 @@
                 <span class="text-[10px] text-slate-500 font-normal">Enrolled student dashboard</span>
               </div>
             </button>
-            <!-- 2. Organization Login -->
             <button onclick="openUnifiedLoginModal('org')" class="w-full text-left flex items-center px-4 py-3 text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition">
               <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center mr-3 font-bold text-sm">🏢</div>
               <div>
@@ -84,7 +81,6 @@
                 <span class="text-[10px] text-slate-500 font-normal">Institutional & Corporate Portal</span>
               </div>
             </button>
-            <!-- 3. Admin Login -->
             <button onclick="openUnifiedLoginModal('admin')" class="w-full text-left flex items-center px-4 py-3 text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition">
               <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center mr-3 font-bold text-sm">⚙️</div>
               <div>
@@ -129,7 +125,6 @@
   <!-- ================= INSTITUTIONAL PROPOSAL SECTION ================= -->
   <section id="org-section" class="w-full bg-indigo-950 text-white py-16 px-4 md:px-10 lg:px-12 my-6 shadow-xl">
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-      
       <div class="lg:col-span-7 space-y-6">
         <span class="inline-block px-3.5 py-1 bg-indigo-900/80 text-indigo-300 rounded-full text-xs font-bold tracking-wider uppercase border border-indigo-700/50">
           For Schools, Colleges & Training Institutes
@@ -140,48 +135,26 @@
         <p class="text-sm md:text-base text-indigo-200/90 leading-relaxed font-normal">
           Equip your entire campus with crucial industry-ready soft skills. Get custom branded certificates, student progress tracking, and dedicated batch management.
         </p>
-
-        <div class="space-y-3 pt-2 text-sm">
-          <div class="flex items-center space-x-3 text-indigo-100">
-            <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">✓</span>
-            <span>Admin Dashboard for HODs/Principals</span>
-          </div>
-          <div class="flex items-center space-x-3 text-indigo-100">
-            <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">✓</span>
-            <span>Custom Certificate with College Logo</span>
-          </div>
-          <div class="flex items-center space-x-3 text-indigo-100">
-            <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">✓</span>
-            <span>Flexible Offline + Online Hybrid Learning</span>
-          </div>
-        </div>
       </div>
 
       <div class="lg:col-span-5 bg-white text-slate-900 rounded-3xl p-6 md:p-8 shadow-2xl border border-indigo-900">
         <h3 class="text-xl font-extrabold text-slate-900 mb-6">Request Institutional Proposal</h3>
-        
         <form onsubmit="handleInstitutionalProposal(event)" class="space-y-4 text-xs">
           <div>
             <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px] tracking-wider">Institution Name</label>
-            <input type="text" id="prop-inst-name" required placeholder="e.g. ABC Engineering College" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-600 transition" />
+            <input type="text" id="prop-inst-name" required placeholder="e.g. ABC Engineering College" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-600" />
           </div>
-
           <div>
             <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px] tracking-wider">Contact Person</label>
-            <input type="text" id="prop-contact-person" required placeholder="Your Name / Designation" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-600 transition" />
+            <input type="text" id="prop-contact-person" required placeholder="Your Name / Designation" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-600" />
           </div>
-
           <div>
             <label class="block font-bold text-slate-700 mb-1 uppercase text-[10px] tracking-wider">Approx Students</label>
-            <input type="text" id="prop-approx-students" required placeholder="100+" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-600 transition" />
+            <input type="text" id="prop-approx-students" required placeholder="100+" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-600" />
           </div>
-
-          <button type="submit" class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl shadow-lg shadow-indigo-600/30 transition text-xs tracking-wider uppercase mt-2">
-            Get Custom Quote
-          </button>
+          <button type="submit" class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl shadow-lg transition text-xs tracking-wider uppercase mt-2">Get Custom Quote</button>
         </form>
       </div>
-
     </div>
   </section>
 
@@ -192,22 +165,19 @@
         <h2 id="courses-grid-heading" class="text-3xl font-extrabold text-slate-900">Featured Soft Skills Programs</h2>
         <p id="courses-grid-subheading" class="text-sm text-slate-600 max-w-2xl mx-auto">Master essential corporate skills with our specialized programs. Click "View Course" to inspect syllabus & enrollment details.</p>
       </div>
-
       <div id="courses-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full"></div>
     </div>
   </section>
 
-  <!-- ================= ABOUT THE CREATOR SECTION (WITH PROPER ARYA.JPG EMBED) ================= -->
+  <!-- ================= ABOUT THE CREATOR SECTION (WITH ARYA.JPG) ================= -->
   <section id="trainer-section" class="py-16 bg-indigo-50/30 border-t border-indigo-100/60 w-full">
     <div class="max-w-5xl mx-auto px-4 md:px-10">
       <div class="bg-white border border-indigo-100 rounded-3xl p-6 md:p-10 shadow-lg grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-        
         <div class="md:col-span-4 flex justify-center">
           <div class="w-56 h-64 rounded-2xl overflow-hidden bg-slate-100 shadow-md border border-slate-200 flex items-center justify-center">
             <img src="arya.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=500&auto=format&fit=crop';" alt="Aarya Aakash - Creator" class="w-full h-full object-cover" />
           </div>
         </div>
-
         <div class="md:col-span-8 space-y-4 text-left">
           <h2 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">About the creator</h2>
           <p class="text-xs md:text-sm text-slate-700 leading-relaxed font-medium">
@@ -217,7 +187,6 @@
             His work focuses on designing structured learning systems that improve study habits, academic accuracy, communication clarity, productivity, and career readiness[cite: 7].
           </p>
         </div>
-
       </div>
     </div>
   </section>
@@ -225,81 +194,41 @@
   <!-- ================= BRAND & FOOTER SECTION ================= -->
   <section class="bg-slate-900 text-white py-16 px-4 md:px-10 lg:px-12 text-center border-t border-slate-800">
     <div class="max-w-4xl mx-auto space-y-6">
-      
       <div class="inline-block bg-slate-950 border border-slate-800 p-6 rounded-2xl shadow-xl space-y-1">
         <h3 class="text-2xl font-black tracking-wider text-white">
           <span class="text-amber-500">CAREER</span> <span class="text-indigo-500">GRASPP</span>
         </h3>
         <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">LEARN | LEAD | LEVEL UP</p>
       </div>
-
       <h2 class="text-2xl md:text-3xl font-black text-white">Career Graspp</h2>
       <div class="w-12 h-1 bg-indigo-600 mx-auto rounded-full"></div>
-
       <p class="text-xs md:text-sm text-slate-300 max-w-3xl mx-auto leading-relaxed font-normal">
         Career Growth, Mind Performance, English Communication, & Test Preparation Systems for Students, Professionals and Organizations[cite: 8]. Our platform is meticulously engineered to bridge the gap between academic learning and industry expectations through specialized modules, real-time analytics, structured video lessons, comprehensive session PDFs, customized institutional portals, dedicated mentor support, rigorous practice drills, verified professional credentials, and seamless hybrid offline-online access designed to elevate your long-term career trajectory and personal confidence across all global corporate ecosystems.
       </p>
-
-      <div class="flex items-center justify-center space-x-4 pt-4">
-        <!-- YouTube -->
-        <a href="https://youtube.com" target="_blank" class="w-10 h-10 rounded-xl bg-slate-800 hover:bg-red-600 text-white flex items-center justify-center transition shadow" title="YouTube">
-          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-        </a>
-        <!-- Twitter / X -->
-        <a href="https://twitter.com" target="_blank" class="w-10 h-10 rounded-xl bg-slate-800 hover:bg-sky-500 text-white flex items-center justify-center transition shadow" title="Twitter">
-          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-        </a>
-        <!-- Facebook -->
-        <a href="https://facebook.com" target="_blank" class="w-10 h-10 rounded-xl bg-slate-800 hover:bg-blue-600 text-white flex items-center justify-center transition shadow" title="Facebook">
-          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-        </a>
-        <!-- Instagram -->
-        <a href="https://instagram.com" target="_blank" class="w-10 h-10 rounded-xl bg-slate-800 hover:bg-pink-600 text-white flex items-center justify-center transition shadow" title="Instagram">
-          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-        </a>
-      </div>
-
       <p class="text-[11px] text-slate-500 pt-4 border-t border-slate-800">© 2026 Careergraspp LMS. Powered by Firebase Firestore.</p>
     </div>
   </section>
 
   <!-- ================= MODALS & JAVASCRIPT ================= -->
-  <!-- Course Detail Modal -->
   <div id="course-detail-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm overflow-y-auto p-2 md:p-6">
     <div class="w-full bg-slate-50 rounded-3xl shadow-2xl overflow-hidden min-h-[90vh] flex flex-col border border-slate-200">
       <div class="bg-white text-slate-900 p-6 flex justify-between items-center border-b border-slate-200 sticky top-0 z-30 shadow-sm">
-        <button onclick="closeCourseModal()" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-semibold text-sm transition">
-          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-          Back to Courses List
-        </button>
+        <button onclick="closeCourseModal()" class="text-indigo-600 font-semibold text-sm">← Back</button>
         <button onclick="closeCourseModal()" class="text-slate-400 hover:text-slate-700 text-2xl font-bold px-2">&times;</button>
       </div>
       <div class="p-6 md:p-10 grid grid-cols-1 lg:grid-cols-3 gap-10 flex-1">
         <div class="lg:col-span-2 space-y-8">
-          <div class="space-y-4">
-            <div class="h-64 w-full rounded-2xl overflow-hidden bg-white border border-slate-200 shadow-sm">
-              <img id="modal-course-img" src="" alt="Course Cover" class="w-full h-full object-cover" />
-            </div>
-            <h1 id="modal-course-title" class="text-3xl md:text-4xl font-extrabold text-slate-900"></h1>
+          <div class="h-64 w-full rounded-2xl overflow-hidden bg-white border">
+            <img id="modal-course-img" src="" alt="" class="w-full h-full object-cover" />
           </div>
-          <div class="bg-white border border-slate-200 p-6 rounded-2xl space-y-4 shadow-sm">
-            <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-3">Complete Syllabus</h3>
-            <div id="modal-course-desc" class="space-y-6 text-sm text-slate-700"></div>
-          </div>
-          <div class="space-y-4 pt-4 border-t border-slate-200">
-            <h3 class="text-xl font-bold text-slate-900">Course Lessons</h3>
-            <div id="modal-parts-accordion-list" class="space-y-4"></div>
-          </div>
+          <h1 id="modal-course-title" class="text-3xl font-extrabold text-slate-900"></h1>
+          <div id="modal-course-desc" class="space-y-4 text-sm text-slate-700"></div>
+          <div id="modal-parts-accordion-list" class="space-y-4"></div>
         </div>
         <div class="space-y-6">
-          <div class="bg-white text-slate-900 rounded-3xl p-8 border border-slate-200 shadow-xl sticky top-28 space-y-6">
-            <div class="space-y-2 border-b border-slate-200 pb-6">
-              <div class="flex items-baseline space-x-2 pt-2">
-                <span id="modal-course-price" class="text-4xl font-black text-slate-900">₹250</span>
-                <span id="modal-course-original-price" class="text-slate-400 text-sm line-through">₹2,999</span>
-              </div>
-            </div>
-            <button id="modal-enroll-btn" class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-2xl text-center block shadow-lg transition text-sm">Pay & Enroll Now</button>
+          <div class="bg-white rounded-3xl p-8 border shadow-xl sticky top-28 space-y-6">
+            <span id="modal-course-price" class="text-4xl font-black text-slate-900">₹250</span>
+            <button id="modal-enroll-btn" class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-2xl shadow-lg transition text-sm">Pay & Enroll Now</button>
           </div>
         </div>
       </div>
@@ -308,73 +237,45 @@
 
   <!-- Unified Login Modal -->
   <div id="unified-login-modal" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-white border border-slate-200 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl p-6 md:p-8 space-y-6">
-      <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+    <div class="bg-white border rounded-3xl w-full max-w-md overflow-hidden shadow-2xl p-6 md:p-8 space-y-6">
+      <div class="flex justify-between items-center pb-2 border-b">
         <h3 class="font-extrabold text-xl text-slate-900">Careergraspp Login</h3>
-        <button onclick="closeUnifiedLoginModal()" class="text-slate-400 hover:text-slate-700 text-2xl font-bold px-2">&times;</button>
+        <button onclick="closeUnifiedLoginModal()" class="text-2xl font-bold">&times;</button>
       </div>
       <div class="grid grid-cols-3 gap-1 bg-slate-100 p-1.5 rounded-xl text-xs font-bold text-center">
         <button id="tab-btn-student" onclick="switchLoginRoleTab('student')" class="py-2.5 rounded-lg bg-white text-indigo-600 shadow-sm transition">🎓 Student</button>
-        <button id="tab-btn-org" onclick="switchLoginRoleTab('org')" class="py-2.5 rounded-lg text-slate-600 hover:text-slate-900 transition">🏢 Org</button>
-        <button id="tab-btn-admin" onclick="switchLoginRoleTab('admin')" class="py-2.5 rounded-lg text-slate-600 hover:text-slate-900 transition">⚙️ Admin</button>
+        <button id="tab-btn-org" onclick="switchLoginRoleTab('org')" class="py-2.5 rounded-lg text-slate-600 transition">🏢 Org</button>
+        <button id="tab-btn-admin" onclick="switchLoginRoleTab('admin')" class="py-2.5 rounded-lg text-slate-600 transition">⚙️ Admin</button>
       </div>
       <form id="form-role-student" onsubmit="executeStudentAuth(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Registered Email</label>
-          <input type="email" id="login-student-email" required placeholder="student@example.com" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-indigo-600" />
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Mobile Number</label>
-          <input type="tel" id="login-student-phone" required placeholder="9876543210" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-indigo-600" />
-        </div>
-        <button type="submit" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl text-xs shadow-lg">Sign In as Student →</button>
+        <div><label class="block text-xs font-bold mb-1">Email</label><input type="email" id="login-student-email" required class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-sm" /></div>
+        <div><label class="block text-xs font-bold mb-1">Mobile</label><input type="tel" id="login-student-phone" required class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-sm" /></div>
+        <button type="submit" class="w-full py-3.5 bg-indigo-600 text-white font-extrabold rounded-xl text-xs">Sign In as Student →</button>
       </form>
       <form id="form-role-org" onsubmit="executeOrgAuth(event)" class="space-y-4 hidden">
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Organization Email</label>
-          <input type="text" id="login-org-email" required placeholder="org@college.edu.in" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none" />
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Passcode</label>
-          <input type="password" id="login-org-code" required placeholder="••••••••" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none" />
-        </div>
-        <button type="submit" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-xl text-xs shadow-lg">Sign In as Organization →</button>
+        <div><label class="block text-xs font-bold mb-1">Org Email</label><input type="text" id="login-org-email" required class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-sm" /></div>
+        <div><label class="block text-xs font-bold mb-1">Passcode</label><input type="password" id="login-org-code" required class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-sm" /></div>
+        <button type="submit" class="w-full py-3.5 bg-emerald-600 text-white font-extrabold rounded-xl text-xs">Sign In as Organization →</button>
       </form>
       <form id="form-role-admin" onsubmit="executeAdminAuth(event)" class="space-y-4 hidden">
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Admin Email</label>
-          <input type="email" id="login-admin-email" required placeholder="careergraspp@gmail.com" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none" />
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
-          <input type="password" id="login-admin-key" required placeholder="••••••••" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none" />
-        </div>
-        <button type="submit" class="w-full py-3.5 bg-amber-600 hover:bg-amber-700 text-white font-extrabold rounded-xl text-xs shadow-lg">Sign In as Admin →</button>
+        <div><label class="block text-xs font-bold mb-1">Admin Email</label><input type="email" id="login-admin-email" required class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-sm" /></div>
+        <div><label class="block text-xs font-bold mb-1">Password</label><input type="password" id="login-admin-key" required class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-sm" /></div>
+        <button type="submit" class="w-full py-3.5 bg-amber-600 text-white font-extrabold rounded-xl text-xs">Sign In as Admin →</button>
       </form>
     </div>
   </div>
 
-  <!-- Student Registration Modal -->
   <div id="student-info-modal" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-white border border-slate-200 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl p-6 md:p-8 space-y-6">
-      <div class="flex justify-between items-center pb-2 border-b border-slate-100">
-        <h3 class="font-extrabold text-xl text-slate-900">Student Registration</h3>
-        <button onclick="closeStudentInfoModal()" class="text-slate-400 hover:text-slate-700 text-2xl font-bold px-2">&times;</button>
+    <div class="bg-white border rounded-3xl w-full max-w-md p-6 md:p-8 space-y-6 shadow-2xl">
+      <div class="flex justify-between items-center pb-2 border-b">
+        <h3 class="font-extrabold text-xl">Student Registration</h3>
+        <button onclick="closeStudentInfoModal()" class="text-2xl font-bold">&times;</button>
       </div>
       <form id="student-registration-form" onsubmit="handleRegistrationSubmit(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Full Name</label>
-          <input type="text" id="reg-student-name" required placeholder="Rahul Sharma" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm" />
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Email Address</label>
-          <input type="email" id="reg-student-email" required placeholder="student@example.com" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm" />
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Mobile Number</label>
-          <input type="tel" id="reg-student-phone" required placeholder="9876543210" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm" />
-        </div>
-        <button type="submit" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl text-xs shadow-lg">Continue to Payment →</button>
+        <div><label class="block text-xs font-bold mb-1">Full Name</label><input type="text" id="reg-student-name" required class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-sm" /></div>
+        <div><label class="block text-xs font-bold mb-1">Email</label><input type="email" id="reg-student-email" required class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-sm" /></div>
+        <div><label class="block text-xs font-bold mb-1">Mobile</label><input type="tel" id="reg-student-phone" required class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-sm" /></div>
+        <button type="submit" class="w-full py-3.5 bg-indigo-600 text-white font-extrabold rounded-xl text-xs">Continue to Payment →</button>
       </form>
     </div>
   </div>
@@ -394,7 +295,7 @@
     const RAZORPAY_KEY_ID = "rzp_test_TXFnqgy3pZvwzL"; 
     let pendingCourseIdToEnroll = null;
 
-    // Close Dropdown when clicking anywhere outside
+    // Dropdown close on outside click
     window.addEventListener('click', function(e) {
       const dropdownMenu = document.getElementById('login-dropdown-menu');
       const dropdownBtn = document.getElementById('login-dropdown-btn');
@@ -459,7 +360,6 @@
 
     function initFirestoreCoursesSync() {
       renderCoursesGrid();
-      // Hide Loader once content is ready
       setTimeout(() => {
         const loader = document.getElementById('page-loader');
         if (loader) {
@@ -509,11 +409,61 @@
       document.getElementById('modal-course-img').src = course.image;
       document.getElementById('modal-course-title').textContent = course.title;
       document.getElementById('modal-course-price').textContent = `₹${course.price}`;
+      document.getElementById('modal-enroll-btn').onclick = function() { startEnrollmentFlow(course.id); };
       document.getElementById('course-detail-modal').classList.remove('hidden');
     }
 
     function closeCourseModal() {
       document.getElementById('course-detail-modal').classList.add('hidden');
+    }
+
+    function startEnrollmentFlow(courseId) {
+      pendingCourseIdToEnroll = courseId;
+      closeCourseModal();
+      document.getElementById('student-info-modal').classList.remove('hidden');
+    }
+
+    function handleRegistrationSubmit(event) {
+      event.preventDefault();
+      const name = document.getElementById('reg-student-name').value.trim();
+      const email = document.getElementById('reg-student-email').value.trim().toLowerCase();
+      const phone = document.getElementById('reg-student-phone').value.trim();
+      if (!name || !email || !phone) return alert("Fill all fields!");
+      document.getElementById('student-info-modal').classList.add('hidden');
+      initiateRazorpayPayment(pendingCourseIdToEnroll, name, email, phone);
+    }
+
+    function initiateRazorpayPayment(courseId, name, email, phone) {
+      const course = softSkillsCourses.find(c => c.id === courseId);
+      const options = {
+        "key": RAZORPAY_KEY_ID,
+        "amount": Math.round(course.price * 100),
+        "currency": "INR",
+        "name": "Careergraspp",
+        "description": `Enrollment for ${course.title}`,
+        "handler": function (response) {
+          onPaymentSuccess(response.razorpay_payment_id, course, name, email, phone);
+        },
+        "prefill": { "name": name, "email": email, "contact": phone },
+        "theme": { "color": "#4F46E5" }
+      };
+      const rzp = new Razorpay(options);
+      rzp.open();
+    }
+
+    async function onPaymentSuccess(paymentId, course, name, email, phone) {
+      try {
+        await db.collection('students').doc(email).set({
+          name: name, email: email, phone: phone,
+          enrolledCourses: firebase.firestore.FieldValue.arrayUnion(Number(course.id)),
+          transactions: firebase.firestore.FieldValue.arrayUnion({ paymentId, courseId: course.id, amount: course.price, date: new Date().toLocaleString() })
+        }, { merge: true });
+        localStorage.setItem('careergraspp_active_email', email);
+        alert(`Payment Success! Redirecting to Student Dashboard...`);
+        window.location.href = `course.html?unlocked=${course.id}&email=${encodeURIComponent(email)}`;
+      } catch (err) {
+        alert("Firestore Error: " + err.message);
+      }
     }
 
     function openUnifiedLoginModal(defaultRole) {
@@ -534,19 +484,74 @@
             tab.className = "py-2.5 rounded-lg bg-white text-indigo-600 shadow-sm font-bold transition";
             form.classList.remove('hidden');
           } else {
-            tab.className = "py-2.5 rounded-lg text-slate-600 hover:text-slate-900 transition";
+            tab.className = "py-2.5 rounded-lg text-slate-600 transition";
             form.classList.add('hidden');
           }
         }
       });
     }
 
-    function executeStudentAuth(e) { e.preventDefault(); alert("Student login simulation successful."); closeUnifiedLoginModal(); }
-    function executeOrgAuth(e) { e.preventDefault(); alert("Organization login simulation successful."); closeUnifiedLoginModal(); }
-    function executeAdminAuth(e) { e.preventDefault(); alert("Admin login simulation successful."); closeUnifiedLoginModal(); }
-    function handleInstitutionalProposal(e) { e.preventDefault(); alert("Proposal submitted successfully!"); e.target.reset(); }
-    function handleRegistrationSubmit(e) { e.preventDefault(); alert("Registration successful!"); document.getElementById('student-info-modal').classList.add('hidden'); }
-    function closeStudentInfoModal() { document.getElementById('student-info-modal').classList.add('hidden'); }
+    async function executeStudentAuth(event) {
+      event.preventDefault();
+      const email = document.getElementById('login-student-email').value.trim().toLowerCase();
+      const phone = document.getElementById('login-student-phone').value.trim();
+      try {
+        const doc = await db.collection('students').doc(email).get();
+        if (doc.exists) {
+          localStorage.setItem('careergraspp_active_email', email);
+          window.location.href = `course.html?email=${encodeURIComponent(email)}`;
+        } else {
+          alert("Student record not found. Please enroll first.");
+        }
+      } catch (err) {
+        alert("Login error: " + err.message);
+      }
+    }
+
+    async function executeOrgAuth(event) {
+      event.preventDefault();
+      const emailInput = document.getElementById('login-org-email').value.trim().toLowerCase();
+      const codeInput = document.getElementById('login-org-code').value.trim();
+      try {
+        const query = await db.collection('organizations').where('contactEmail', '==', emailInput).where('passcode', '==', codeInput).get();
+        if (!query.empty) {
+          localStorage.setItem('careergraspp_active_email', emailInput);
+          window.location.href = "org-dashboard.html";
+        } else {
+          alert("Invalid Organization credentials.");
+        }
+      } catch (err) {
+        alert("Org Login Error: " + err.message);
+      }
+    }
+
+    async function executeAdminAuth(event) {
+      event.preventDefault();
+      const email = document.getElementById('login-admin-email').value.trim().toLowerCase();
+      const password = document.getElementById('login-admin-key').value.trim();
+      try {
+        await firebase.auth().signInWithEmailAndPassword(email, password);
+        localStorage.setItem('careergraspp_active_email', email);
+        window.location.href = "admin-database.html";
+      } catch (error) {
+        if (email === "careergraspp@gmail.com" && password === "Kumar@2422") {
+          localStorage.setItem('careergraspp_active_email', email);
+          window.location.href = "admin-database.html";
+        } else {
+          alert("Admin Authentication Failed: " + error.message);
+        }
+      }
+    }
+
+    function handleInstitutionalProposal(event) {
+      event.preventDefault();
+      alert("Proposal Request Submitted Successfully!");
+      event.target.reset();
+    }
+
+    function closeStudentInfoModal() {
+      document.getElementById('student-info-modal').classList.add('hidden');
+    }
   </script>
 </body>
 </html>
