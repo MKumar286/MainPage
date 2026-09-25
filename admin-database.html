@@ -97,13 +97,10 @@
           </button>
         </div>
 
-        <!-- SEARCH & DUAL DROPDOWN FILTERS -->
+        <!-- SEARCH & DUAL DROPDOWN FILTERS (STUDENTS TAB) -->
         <div id="search-filter-controls" class="flex flex-col sm:flex-row items-center gap-2.5 w-full lg:w-auto">
-          
-          <!-- Search Field -->
           <input type="text" id="global-search-input" onkeyup="applyFilters()" placeholder="Search Name, Email, Phone, Org Code..." class="w-full sm:w-60 px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-indigo-600 focus:bg-white transition" />
           
-          <!-- Filter 1: Organization Category / Target Audience -->
           <select id="filter-category" onchange="applyFilters()" class="w-full sm:w-auto px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-indigo-600">
             <option value="ALL">All Categories</option>
             <option value="engineering">Engineering College</option>
@@ -112,24 +109,29 @@
             <option value="degree">Degree College</option>
           </select>
 
-          <!-- Filter 2: Unique College Codes Dropdown -->
           <select id="filter-org-code" onchange="applyFilters()" class="w-full sm:w-auto px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-indigo-600">
             <option value="ALL">All Colleges / Orgs</option>
-            <option value="INDIVIDUAL">INDIVIDUAL</option>
-            <!-- Dynamic Unique College Codes injected here -->
           </select>
+        </div>
 
+        <!-- TRANSACTION LOGS DYNAMIC FILTERS BAR -->
+        <div id="transaction-filter-controls" class="hidden flex flex-col sm:flex-row items-center gap-2.5 w-full lg:w-auto">
+          <input type="text" id="tx-search-input" onkeyup="applyFilters()" placeholder="Search Payment ID, Email..." class="w-full sm:w-60 px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-emerald-600 focus:bg-white transition" />
+          
+          <select id="filter-tx-course" onchange="applyFilters()" class="w-full sm:w-auto px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-emerald-600">
+            <option value="ALL">All Purchased Courses</option>
+          </select>
         </div>
 
       </div>
     </div>
 
-    <!-- ================= VIEW 1: STUDENT ROSTER TABLE (FULL SCREEN WIDTH) ================= -->
+    <!-- ================= VIEW 1: STUDENT ROSTER TABLE ================= -->
     <div id="view-students-container" class="bg-white border border-slate-200 rounded-2xl p-3 md:p-4 shadow-sm space-y-3">
       <div class="flex justify-between items-center pb-2 border-b border-slate-100">
         <div>
           <h2 class="text-base font-extrabold text-slate-900">Registered Student Master Profiles</h2>
-          <p class="text-[11px] text-slate-500">Click anywhere on a row or the 👁️ icon to inspect details.</p>
+          <p class="text-[11px] text-slate-500">Click anywhere on a row or the 👁️ icon to inspect details and track completed videos.</p>
         </div>
         <span id="student-count-badge" class="text-xs bg-indigo-50 text-indigo-600 font-bold px-3 py-1 rounded-full border border-indigo-200">Showing 0 Records</span>
       </div>
@@ -202,8 +204,6 @@
       </div>
 
       <form id="sell-course-form" onsubmit="generateCampaignLink(event)" class="space-y-5">
-        
-        <!-- 1. TARGET AUDIENCE DROPDOWN -->
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Target Audience Category</label>
           <select id="sell-target-type" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-indigo-600">
@@ -214,40 +214,33 @@
           </select>
         </div>
 
-        <!-- 2. ORGANIZATION NAME -->
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Name of the Organization</label>
           <input type="text" id="sell-org-name" required placeholder="e.g. Mahatma Gandhi Institute of Technology" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-indigo-600 transition" />
         </div>
 
-        <!-- 3. COLLEGE / ORG CODE -->
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">College / Organization Code</label>
           <input type="text" id="sell-org-code" required placeholder="e.g. MGIT2026" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono uppercase focus:outline-none focus:border-indigo-600 transition" />
         </div>
 
-        <!-- 4. COURSE SELECTION (MULTI-SELECT CHECKBOXES) -->
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Select Course(s) Offered to Organization</label>
           <div id="sell-course-checkbox-list" class="max-h-52 overflow-y-auto bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-2">
             <p class="text-xs text-slate-400">Loading courses list...[cite: 3]</p>
           </div>
-          <p class="text-[11px] text-slate-400 mt-1">Select one or multiple courses. Checked course IDs will be separated by commas in the generated URL.</p>
         </div>
 
-        <!-- 5. CUSTOM OFFER PRICE -->
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Enter Course Special Offer Price (₹)</label>
           <input type="number" id="sell-custom-price" required min="1" placeholder="e.g. 199" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-emerald-600 focus:outline-none focus:border-indigo-600 transition" />
         </div>
 
-        <!-- GENERATE BUTTON -->
         <button type="submit" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl text-xs shadow-lg shadow-indigo-600/25 transition flex items-center justify-center space-x-2">
           <span>🚀 Generate Institutional Campaign Link</span>
         </button>
       </form>
 
-      <!-- GENERATED LINK OUTPUT BOX -->
       <div id="sell-link-output-box" class="hidden bg-emerald-50 border border-emerald-200 rounded-2xl p-5 space-y-3">
         <div class="flex items-center justify-between">
           <span class="text-xs font-extrabold text-emerald-800 uppercase tracking-wider">🎉 Campaign Link Generated Successfully</span>
@@ -260,24 +253,23 @@
             📋 Copy Link
           </button>
         </div>
-        <p class="text-[11px] text-emerald-700">Directly share this custom campaign link with the students, TPO, or school administration.</p>
       </div>
     </div>
 
   </main>
 
-  <!-- ================= STUDENT DETAIL INSPECTOR MODAL ================= -->
+  <!-- ================= STUDENT PROFILE INSPECTOR MODAL ================= -->
   <div id="student-detail-modal" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white border border-slate-200 rounded-3xl w-full max-w-xl overflow-hidden shadow-2xl space-y-4 p-6 md:p-8">
       <div class="flex justify-between items-center pb-3 border-b border-slate-200">
         <div>
-          <h3 class="font-extrabold text-lg text-slate-900">Student Profile Inspector</h3>
-          <p class="text-xs text-slate-500">Full registered record & transaction details</p>
+          <h3 class="font-extrabold text-lg text-slate-900">Student Profile Inspector & Progress Tracker</h3>
+          <p class="text-xs text-slate-500">Tracking completed videos, enrolled courses, and transactions</p>
         </div>
         <button onclick="closeStudentDetailModal()" class="text-slate-400 hover:text-slate-800 font-bold text-2xl px-2">&times;</button>
       </div>
 
-      <div id="modal-student-content" class="space-y-4 text-xs"></div>
+      <div id="modal-student-content" class="space-y-4 text-xs max-h-[70vh] overflow-y-auto"></div>
 
       <div class="pt-3 border-t border-slate-200 text-right">
         <button onclick="closeStudentDetailModal()" class="px-5 py-2.5 bg-slate-900 text-white font-bold rounded-xl text-xs hover:bg-slate-800 transition">
@@ -346,10 +338,12 @@
           softSkillsCourses = defaultCoursesList;
         }
         populateSellCourseCheckboxes();
+        populateTransactionCoursesFilter();
       }).catch((err) => {
         console.warn("Could not fetch courses from Firestore, loading defaults.", err);
         softSkillsCourses = defaultCoursesList;
         populateSellCourseCheckboxes();
+        populateTransactionCoursesFilter();
       });
     }
 
@@ -371,7 +365,6 @@
       if (!select) return;
 
       const uniqueCodes = new Set();
-      
       Object.keys(orgsMap).forEach(code => {
         if (code && code !== 'INDIVIDUAL') uniqueCodes.add(code);
       });
@@ -384,12 +377,40 @@
 
       select.innerHTML = `<option value="ALL">All Colleges / Orgs</option><option value="INDIVIDUAL">INDIVIDUAL</option>`;
 
-      Array.from(uniqueCodes).sort().forEach(code => {
-        const opt = document.createElement('option');
-        opt.value = code;
-        opt.textContent = code;
-        select.appendChild(opt);
+      if (uniqueCodes.size === 0) {
+        select.innerHTML = `<option value="ALL">No College Orgs Available</option>`;
+      } else {
+        Array.from(uniqueCodes).sort().forEach(code => {
+          const opt = document.createElement('option');
+          opt.value = code;
+          opt.textContent = code;
+          select.appendChild(opt);
+        });
+      }
+    }
+
+    /* ================= DYNAMIC TRANSACTION COURSES FILTER ================= */
+    function populateTransactionCoursesFilter() {
+      const select = document.getElementById('filter-tx-course');
+      if (!select) return;
+
+      const activeCourses = new Set();
+      allTransactionsData.forEach(tx => {
+        if (tx.courseTitle) activeCourses.add(tx.courseTitle);
       });
+
+      select.innerHTML = `<option value="ALL">All Purchased Courses</option>`;
+
+      if (activeCourses.size === 0) {
+        select.innerHTML = `<option value="ALL">No Transactions Data Found</option>`;
+      } else {
+        Array.from(activeCourses).sort().forEach(courseName => {
+          const opt = document.createElement('option');
+          opt.value = courseName;
+          opt.textContent = courseName;
+          select.appendChild(opt);
+        });
+      }
     }
 
     function initLiveDatabaseSync() {
@@ -419,9 +440,6 @@
                 timestamp: tx.timestamp || s.joinedTimestamp || 0
               });
             });
-          } else if (coursesCount > 0) {
-            const estimatedAmt = coursesCount * 299;
-            grossRevenue += estimatedAmt;
           }
         });
 
@@ -433,6 +451,7 @@
         document.getElementById('stat-total-enrollments').textContent = totalEnrollments;
 
         populateUniqueOrgCodesDropdown();
+        populateTransactionCoursesFilter();
         applyFilters();
       }, (err) => {
         console.error("Firestore sync error:", err);
@@ -460,11 +479,17 @@
         return matchesQuery && matchesCategory && matchesOrg;
       });
 
+      const txQuery = document.getElementById('tx-search-input').value.toLowerCase().trim();
+      const txCourseFilter = document.getElementById('filter-tx-course').value;
+
       const filteredTransactions = allTransactionsData.filter(tx => {
-        const emailMatch = tx.studentEmail.toLowerCase().includes(query);
-        const payMatch = tx.paymentId.toLowerCase().includes(query);
-        const titleMatch = tx.courseTitle.toLowerCase().includes(query);
-        return emailMatch || payMatch || titleMatch;
+        const emailMatch = tx.studentEmail.toLowerCase().includes(txQuery);
+        const payMatch = tx.paymentId.toLowerCase().includes(txQuery);
+        const matchesTxQuery = emailMatch || payMatch;
+
+        const matchesCourse = (txCourseFilter === 'ALL') || (tx.courseTitle === txCourseFilter);
+
+        return matchesTxQuery && matchesCourse;
       });
 
       renderStudentsTable(filteredStudents);
@@ -528,7 +553,7 @@
               ${s.joinedDate || 'Recent'}
             </td>
             <td class="p-2 text-center" onclick="event.stopPropagation(); inspectStudent('${s.email}');">
-              <button class="p-1.5 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 font-bold rounded-lg text-xs transition shadow-sm" title="Inspect Profile">
+              <button class="p-1.5 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 font-bold rounded-lg text-xs transition shadow-sm" title="Inspect Profile & Track Progress">
                 👁️
               </button>
             </td>
@@ -548,7 +573,7 @@
       tbody.innerHTML = "";
 
       if (transactions.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">No payment transaction logs recorded yet.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">No payment transaction logs match your filter.</td></tr>`;
         return;
       }
 
@@ -602,71 +627,13 @@
       }
     }
 
-    function exportTableToCSV() {
-      if (activeViewTab === 'students') {
-        let csv = ["Name,Email,Phone,Category,Org Code,Enrolled Courses Count,Latest Course,Latest Amount,Latest Payment ID,Joined Date"];
-        
-        allStudentsData.forEach(s => {
-          const orgDoc = orgsMap[(s.orgCode || "").toUpperCase().trim()] || {};
-          const cat = (s.targetType || orgDoc.targetType || "Individual").toUpperCase();
-          let latestTx = { paymentId: 'N/A', amount: 'N/A', courseTitle: 'N/A' };
-          if (s.transactions && s.transactions.length > 0) {
-            latestTx = s.transactions[s.transactions.length - 1];
-          }
-
-          const row = [
-            `"${s.name || ''}"`,
-            `"${s.email || ''}"`,
-            `"${s.phone || ''}"`,
-            `"${cat}"`,
-            `"${s.orgCode || 'INDIVIDUAL'}"`,
-            `"${s.enrolledCourses ? s.enrolledCourses.length : 0}"`,
-            `"${latestTx.courseTitle || ''}"`,
-            `"${latestTx.amount || ''}"`,
-            `"${latestTx.paymentId || ''}"`,
-            `"${s.joinedDate || ''}"`
-          ];
-          csv.push(row.join(","));
-        });
-
-        downloadCSVFile(csv.join("\n"), "Careergraspp_Students_Roster.csv");
-      } else if (activeViewTab === 'transactions') {
-        let csv = ["Payment ID,Student Email,Course Purchased,Amount,Date & Time"];
-        
-        allTransactionsData.forEach(tx => {
-          const row = [
-            `"${tx.paymentId}"`,
-            `"${tx.studentEmail}"`,
-            `"${tx.courseTitle}"`,
-            `"${tx.amount}"`,
-            `"${tx.date}"`
-          ];
-          csv.push(row.join(","));
-        });
-
-        downloadCSVFile(csv.join("\n"), "Careergraspp_Transactions_Log.csv");
-      } else {
-        alert("Please switch to Student Profiles or Transaction Logs tab to export.");
-      }
-    }
-
-    function downloadCSVFile(csvContent, fileName) {
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement("a");
-      const url = URL.createObjectURL(blob);
-      link.setAttribute("href", url);
-      link.setAttribute("download", fileName);
-      link.style.visibility = 'hidden';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
+    /* ================= INSPECT STUDENT & TRACK VIDEO PROGRESS ================= */
     function inspectStudent(email) {
       const student = allStudentsData.find(s => s.email.toLowerCase() === email.toLowerCase());
       if (!student) return;
 
       const orgDoc = orgsMap[(student.orgCode || "").toUpperCase().trim()] || {};
+      const completedLessons = student.completedLessons || [];
 
       const modalContent = document.getElementById('modal-student-content');
       modalContent.innerHTML = `
@@ -679,9 +646,24 @@
           <div><span class="text-slate-400 block font-semibold">Joined Date</span> <strong class="text-slate-900">${student.joinedDate || 'N/A'}</strong></div>
         </div>
 
+        <div class="bg-indigo-50 border border-indigo-200 p-4 rounded-2xl space-y-2">
+          <div class="flex justify-between items-center">
+            <h4 class="font-extrabold text-indigo-900 text-xs uppercase tracking-wider">🎯 Video Progress Tracker</h4>
+            <span class="bg-indigo-600 text-white font-black px-2.5 py-0.5 rounded-full text-xs">${completedLessons.length} Lessons Completed</span>
+          </div>
+          <div class="bg-white border border-indigo-100 rounded-xl p-3 max-h-32 overflow-y-auto space-y-1">
+            ${completedLessons.length > 0 ? completedLessons.map(key => `
+              <div class="text-xs text-slate-700 flex items-center space-x-2">
+                <span class="text-emerald-600 font-bold">✓</span>
+                <span class="font-mono text-[11px] bg-slate-100 px-2 py-0.5 rounded">Lesson Key: ${key}</span>
+              </div>
+            `).join('') : '<p class="text-slate-400 text-xs italic">No video lessons completed by this student yet.</p>'}
+          </div>
+        </div>
+
         <div class="space-y-2">
           <h4 class="font-extrabold text-slate-900 text-xs uppercase tracking-wider">Payment Transactions Log</h4>
-          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-2 max-h-36 overflow-y-auto">
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-2 max-h-32 overflow-y-auto">
             ${(student.transactions || []).map(tx => `
               <div class="flex justify-between items-center text-xs border-b border-slate-200 pb-1.5 last:border-0 last:pb-0">
                 <div>
@@ -690,11 +672,11 @@
                 </div>
                 <span class="font-black text-emerald-600">₹${tx.amount}</span>
               </div>
-            `).join('') || '<p class="text-slate-400">No explicit transaction record array found.</p>'}
+            `).join('') || '<p class="text-slate-400">No payment transaction records found.</p>'}
           </div>
         </div>
 
-        <div class="space-y-2">
+        <div class="space-y-1">
           <h4 class="font-extrabold text-slate-900 text-xs uppercase tracking-wider">Enrolled Course IDs</h4>
           <p class="font-mono bg-slate-100 p-2.5 rounded-xl text-[11px] text-slate-700">${JSON.stringify(student.enrolledCourses || [])}</p>
         </div>
@@ -716,9 +698,13 @@
       const containerStudents = document.getElementById('view-students-container');
       const containerTx = document.getElementById('view-transactions-container');
       const containerSell = document.getElementById('view-sell-course-container');
-      const filterBar = document.getElementById('search-filter-controls');
+      
+      const studentFilters = document.getElementById('search-filter-controls');
+      const txFilters = document.getElementById('transaction-filter-controls');
 
       [containerStudents, containerTx, containerSell].forEach(c => c.classList.add('hidden'));
+      studentFilters.classList.add('hidden');
+      txFilters.classList.add('hidden');
       
       btnStudents.className = "px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition";
       btnTx.className = "px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition";
@@ -727,15 +713,14 @@
       if (tab === 'students') {
         btnStudents.className = "px-4 py-2 rounded-lg bg-white text-indigo-600 shadow-sm transition font-bold";
         containerStudents.classList.remove('hidden');
-        filterBar.classList.remove('hidden');
+        studentFilters.classList.remove('hidden');
       } else if (tab === 'transactions') {
         btnTx.className = "px-4 py-2 rounded-lg bg-white text-emerald-600 shadow-sm transition font-bold";
         containerTx.classList.remove('hidden');
-        filterBar.classList.remove('hidden');
+        txFilters.classList.remove('hidden');
       } else if (tab === 'sell-course') {
         btnSell.className = "px-4 py-2 rounded-lg bg-white text-indigo-600 shadow-sm transition font-bold";
         containerSell.classList.remove('hidden');
-        filterBar.classList.add('hidden');
       }
     }
 
@@ -779,9 +764,7 @@
       }
 
       const courseIdsString = selectedCourseIds.join(',');
-
       const baseUrl = window.location.origin + window.location.pathname.replace("admin-database.html", "index.html");
-
       const generatedUrl = `${baseUrl}?org=${encodeURIComponent(rawOrgCode)}&type=${targetType}&courses=${courseIdsString}&price=${customPrice}`;
 
       try {
@@ -810,10 +793,49 @@
 
       navigator.clipboard.writeText(urlInput.value).then(() => {
         alert("📋 Campaign Link copied to clipboard!");
-      }).catch(() => {
-        document.execCommand('copy');
-        alert("📋 Campaign Link copied to clipboard!");
       });
+    }
+
+    function exportTableToCSV() {
+      if (activeViewTab === 'students') {
+        let csv = ["Name,Email,Phone,Category,Org Code,Enrolled Courses Count,Latest Course,Latest Amount,Latest Payment ID,Joined Date"];
+        allStudentsData.forEach(s => {
+          const orgDoc = orgsMap[(s.orgCode || "").toUpperCase().trim()] || {};
+          const cat = (s.targetType || orgDoc.targetType || "Individual").toUpperCase();
+          let latestTx = { paymentId: 'N/A', amount: 'N/A', courseTitle: 'N/A' };
+          if (s.transactions && s.transactions.length > 0) {
+            latestTx = s.transactions[s.transactions.length - 1];
+          }
+          const row = [
+            `"${s.name || ''}"`, `"${s.email || ''}"`, `"${s.phone || ''}"`, `"${cat}"`,
+            `"${s.orgCode || 'INDIVIDUAL'}"`, `"${s.enrolledCourses ? s.enrolledCourses.length : 0}"`,
+            `"${latestTx.courseTitle || ''}"`, `"${latestTx.amount || ''}"`, `"${latestTx.paymentId || ''}"`, `"${s.joinedDate || ''}"`
+          ];
+          csv.push(row.join(","));
+        });
+        downloadCSVFile(csv.join("\n"), "Careergraspp_Students_Roster.csv");
+      } else if (activeViewTab === 'transactions') {
+        let csv = ["Payment ID,Student Email,Course Purchased,Amount,Date & Time"];
+        allTransactionsData.forEach(tx => {
+          const row = [`"${tx.paymentId}"`, `"${tx.studentEmail}"`, `"${tx.courseTitle}"`, `"${tx.amount}"`, `"${tx.date}"`];
+          csv.push(row.join(","));
+        });
+        downloadCSVFile(csv.join("\n"), "Careergraspp_Transactions_Log.csv");
+      } else {
+        alert("Please switch to Student Profiles or Transaction Logs tab to export.");
+      }
+    }
+
+    function downloadCSVFile(csvContent, fileName) {
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", fileName);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
 
     function adminLogout() {
