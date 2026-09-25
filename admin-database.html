@@ -53,7 +53,7 @@
       </div>
     </header>
 
-    <!-- ================= MAIN CONTENT CONTAINER (TIGHTLY ADJUSTED) ================= -->
+    <!-- ================= MAIN CONTENT CONTAINER ================= -->
     <main class="w-full px-2 md:px-6 py-3 space-y-3">
 
       <!-- COMPACT METRICS CARDS -->
@@ -133,7 +133,7 @@
 
       </div>
 
-      <!-- ================= VIEW 1: STUDENT ROSTER TABLE (MAXIMIZED VISIBILITY) ================= -->
+      <!-- ================= VIEW 1: STUDENT ROSTER TABLE ================= -->
       <div id="view-students-container" class="bg-white border border-slate-200 rounded-xl p-2.5 shadow-sm space-y-2">
         <div class="flex justify-between items-center pb-1.5 border-b border-slate-100">
           <div>
@@ -162,7 +162,7 @@
             </thead>
             <tbody id="student-table-body" class="divide-y divide-slate-100">
               <tr>
-                <td colspan="11" class="p-6 text-center text-slate-400">Loading master student database...[cite: 3]</td>
+                <td colspan="11" class="p-6 text-center text-slate-400">Loading master student database...</td>
               </tr>
             </tbody>
           </table>
@@ -190,7 +190,7 @@
             </thead>
             <tbody id="transaction-table-body" class="divide-y divide-slate-100">
               <tr>
-                <td colspan="6" class="p-6 text-center text-slate-400">Loading transaction logs...[cite: 3]</td>
+                <td colspan="6" class="p-6 text-center text-slate-400">Loading transaction logs...</td>
               </tr>
             </tbody>
           </table>
@@ -234,7 +234,7 @@
           <div>
             <label class="block text-[11px] font-bold text-slate-700 mb-1">Select Course(s)</label>
             <div id="sell-course-checkbox-list" class="max-h-40 overflow-y-auto bg-slate-50 border border-slate-200 rounded-lg p-2.5 space-y-1.5">
-              <p class="text-[11px] text-slate-400">Loading courses...[cite: 3]</p>
+              <p class="text-[11px] text-slate-400">Loading courses...</p>
             </div>
           </div>
 
@@ -370,6 +370,8 @@
         });
         populateUniqueOrgCodesDropdown();
         populateUniqueCategoriesDropdown();
+      }).catch((err) => {
+        console.warn("Organizations fetch error:", err);
       });
     }
 
@@ -389,7 +391,6 @@
 
       select.innerHTML = `<option value="ALL">All Categories</option>`;
       if (uniqueCats.size === 0) {
-        // Fallback default categories if none in DB yet
         ['engineering', 'school', 'intermediate', 'degree'].forEach(c => uniqueCats.add(c));
       }
 
@@ -445,7 +446,13 @@
     }
 
     function initLiveDatabaseSync() {
+      // Safety Timer: Guarantee loader disappears after 3 seconds even if Firebase hangs
+      const safetyLoaderTimer = setTimeout(() => {
+        hidePageLoader();
+      }, 3000);
+
       db.collection('students').onSnapshot((snapshot) => {
+        clearTimeout(safetyLoaderTimer);
         allStudentsData = [];
         allTransactionsData = [];
         let grossRevenue = 0;
@@ -486,19 +493,21 @@
         populateTransactionCoursesFilter();
         applyFilters();
 
-        // Smoothly hide loader after initial render
-        setTimeout(() => {
-          const loader = document.getElementById('page-loader');
-          if (loader) {
-            loader.style.opacity = '0';
-            setTimeout(() => loader.remove(), 300);
-          }
-        }, 200);
+        hidePageLoader();
       }, (err) => {
+        clearTimeout(safetyLoaderTimer);
         console.error("Firestore sync error:", err);
-        const loader = document.getElementById('page-loader');
-        if (loader) loader.remove();
+        hidePageLoader();
+        document.getElementById('student-table-body').innerHTML = `<tr><td colspan="11" class="p-6 text-center text-red-500 font-bold">Error loading database: ${err.message}</td></tr>`;
       });
+    }
+
+    function hidePageLoader() {
+      const loader = document.getElementById('page-loader');
+      if (loader) {
+        loader.style.opacity = '0';
+        setTimeout(() => loader.remove(), 300);
+      }
     }
 
     function applyFilters() {
@@ -767,7 +776,7 @@
 
       container.innerHTML = "";
       softSkillsCourses.forEach((course) => {
-        container.innerHTML +=
+        container.innerHTML += `
           <label class="flex items-center space-x-2.5 p-2 bg-white rounded-lg border border-slate-200 hover:border-indigo-300 cursor-pointer transition">
             <input type="checkbox" name="sell-course-select" value="${course.id}" class="w-4 h-4 text-indigo-600 rounded border-slate-300" />
             <div class="text-xs">
