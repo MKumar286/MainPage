@@ -280,6 +280,7 @@
     </div>
   </div>
 
+  <!-- FIREBASE CONFIGURATION & LOGIC -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyBh9VQBgh3dSRug89_2NaVEOD7GPhHKvyE",
@@ -290,7 +291,9 @@
       appId: "1:243374148181:web:7f6a37b9ac71caf76022dc"
     };
 
-    if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+    if (!firebase.apps.length) { 
+      firebase.initializeApp(firebaseConfig); 
+    }
     const db = firebase.firestore();
     const RAZORPAY_KEY_ID = "rzp_test_TXFnqgy3pZvwzL"; 
     let pendingCourseIdToEnroll = null;
