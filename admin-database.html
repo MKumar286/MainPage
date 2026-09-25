@@ -13,267 +13,279 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
   <style>
-    body { font-family: 'Inter', sans-serif; }
+    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
   </style>
 </head>
-<body class="bg-slate-100 text-slate-800 min-h-screen">
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col justify-between">
 
-  <!-- ================= TOP NAVIGATION HEADER ================= -->
-  <header class="bg-slate-900 text-white p-3.5 shadow-lg sticky top-0 z-40 border-b border-slate-800">
-    <div class="w-full px-4 md:px-8 flex justify-between items-center">
-      <div class="flex items-center space-x-3">
-        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-600 flex items-center justify-center font-black text-slate-950 text-base shadow">⚙️</div>
-        <div>
-          <h1 class="font-extrabold text-sm md:text-base leading-none tracking-tight">Super Admin Database</h1>
-          <span class="text-[9px] text-amber-400 font-bold tracking-widest uppercase">Master Revenue & Student Roster Console</span>
+  <!-- ================= SMOOTH PAGE LOADING SPINNER ================= -->
+  <div id="page-loader" class="fixed inset-0 z-50 bg-white/90 backdrop-blur-md flex flex-col items-center justify-center transition-opacity duration-300">
+    <div class="w-10 h-10 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+    <p class="mt-3 text-[11px] font-bold text-slate-900 tracking-wider uppercase animate-pulse">Loading Super Admin Database...</p>
+  </div>
+
+  <div>
+    <!-- ================= TOP NAVIGATION HEADER ================= -->
+    <header class="bg-slate-900 text-white p-3 shadow-md sticky top-0 z-40 border-b border-slate-800">
+      <div class="w-full px-3 md:px-6 flex justify-between items-center">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-amber-500 to-amber-600 flex items-center justify-center font-black text-slate-950 text-sm shadow">⚙️</div>
+          <div>
+            <h1 class="font-extrabold text-xs md:text-sm leading-none tracking-tight">Super Admin Database</h1>
+            <span class="text-[8px] text-amber-400 font-bold tracking-widest uppercase">Master Roster Console</span>
+          </div>
+        </div>
+        <div class="flex items-center space-x-2">
+          <button onclick="exportTableToCSV()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-xs transition shadow-sm flex items-center gap-1">
+            <span>📥 Export</span>
+          </button>
+          <a href="admin-courses.html" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-lg text-xs transition border border-slate-700">
+            📚 Courses
+          </a>
+          <button onclick="adminLogout()" class="px-2.5 py-1.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg text-xs transition shadow-sm">
+            Logout
+          </button>
         </div>
       </div>
-      <div class="flex items-center space-x-3">
-        <button onclick="exportTableToCSV()" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition shadow-sm flex items-center gap-1.5">
-          <span>📥 Export Excel</span>
-        </button>
-        <a href="admin-courses.html" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl text-xs transition border border-slate-700">
-          📚 Manage Courses
-        </a>
-        <button onclick="adminLogout()" class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl text-xs transition shadow-sm">
-          Log Out
-        </button>
-      </div>
-    </div>
-  </header>
+    </header>
 
-  <!-- ================= MAIN CONTENT CONTAINER ================= -->
-  <main class="w-full px-4 md:px-8 py-4 space-y-4">
+    <!-- ================= MAIN CONTENT CONTAINER (TIGHTLY ADJUSTED) ================= -->
+    <main class="w-full px-2 md:px-6 py-3 space-y-3">
 
-    <!-- COMPACT MINIMIZED METRICS CARDS BANNER -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
-      <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
-        <div>
-          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total Revenue</span>
-          <h3 id="stat-total-revenue" class="text-xl font-black text-emerald-600">₹0</h3>
+      <!-- COMPACT METRICS CARDS -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
+        <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Total Revenue</span>
+            <h3 id="stat-total-revenue" class="text-lg font-black text-emerald-600">₹0</h3>
+          </div>
+          <span class="p-1.5 rounded-lg bg-emerald-50 text-emerald-600 text-base">💰</span>
         </div>
-        <span class="p-2 rounded-lg bg-emerald-50 text-emerald-600 text-lg">💰</span>
-      </div>
 
-      <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
-        <div>
-          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Registered Students</span>
-          <h3 id="stat-total-students" class="text-xl font-black text-slate-900">0</h3>
+        <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Students</span>
+            <h3 id="stat-total-students" class="text-lg font-black text-slate-900">0</h3>
+          </div>
+          <span class="p-1.5 rounded-lg bg-slate-100 text-slate-700 text-base">🎓</span>
         </div>
-        <span class="p-2 rounded-lg bg-slate-100 text-slate-700 text-lg">🎓</span>
-      </div>
 
-      <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
-        <div>
-          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Course Enrollments</span>
-          <h3 id="stat-total-enrollments" class="text-xl font-black text-indigo-600">0</h3>
+        <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Enrollments</span>
+            <h3 id="stat-total-enrollments" class="text-lg font-black text-indigo-600">0</h3>
+          </div>
+          <span class="p-1.5 rounded-lg bg-indigo-50 text-indigo-600 text-base">📚</span>
         </div>
-        <span class="p-2 rounded-lg bg-indigo-50 text-indigo-600 text-lg">📚</span>
-      </div>
 
-      <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
-        <div>
-          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Institutional Partners</span>
-          <h3 id="stat-total-orgs" class="text-xl font-black text-amber-500">0</h3>
+        <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Partners</span>
+            <h3 id="stat-total-orgs" class="text-lg font-black text-amber-500">0</h3>
+          </div>
+          <span class="p-1.5 rounded-lg bg-amber-50 text-amber-600 text-base">🏢</span>
         </div>
-        <span class="p-2 rounded-lg bg-amber-50 text-amber-600 text-lg">🏢</span>
       </div>
-    </div>
 
-    <!-- TABS AND ADVANCED DUAL FILTER BAR -->
-    <div class="bg-white border border-slate-200 rounded-2xl p-3 md:p-4 shadow-sm space-y-3">
-      <div class="flex flex-col lg:flex-row items-center justify-between gap-3">
+      <!-- TABS & DUAL DYNAMIC FILTER BAR -->
+      <div class="bg-white border border-slate-200 rounded-xl p-2.5 shadow-sm flex flex-col lg:flex-row items-center justify-between gap-2.5">
         
         <!-- View Toggle Buttons -->
-        <div class="flex bg-slate-100 p-1 rounded-xl text-xs font-bold w-full lg:w-auto">
-          <button id="tab-btn-students" onclick="switchViewTab('students')" class="px-4 py-2 rounded-lg bg-white text-indigo-600 shadow-sm transition">
-            🎓 Student Profiles
+        <div class="flex bg-slate-100 p-1 rounded-lg text-xs font-bold w-full lg:w-auto">
+          <button id="tab-btn-students" onclick="switchViewTab('students')" class="px-3 py-1.5 rounded-md bg-white text-indigo-600 shadow-sm transition">
+            🎓 Students
           </button>
-          <button id="tab-btn-transactions" onclick="switchViewTab('transactions')" class="px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition">
-            💳 Transaction Logs
+          <button id="tab-btn-transactions" onclick="switchViewTab('transactions')" class="px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition">
+            💳 Transactions
           </button>
-          <button id="tab-btn-sell-course" onclick="switchViewTab('sell-course')" class="px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition">
-            🏷️ Sell Course Link
+          <button id="tab-btn-sell-course" onclick="switchViewTab('sell-course')" class="px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition">
+            🏷️ Sell Link
           </button>
         </div>
 
-        <!-- SEARCH & DUAL DROPDOWN FILTERS (STUDENTS TAB) -->
-        <div id="search-filter-controls" class="flex flex-col sm:flex-row items-center gap-2.5 w-full lg:w-auto">
-          <input type="text" id="global-search-input" onkeyup="applyFilters()" placeholder="Search Name, Email, Phone, Org Code..." class="w-full sm:w-60 px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-indigo-600 focus:bg-white transition" />
+        <!-- SEARCH & DYNAMIC UNIQUE CATEGORY/ORG FILTERS -->
+        <div id="search-filter-controls" class="flex flex-col sm:flex-row items-center gap-2 w-full lg:w-auto">
+          <input type="text" id="global-search-input" onkeyup="applyFilters()" placeholder="Search Name, Email, Phone..." class="w-full sm:w-56 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:outline-none focus:border-indigo-600 transition" />
           
-          <select id="filter-category" onchange="applyFilters()" class="w-full sm:w-auto px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-indigo-600">
+          <!-- Dynamic Unique Categories Dropdown -->
+          <select id="filter-category" onchange="applyFilters()" class="w-full sm:w-auto px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold focus:outline-none focus:border-indigo-600">
             <option value="ALL">All Categories</option>
-            <option value="engineering">Engineering College</option>
-            <option value="school">School</option>
-            <option value="intermediate">Intermediate / Jr College</option>
-            <option value="degree">Degree College</option>
           </select>
 
-          <select id="filter-org-code" onchange="applyFilters()" class="w-full sm:w-auto px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-indigo-600">
+          <!-- Unique Org Codes Dropdown -->
+          <select id="filter-org-code" onchange="applyFilters()" class="w-full sm:w-auto px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold focus:outline-none focus:border-indigo-600">
             <option value="ALL">All Colleges / Orgs</option>
           </select>
         </div>
 
-        <!-- TRANSACTION LOGS DYNAMIC FILTERS BAR -->
-        <div id="transaction-filter-controls" class="hidden flex flex-col sm:flex-row items-center gap-2.5 w-full lg:w-auto">
-          <input type="text" id="tx-search-input" onkeyup="applyFilters()" placeholder="Search Payment ID, Email..." class="w-full sm:w-60 px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-emerald-600 focus:bg-white transition" />
+        <!-- TRANSACTION LOGS FILTERS -->
+        <div id="transaction-filter-controls" class="hidden flex flex-col sm:flex-row items-center gap-2 w-full lg:w-auto">
+          <input type="text" id="tx-search-input" onkeyup="applyFilters()" placeholder="Search Payment ID, Email..." class="w-full sm:w-56 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:outline-none focus:border-emerald-600 transition" />
           
-          <select id="filter-tx-course" onchange="applyFilters()" class="w-full sm:w-auto px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-emerald-600">
+          <select id="filter-tx-course" onchange="applyFilters()" class="w-full sm:w-auto px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold focus:outline-none focus:border-emerald-600">
             <option value="ALL">All Purchased Courses</option>
           </select>
         </div>
 
       </div>
-    </div>
 
-    <!-- ================= VIEW 1: STUDENT ROSTER TABLE ================= -->
-    <div id="view-students-container" class="bg-white border border-slate-200 rounded-2xl p-3 md:p-4 shadow-sm space-y-3">
-      <div class="flex justify-between items-center pb-2 border-b border-slate-100">
-        <div>
-          <h2 class="text-base font-extrabold text-slate-900">Registered Student Master Profiles</h2>
-          <p class="text-[11px] text-slate-500">Click anywhere on a row or the 👁️ icon to inspect details and track completed videos.</p>
-        </div>
-        <span id="student-count-badge" class="text-xs bg-indigo-50 text-indigo-600 font-bold px-3 py-1 rounded-full border border-indigo-200">Showing 0 Records</span>
-      </div>
-
-      <div class="overflow-x-auto w-full">
-        <table class="w-full text-left border-collapse text-[11px]">
-          <thead>
-            <tr class="border-b border-slate-200 bg-slate-50 text-slate-600 uppercase font-bold text-[10px] whitespace-nowrap">
-              <th class="p-2">Student Name & Mobile</th>
-              <th class="p-2">Email Address</th>
-              <th class="p-2">Category</th>
-              <th class="p-2">College Code</th>
-              <th class="p-2 text-center">Enrolled Count</th>
-              <th class="p-2">Course Purchased</th>
-              <th class="p-2">Amount</th>
-              <th class="p-2">Payment ID</th>
-              <th class="p-2">Date</th>
-              <th class="p-2 text-center">Profile</th>
-              <th class="p-2 text-center">Delete</th>
-            </tr>
-          </thead>
-          <tbody id="student-table-body" class="divide-y divide-slate-100">
-            <tr>
-              <td colspan="11" class="p-6 text-center text-slate-400">Loading master student database...[cite: 3]</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ================= VIEW 2: PAYMENT TRANSACTION LOGS TABLE ================= -->
-    <div id="view-transactions-container" class="bg-white border border-slate-200 rounded-2xl p-3 md:p-4 shadow-sm space-y-3 hidden">
-      <div class="flex justify-between items-center pb-2 border-b border-slate-100">
-        <h2 class="text-base font-extrabold text-slate-900">Razorpay Payment Transaction Logs</h2>
-        <span id="transaction-count-badge" class="text-xs bg-emerald-50 text-emerald-600 font-bold px-3 py-1 rounded-full border border-emerald-200">0 Transactions Found</span>
-      </div>
-
-      <div class="overflow-x-auto w-full">
-        <table class="w-full text-left border-collapse text-[11px]">
-          <thead>
-            <tr class="border-b border-slate-200 bg-slate-50 text-slate-600 uppercase font-bold text-[10px] whitespace-nowrap">
-              <th class="p-2">Payment ID (Razorpay)</th>
-              <th class="p-2">Student Email</th>
-              <th class="p-2">Course Purchased</th>
-              <th class="p-2">Amount</th>
-              <th class="p-2">Date & Time</th>
-              <th class="p-2 text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody id="transaction-table-body" class="divide-y divide-slate-100">
-            <tr>
-              <td colspan="6" class="p-6 text-center text-slate-400">Loading payment transaction logs...[cite: 3]</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ================= VIEW 3: SELL COURSE / CAMPAIGN LINK GENERATOR ================= -->
-    <div id="view-sell-course-container" class="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 shadow-sm space-y-6 hidden max-w-3xl mx-auto">
-      <div class="border-b border-slate-100 pb-4 flex items-center justify-between">
-        <div>
-          <h2 class="text-xl font-extrabold text-slate-900 flex items-center">
-            <span class="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center mr-3 text-sm">🏷️</span>
-            Sell Course & Generate Custom Link
-          </h2>
-          <p class="text-xs text-slate-500 mt-1">Create customized enrollment links with custom pricing and institutional mapping.</p>
-        </div>
-        <span class="text-xs bg-indigo-50 text-indigo-700 border border-indigo-200 px-3 py-1 rounded-full font-bold">Campaign Link Tool</span>
-      </div>
-
-      <form id="sell-course-form" onsubmit="generateCampaignLink(event)" class="space-y-5">
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Target Audience Category</label>
-          <select id="sell-target-type" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-indigo-600">
-            <option value="engineering">Engineering College</option>
-            <option value="school">School</option>
-            <option value="intermediate">Intermediate / Jr College</option>
-            <option value="degree">Degree College</option>
-          </select>
+      <!-- ================= VIEW 1: STUDENT ROSTER TABLE (MAXIMIZED VISIBILITY) ================= -->
+      <div id="view-students-container" class="bg-white border border-slate-200 rounded-xl p-2.5 shadow-sm space-y-2">
+        <div class="flex justify-between items-center pb-1.5 border-b border-slate-100">
+          <div>
+            <h2 class="text-xs md:text-sm font-extrabold text-slate-900">Registered Student Master Profiles</h2>
+            <p class="text-[10px] text-slate-500">Click any student row or 👁️ icon to inspect progress.</p>
+          </div>
+          <span id="student-count-badge" class="text-[10px] bg-indigo-50 text-indigo-600 font-bold px-2.5 py-0.5 rounded-full border border-indigo-200">0 Records</span>
         </div>
 
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Name of the Organization</label>
-          <input type="text" id="sell-org-name" required placeholder="e.g. Mahatma Gandhi Institute of Technology" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-indigo-600 transition" />
+        <div class="overflow-x-auto w-full max-h-[65vh]">
+          <table class="w-full text-left border-collapse text-[11px]">
+            <thead class="sticky top-0 bg-slate-50 z-10">
+              <tr class="border-b border-slate-200 text-slate-600 uppercase font-bold text-[9px] whitespace-nowrap">
+                <th class="p-2">Name & Mobile</th>
+                <th class="p-2">Email</th>
+                <th class="p-2">Category</th>
+                <th class="p-2">College Code</th>
+                <th class="p-2 text-center">Count</th>
+                <th class="p-2">Course Purchased</th>
+                <th class="p-2">Amount</th>
+                <th class="p-2">Payment ID</th>
+                <th class="p-2">Date</th>
+                <th class="p-2 text-center">Profile</th>
+                <th class="p-2 text-center">Delete</th>
+              </tr>
+            </thead>
+            <tbody id="student-table-body" class="divide-y divide-slate-100">
+              <tr>
+                <td colspan="11" class="p-6 text-center text-slate-400">Loading master student database...[cite: 3]</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ================= VIEW 2: TRANSACTION LOGS TABLE ================= -->
+      <div id="view-transactions-container" class="bg-white border border-slate-200 rounded-xl p-2.5 shadow-sm space-y-2 hidden">
+        <div class="flex justify-between items-center pb-1.5 border-b border-slate-100">
+          <h2 class="text-xs md:text-sm font-extrabold text-slate-900">Razorpay Payment Transaction Logs</h2>
+          <span id="transaction-count-badge" class="text-[10px] bg-emerald-50 text-emerald-600 font-bold px-2.5 py-0.5 rounded-full border border-emerald-200">0 Transactions</span>
         </div>
 
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">College / Organization Code</label>
-          <input type="text" id="sell-org-code" required placeholder="e.g. MGIT2026" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono uppercase focus:outline-none focus:border-indigo-600 transition" />
+        <div class="overflow-x-auto w-full max-h-[65vh]">
+          <table class="w-full text-left border-collapse text-[11px]">
+            <thead class="sticky top-0 bg-slate-50 z-10">
+              <tr class="border-b border-slate-200 text-slate-600 uppercase font-bold text-[9px] whitespace-nowrap">
+                <th class="p-2">Payment ID</th>
+                <th class="p-2">Student Email</th>
+                <th class="p-2">Course Purchased</th>
+                <th class="p-2">Amount</th>
+                <th class="p-2">Date & Time</th>
+                <th class="p-2 text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody id="transaction-table-body" class="divide-y divide-slate-100">
+              <tr>
+                <td colspan="6" class="p-6 text-center text-slate-400">Loading transaction logs...[cite: 3]</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ================= VIEW 3: SELL COURSE / CAMPAIGN LINK GENERATOR ================= -->
+      <div id="view-sell-course-container" class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4 hidden max-w-2xl mx-auto">
+        <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
+          <div>
+            <h2 class="text-sm md:text-base font-extrabold text-slate-900 flex items-center">
+              <span class="w-7 h-7 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center mr-2 text-xs">🏷️</span>
+              Sell Course & Generate Custom Link
+            </h2>
+            <p class="text-[11px] text-slate-500 mt-0.5">Create customized enrollment links with custom pricing.</p>
+          </div>
+          <span class="text-[10px] bg-indigo-50 text-indigo-700 border border-indigo-200 px-2.5 py-0.5 rounded-full font-bold">Link Generator</span>
         </div>
 
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Select Course(s) Offered to Organization</label>
-          <div id="sell-course-checkbox-list" class="max-h-52 overflow-y-auto bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-2">
-            <p class="text-xs text-slate-400">Loading courses list...[cite: 3]</p>
+        <form id="sell-course-form" onsubmit="generateCampaignLink(event)" class="space-y-3.5">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">Target Audience Category</label>
+            <select id="sell-target-type" required class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold focus:outline-none focus:border-indigo-600">
+              <option value="engineering">Engineering College</option>
+              <option value="school">School</option>
+              <option value="intermediate">Intermediate / Jr College</option>
+              <option value="degree">Degree College</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">Name of the Organization</label>
+            <input type="text" id="sell-org-name" required placeholder="e.g. MGIT" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:outline-none focus:border-indigo-600 transition" />
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">College / Organization Code</label>
+            <input type="text" id="sell-org-code" required placeholder="e.g. MGIT2026" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-mono uppercase focus:outline-none focus:border-indigo-600 transition" />
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">Select Course(s)</label>
+            <div id="sell-course-checkbox-list" class="max-h-40 overflow-y-auto bg-slate-50 border border-slate-200 rounded-lg p-2.5 space-y-1.5">
+              <p class="text-[11px] text-slate-400">Loading courses...[cite: 3]</p>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">Special Offer Price (₹)</label>
+            <input type="number" id="sell-custom-price" required min="1" placeholder="e.g. 199" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-emerald-600 focus:outline-none focus:border-indigo-600 transition" />
+          </div>
+
+          <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-lg text-xs shadow-md transition flex items-center justify-center space-x-1.5">
+            <span>🚀 Generate Campaign Link</span>
+          </button>
+        </form>
+
+        <div id="sell-link-output-box" class="hidden bg-emerald-50 border border-emerald-200 rounded-xl p-4 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-extrabold text-emerald-800 uppercase tracking-wider">🎉 Link Generated Successfully</span>
+            <span id="sell-link-badge" class="text-[10px] bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded-full font-bold"></span>
+          </div>
+          
+          <div class="flex items-center space-x-2">
+            <input type="text" id="sell-generated-url" readonly class="w-full px-2.5 py-2 bg-white border border-emerald-300 rounded-lg text-[11px] font-mono text-slate-800 select-all focus:outline-none" />
+            <button onclick="copyGeneratedCampaignLink()" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-xs flex-shrink-0 transition">
+              📋 Copy
+            </button>
           </div>
         </div>
-
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Enter Course Special Offer Price (₹)</label>
-          <input type="number" id="sell-custom-price" required min="1" placeholder="e.g. 199" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-emerald-600 focus:outline-none focus:border-indigo-600 transition" />
-        </div>
-
-        <button type="submit" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl text-xs shadow-lg shadow-indigo-600/25 transition flex items-center justify-center space-x-2">
-          <span>🚀 Generate Institutional Campaign Link</span>
-        </button>
-      </form>
-
-      <div id="sell-link-output-box" class="hidden bg-emerald-50 border border-emerald-200 rounded-2xl p-5 space-y-3">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-extrabold text-emerald-800 uppercase tracking-wider">🎉 Campaign Link Generated Successfully</span>
-          <span id="sell-link-badge" class="text-[10px] bg-emerald-200 text-emerald-900 px-2.5 py-0.5 rounded-full font-bold"></span>
-        </div>
-        
-        <div class="flex items-center space-x-2">
-          <input type="text" id="sell-generated-url" readonly class="w-full px-3 py-2.5 bg-white border border-emerald-300 rounded-xl text-xs font-mono text-slate-800 select-all focus:outline-none" />
-          <button onclick="copyGeneratedCampaignLink()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs flex-shrink-0 transition shadow-md">
-            📋 Copy Link
-          </button>
-        </div>
       </div>
-    </div>
 
-  </main>
+    </main>
+  </div>
+
+  <footer class="bg-white border-t border-slate-200 py-3 text-center text-[10px] text-slate-500 w-full mt-4">
+    © 2026 Careergraspp Super Admin Roster Console.
+  </footer>
 
   <!-- ================= STUDENT PROFILE INSPECTOR MODAL ================= -->
-  <div id="student-detail-modal" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white border border-slate-200 rounded-3xl w-full max-w-xl overflow-hidden shadow-2xl space-y-4 p-6 md:p-8">
-      <div class="flex justify-between items-center pb-3 border-b border-slate-200">
+  <div id="student-detail-modal" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-3">
+    <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl space-y-3 p-5">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-200">
         <div>
-          <h3 class="font-extrabold text-lg text-slate-900">Student Profile Inspector & Progress Tracker</h3>
-          <p class="text-xs text-slate-500">Tracking completed videos, enrolled courses, and transactions</p>
+          <h3 class="font-extrabold text-sm text-slate-900">Student Profile Inspector & Progress</h3>
+          <p class="text-[10px] text-slate-500">Track completed videos and transactions</p>
         </div>
-        <button onclick="closeStudentDetailModal()" class="text-slate-400 hover:text-slate-800 font-bold text-2xl px-2">&times;</button>
+        <button onclick="closeStudentDetailModal()" class="text-slate-400 hover:text-slate-800 font-bold text-xl px-1.5">&times;</button>
       </div>
 
-      <div id="modal-student-content" class="space-y-4 text-xs max-h-[70vh] overflow-y-auto"></div>
+      <div id="modal-student-content" class="space-y-3 text-xs max-h-[65vh] overflow-y-auto"></div>
 
-      <div class="pt-3 border-t border-slate-200 text-right">
-        <button onclick="closeStudentDetailModal()" class="px-5 py-2.5 bg-slate-900 text-white font-bold rounded-xl text-xs hover:bg-slate-800 transition">
-          Close Profile
+      <div class="pt-2 border-t border-slate-200 text-right">
+        <button onclick="closeStudentDetailModal()" class="px-4 py-2 bg-slate-900 text-white font-bold rounded-lg text-xs hover:bg-slate-800 transition">
+          Close
         </button>
       </div>
     </div>
@@ -357,6 +369,35 @@
           }
         });
         populateUniqueOrgCodesDropdown();
+        populateUniqueCategoriesDropdown();
+      });
+    }
+
+    /* ================= DYNAMIC UNIQUE CATEGORIES FILTER ================= */
+    function populateUniqueCategoriesDropdown() {
+      const select = document.getElementById('filter-category');
+      if (!select) return;
+
+      const uniqueCats = new Set();
+      allStudentsData.forEach(s => {
+        const orgDoc = orgsMap[(s.orgCode || "").toUpperCase().trim()] || {};
+        const cat = s.targetType || s.category || orgDoc.targetType;
+        if (cat) {
+          uniqueCats.add(cat.trim().toLowerCase());
+        }
+      });
+
+      select.innerHTML = `<option value="ALL">All Categories</option>`;
+      if (uniqueCats.size === 0) {
+        // Fallback default categories if none in DB yet
+        ['engineering', 'school', 'intermediate', 'degree'].forEach(c => uniqueCats.add(c));
+      }
+
+      Array.from(uniqueCats).sort().forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+        select.appendChild(opt);
       });
     }
 
@@ -377,19 +418,14 @@
 
       select.innerHTML = `<option value="ALL">All Colleges / Orgs</option><option value="INDIVIDUAL">INDIVIDUAL</option>`;
 
-      if (uniqueCodes.size === 0) {
-        select.innerHTML = `<option value="ALL">No College Orgs Available</option>`;
-      } else {
-        Array.from(uniqueCodes).sort().forEach(code => {
-          const opt = document.createElement('option');
-          opt.value = code;
-          opt.textContent = code;
-          select.appendChild(opt);
-        });
-      }
+      Array.from(uniqueCodes).sort().forEach(code => {
+        const opt = document.createElement('option');
+        opt.value = code;
+        opt.textContent = code;
+        select.appendChild(opt);
+      });
     }
 
-    /* ================= DYNAMIC TRANSACTION COURSES FILTER ================= */
     function populateTransactionCoursesFilter() {
       const select = document.getElementById('filter-tx-course');
       if (!select) return;
@@ -400,17 +436,12 @@
       });
 
       select.innerHTML = `<option value="ALL">All Purchased Courses</option>`;
-
-      if (activeCourses.size === 0) {
-        select.innerHTML = `<option value="ALL">No Transactions Data Found</option>`;
-      } else {
-        Array.from(activeCourses).sort().forEach(courseName => {
-          const opt = document.createElement('option');
-          opt.value = courseName;
-          opt.textContent = courseName;
-          select.appendChild(opt);
-        });
-      }
+      Array.from(activeCourses).sort().forEach(courseName => {
+        const opt = document.createElement('option');
+        opt.value = courseName;
+        opt.textContent = courseName;
+        select.appendChild(opt);
+      });
     }
 
     function initLiveDatabaseSync() {
@@ -450,11 +481,23 @@
         document.getElementById('stat-total-students').textContent = snapshot.size;
         document.getElementById('stat-total-enrollments').textContent = totalEnrollments;
 
+        populateUniqueCategoriesDropdown();
         populateUniqueOrgCodesDropdown();
         populateTransactionCoursesFilter();
         applyFilters();
+
+        // Smoothly hide loader after initial render
+        setTimeout(() => {
+          const loader = document.getElementById('page-loader');
+          if (loader) {
+            loader.style.opacity = '0';
+            setTimeout(() => loader.remove(), 300);
+          }
+        }, 200);
       }, (err) => {
         console.error("Firestore sync error:", err);
+        const loader = document.getElementById('page-loader');
+        if (loader) loader.remove();
       });
     }
 
@@ -498,7 +541,7 @@
 
     function renderStudentsTable(students) {
       const tbody = document.getElementById('student-table-body');
-      document.getElementById('student-count-badge').textContent = `Showing ${students.length} Records`;
+      document.getElementById('student-count-badge').textContent = `${students.length} Records`;
       tbody.innerHTML = "";
 
       if (students.length === 0) {
@@ -522,43 +565,43 @@
           <tr onclick="inspectStudent('${s.email}')" class="hover:bg-indigo-50/60 cursor-pointer transition whitespace-nowrap group">
             <td class="p-2">
               <div class="font-extrabold text-slate-900 group-hover:text-indigo-600 transition">${s.name || 'N/A'}</div>
-              <div class="text-[10px] text-slate-500">${s.phone || 'No Phone'}</div>
+              <div class="text-[9px] text-slate-500">${s.phone || 'No Phone'}</div>
             </td>
             <td class="p-2 font-semibold text-slate-700">${s.email}</td>
             <td class="p-2">
-              <span class="bg-slate-100 text-slate-700 border border-slate-200 px-1.5 py-0.5 rounded text-[9px] font-bold uppercase">
+              <span class="bg-slate-100 text-slate-700 border border-slate-200 px-1.5 py-0.5 rounded text-[8px] font-bold uppercase">
                 ${categoryLabel}
               </span>
             </td>
             <td class="p-2 font-semibold text-slate-700">
-              <span class="${isOrg ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'bg-slate-100 text-slate-600'} px-1.5 py-0.5 rounded text-[9px] font-bold">
+              <span class="${isOrg ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'bg-slate-100 text-slate-600'} px-1.5 py-0.5 rounded text-[8px] font-bold">
                 ${s.orgCode || 'INDIVIDUAL'}
               </span>
             </td>
             <td class="p-2 text-center">
-              <span class="bg-indigo-100 text-indigo-700 font-black px-2 py-0.5 rounded-full text-[10px]">
-                ${coursesCount} Course${coursesCount > 1 ? 's' : ''}
+              <span class="bg-indigo-100 text-indigo-700 font-black px-2 py-0.5 rounded-full text-[9px]">
+                ${coursesCount}
               </span>
             </td>
-            <td class="p-2 font-bold text-indigo-600 truncate max-w-[150px]">
+            <td class="p-2 font-bold text-indigo-600 truncate max-w-[130px]">
               ${latestTx.courseTitle || `${coursesCount} Course(s)`}
             </td>
             <td class="p-2 font-black text-emerald-600">
               ${latestTx.amount !== 'N/A' ? `₹${latestTx.amount}` : 'N/A'}
             </td>
-            <td class="p-2 font-mono font-bold text-slate-800 text-[10px]">
+            <td class="p-2 font-mono font-bold text-slate-800 text-[9px]">
               ${latestTx.paymentId || 'N/A'}
             </td>
-            <td class="p-2 text-slate-400 font-medium text-[10px]">
+            <td class="p-2 text-slate-400 font-medium text-[9px]">
               ${s.joinedDate || 'Recent'}
             </td>
             <td class="p-2 text-center" onclick="event.stopPropagation(); inspectStudent('${s.email}');">
-              <button class="p-1.5 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 font-bold rounded-lg text-xs transition shadow-sm" title="Inspect Profile & Track Progress">
+              <button class="p-1 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 font-bold rounded text-xs transition shadow-sm" title="Inspect Profile">
                 👁️
               </button>
             </td>
             <td class="p-2 text-center" onclick="event.stopPropagation(); deleteStudent(event, '${s.email}');">
-              <button class="p-1.5 bg-red-100 hover:bg-red-200 text-red-600 font-bold rounded-lg text-xs transition shadow-sm" title="Delete Student">
+              <button class="p-1 bg-red-100 hover:bg-red-200 text-red-600 font-bold rounded text-xs transition shadow-sm" title="Delete Student">
                 🗑️
               </button>
             </td>
@@ -569,7 +612,7 @@
 
     function renderTransactionsTable(transactions) {
       const tbody = document.getElementById('transaction-table-body');
-      document.getElementById('transaction-count-badge').textContent = `${transactions.length} Transactions Found`;
+      document.getElementById('transaction-count-badge').textContent = `${transactions.length} Transactions`;
       tbody.innerHTML = "";
 
       if (transactions.length === 0) {
@@ -584,9 +627,9 @@
             <td class="p-2 text-slate-600 font-medium">${tx.studentEmail}</td>
             <td class="p-2 font-semibold text-slate-800">${tx.courseTitle}</td>
             <td class="p-2 font-black text-emerald-600">₹${tx.amount}</td>
-            <td class="p-2 text-slate-400 text-[10px]">${tx.date}</td>
+            <td class="p-2 text-slate-400 text-[9px]">${tx.date}</td>
             <td class="p-2 text-center">
-              <button onclick="deleteTransaction(event, '${tx.studentEmail}', '${tx.paymentId}')" class="p-1.5 bg-red-100 hover:bg-red-200 text-red-600 font-bold rounded-lg text-xs transition shadow-sm" title="Delete Transaction">
+              <button onclick="deleteTransaction(event, '${tx.studentEmail}', '${tx.paymentId}')" class="p-1 bg-red-100 hover:bg-red-200 text-red-600 font-bold rounded text-xs transition shadow-sm">
                 🗑️
               </button>
             </td>
@@ -627,7 +670,6 @@
       }
     }
 
-    /* ================= INSPECT STUDENT & TRACK VIDEO PROGRESS ================= */
     function inspectStudent(email) {
       const student = allStudentsData.find(s => s.email.toLowerCase() === email.toLowerCase());
       if (!student) return;
@@ -637,48 +679,43 @@
 
       const modalContent = document.getElementById('modal-student-content');
       modalContent.innerHTML = `
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
-          <div><span class="text-slate-400 block font-semibold">Full Name</span> <strong class="text-slate-900 text-sm">${student.name || 'N/A'}</strong></div>
-          <div><span class="text-slate-400 block font-semibold">Email Address</span> <strong class="text-slate-900 text-sm">${student.email}</strong></div>
-          <div><span class="text-slate-400 block font-semibold">Mobile Number</span> <strong class="text-slate-900 text-sm">${student.phone || 'N/A'}</strong></div>
-          <div><span class="text-slate-400 block font-semibold">Organization Code</span> <strong class="text-indigo-600 text-sm">${student.orgCode || 'INDIVIDUAL'}</strong></div>
-          <div><span class="text-slate-400 block font-semibold">Target Category</span> <strong class="text-slate-900 uppercase">${student.targetType || orgDoc.targetType || 'Individual'}</strong></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs">
+          <div><span class="text-slate-400 block font-semibold">Full Name</span> <strong class="text-slate-900">${student.name || 'N/A'}</strong></div>
+          <div><span class="text-slate-400 block font-semibold">Email</span> <strong class="text-slate-900">${student.email}</strong></div>
+          <div><span class="text-slate-400 block font-semibold">Mobile</span> <strong class="text-slate-900">${student.phone || 'N/A'}</strong></div>
+          <div><span class="text-slate-400 block font-semibold">Org Code</span> <strong class="text-indigo-600">${student.orgCode || 'INDIVIDUAL'}</strong></div>
+          <div><span class="text-slate-400 block font-semibold">Category</span> <strong class="text-slate-900 uppercase">${student.targetType || orgDoc.targetType || 'Individual'}</strong></div>
           <div><span class="text-slate-400 block font-semibold">Joined Date</span> <strong class="text-slate-900">${student.joinedDate || 'N/A'}</strong></div>
         </div>
 
-        <div class="bg-indigo-50 border border-indigo-200 p-4 rounded-2xl space-y-2">
+        <div class="bg-indigo-50 border border-indigo-200 p-3 rounded-xl space-y-1.5">
           <div class="flex justify-between items-center">
-            <h4 class="font-extrabold text-indigo-900 text-xs uppercase tracking-wider">🎯 Video Progress Tracker</h4>
-            <span class="bg-indigo-600 text-white font-black px-2.5 py-0.5 rounded-full text-xs">${completedLessons.length} Lessons Completed</span>
+            <h4 class="font-extrabold text-indigo-900 text-xs uppercase tracking-wider">🎯 Video Progress</h4>
+            <span class="bg-indigo-600 text-white font-black px-2 py-0.5 rounded-full text-[10px]">${completedLessons.length} Completed</span>
           </div>
-          <div class="bg-white border border-indigo-100 rounded-xl p-3 max-h-32 overflow-y-auto space-y-1">
+          <div class="bg-white border border-indigo-100 rounded-lg p-2 max-h-28 overflow-y-auto space-y-1">
             ${completedLessons.length > 0 ? completedLessons.map(key => `
-              <div class="text-xs text-slate-700 flex items-center space-x-2">
+              <div class="text-[11px] text-slate-700 flex items-center space-x-1.5">
                 <span class="text-emerald-600 font-bold">✓</span>
-                <span class="font-mono text-[11px] bg-slate-100 px-2 py-0.5 rounded">Lesson Key: ${key}</span>
+                <span class="font-mono text-[10px] bg-slate-100 px-1.5 py-0.5 rounded">Lesson: ${key}</span>
               </div>
-            `).join('') : '<p class="text-slate-400 text-xs italic">No video lessons completed by this student yet.</p>'}
-          </div>
-        </div>
-
-        <div class="space-y-2">
-          <h4 class="font-extrabold text-slate-900 text-xs uppercase tracking-wider">Payment Transactions Log</h4>
-          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-2 max-h-32 overflow-y-auto">
-            ${(student.transactions || []).map(tx => `
-              <div class="flex justify-between items-center text-xs border-b border-slate-200 pb-1.5 last:border-0 last:pb-0">
-                <div>
-                  <span class="font-bold text-slate-800 block">${tx.courseTitle || 'Course #' + tx.courseId}</span>
-                  <span class="font-mono text-[10px] text-slate-400">${tx.paymentId}</span>
-                </div>
-                <span class="font-black text-emerald-600">₹${tx.amount}</span>
-              </div>
-            `).join('') || '<p class="text-slate-400">No payment transaction records found.</p>'}
+            `).join('') : '<p class="text-slate-400 text-xs italic">No video lessons completed yet.</p>'}
           </div>
         </div>
 
         <div class="space-y-1">
-          <h4 class="font-extrabold text-slate-900 text-xs uppercase tracking-wider">Enrolled Course IDs</h4>
-          <p class="font-mono bg-slate-100 p-2.5 rounded-xl text-[11px] text-slate-700">${JSON.stringify(student.enrolledCourses || [])}</p>
+          <h4 class="font-extrabold text-slate-900 text-xs uppercase tracking-wider">Transactions Log</h4>
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-2.5 space-y-1.5 max-h-28 overflow-y-auto">
+            ${(student.transactions || []).map(tx => `
+              <div class="flex justify-between items-center text-xs border-b border-slate-200 pb-1 last:border-0 last:pb-0">
+                <div>
+                  <span class="font-bold text-slate-800 block">${tx.courseTitle || 'Course #' + tx.courseId}</span>
+                  <span class="font-mono text-[9px] text-slate-400">${tx.paymentId}</span>
+                </div>
+                <span class="font-black text-emerald-600">₹${tx.amount}</span>
+              </div>
+            `).join('') || '<p class="text-slate-400 text-xs">No transactions found.</p>'}
+          </div>
         </div>
       `;
 
@@ -706,20 +743,20 @@
       studentFilters.classList.add('hidden');
       txFilters.classList.add('hidden');
       
-      btnStudents.className = "px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition";
-      btnTx.className = "px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition";
-      btnSell.className = "px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition";
+      btnStudents.className = "px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition";
+      btnTx.className = "px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition";
+      btnSell.className = "px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition";
 
       if (tab === 'students') {
-        btnStudents.className = "px-4 py-2 rounded-lg bg-white text-indigo-600 shadow-sm transition font-bold";
+        btnStudents.className = "px-3 py-1.5 rounded-md bg-white text-indigo-600 shadow-sm transition font-bold";
         containerStudents.classList.remove('hidden');
         studentFilters.classList.remove('hidden');
       } else if (tab === 'transactions') {
-        btnTx.className = "px-4 py-2 rounded-lg bg-white text-emerald-600 shadow-sm transition font-bold";
+        btnTx.className = "px-3 py-1.5 rounded-md bg-white text-emerald-600 shadow-sm transition font-bold";
         containerTx.classList.remove('hidden');
         txFilters.classList.remove('hidden');
       } else if (tab === 'sell-course') {
-        btnSell.className = "px-4 py-2 rounded-lg bg-white text-indigo-600 shadow-sm transition font-bold";
+        btnSell.className = "px-3 py-1.5 rounded-md bg-white text-indigo-600 shadow-sm transition font-bold";
         containerSell.classList.remove('hidden');
       }
     }
@@ -729,19 +766,13 @@
       if (!container) return;
 
       container.innerHTML = "";
-
-      if (!softSkillsCourses || softSkillsCourses.length === 0) {
-        container.innerHTML = `<p class="text-xs text-slate-400">No courses available.</p>`;
-        return;
-      }
-
       softSkillsCourses.forEach((course) => {
-        container.innerHTML += `
-          <label class="flex items-center space-x-3 p-2 bg-white rounded-lg border border-slate-200 hover:border-indigo-300 cursor-pointer transition">
-            <input type="checkbox" name="sell-course-select" value="${course.id}" class="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500" />
+        container.innerHTML +=
+          <label class="flex items-center space-x-2.5 p-2 bg-white rounded-lg border border-slate-200 hover:border-indigo-300 cursor-pointer transition">
+            <input type="checkbox" name="sell-course-select" value="${course.id}" class="w-4 h-4 text-indigo-600 rounded border-slate-300" />
             <div class="text-xs">
               <span class="font-bold text-slate-800">#${course.id} - ${course.title}</span>
-              <span class="text-slate-400 ml-1">(Default Price: ₹${course.price})</span>
+              <span class="text-slate-400 ml-1">(₹${course.price})</span>
             </div>
           </label>
         `;
@@ -760,7 +791,7 @@
       const selectedCourseIds = Array.from(checkedBoxes).map(cb => cb.value);
 
       if (selectedCourseIds.length === 0) {
-        return alert("⚠️ Please select at least one course to offer!");
+        return alert("⚠️ Please select at least one course!");
       }
 
       const courseIdsString = selectedCourseIds.join(',');
@@ -778,7 +809,7 @@
           updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         }, { merge: true });
       } catch (err) {
-        console.warn("Could not save organization campaign rule to Firestore:", err);
+        console.warn("Firestore error saving org campaign:", err);
       }
 
       document.getElementById('sell-generated-url').value = generatedUrl;
@@ -789,16 +820,14 @@
     function copyGeneratedCampaignLink() {
       const urlInput = document.getElementById('sell-generated-url');
       urlInput.select();
-      urlInput.setSelectionRange(0, 99999);
-
       navigator.clipboard.writeText(urlInput.value).then(() => {
-        alert("📋 Campaign Link copied to clipboard!");
+        alert("📋 Campaign Link copied!");
       });
     }
 
     function exportTableToCSV() {
       if (activeViewTab === 'students') {
-        let csv = ["Name,Email,Phone,Category,Org Code,Enrolled Courses Count,Latest Course,Latest Amount,Latest Payment ID,Joined Date"];
+        let csv = ["Name,Email,Phone,Category,Org Code,Enrolled Count,Latest Course,Latest Amount,Payment ID,Joined Date"];
         allStudentsData.forEach(s => {
           const orgDoc = orgsMap[(s.orgCode || "").toUpperCase().trim()] || {};
           const cat = (s.targetType || orgDoc.targetType || "Individual").toUpperCase();
@@ -813,16 +842,16 @@
           ];
           csv.push(row.join(","));
         });
-        downloadCSVFile(csv.join("\n"), "Careergraspp_Students_Roster.csv");
+        downloadCSVFile(csv.join("\n"), "Careergraspp_Students.csv");
       } else if (activeViewTab === 'transactions') {
         let csv = ["Payment ID,Student Email,Course Purchased,Amount,Date & Time"];
         allTransactionsData.forEach(tx => {
           const row = [`"${tx.paymentId}"`, `"${tx.studentEmail}"`, `"${tx.courseTitle}"`, `"${tx.amount}"`, `"${tx.date}"`];
           csv.push(row.join(","));
         });
-        downloadCSVFile(csv.join("\n"), "Careergraspp_Transactions_Log.csv");
+        downloadCSVFile(csv.join("\n"), "Careergraspp_Transactions.csv");
       } else {
-        alert("Please switch to Student Profiles or Transaction Logs tab to export.");
+        alert("Please switch to Students or Transactions tab to export.");
       }
     }
 
